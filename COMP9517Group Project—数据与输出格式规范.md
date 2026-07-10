@@ -6,6 +6,7 @@
 
 ## 一、项目目录结构
 
+```text
 COMP9517_Project/
 │
 ├── data/
@@ -26,7 +27,7 @@ COMP9517_Project/
 │   │   ├── val.csv
 │   │   ├── test.csv
 │   │   ├── longtail_train.csv
-│   │   ├── longtail_resampled_train.csv
+│   │   ├── longtail_resampled_train.csv   # 可选，仅静态过采样方式需要，见第九节
 │   │   ├── split_config.json
 │   │   └── longtail_config.json
 │   │
@@ -59,8 +60,8 @@ COMP9517_Project/
 │       ├── evaluate.py
 │       ├── metrics.py
 │       ├── confusion_matrix.py
-│       ├── robustness.py
-│       ├── degradation.py        # 实时退化函数，E提供
+│       ├── robustness.py         # 负责遍历method、degradation、severity，调用推理并整理曲线结果。
+│       ├── degradation.py        # 实时退化函数，E提供, 只负责单张图片的noise、blur、brightness、JPEG处理；
 │       ├── error_analysis.py
 │       └── plots.py
 │
@@ -86,8 +87,7 @@ COMP9517_Project/
 ├── presentation/
 ├── README.md
 └── requirements.txt
-
-
+```
 
 > ⚠️ **提交注意**：最终代码ZIP不得包含原始图片、模型权重（checkpoint）、大量结果图片，代码包上限 40MB。
 
@@ -226,11 +226,23 @@ B、C、D训练完成后，**必须**在测试集上跑推理，输出统一格�
 
 ### 5.1 `predictions.csv`
 
+🔴 **每个`predictions.csv`只属于一个method，不能在同一文件里混合不同方法的预测结果**（该文件存放在对应method自己的目录下，见第六节目录结构）。
+
+例如 `outputs/scratch/resnet18_scratch_basic_aug/predictions.csv`：
+
 ```csv
 image_id,true_label,pred_label,top1_score,method_name,split
 88031,0,0,0.8421,resnet18_scratch_basic_aug,test
 88032,0,6,0.3512,resnet18_scratch_basic_aug,test
-99120,1,1,2.7534,sift_bovw_svm,test
+99120,1,1,0.7534,resnet18_scratch_basic_aug,test
+```
+
+`outputs/traditional/sift_bovw_svm/predictions.csv`：
+
+```csv
+image_id,true_label,pred_label,top1_score,method_name,split
+88031,0,0,2.7534,sift_bovw_svm,test
+88032,0,3,1.1023,sift_bovw_svm,test
 ```
 
 | 字段 | 含义 |
@@ -253,7 +265,7 @@ np.savez(
     "scores.npz",
     image_ids=image_ids,       # shape: [N]
     scores=scores,             # shape: [N, 500]
-    class_indices=np.arange(500)
+    class_indices=class_indices    # shape: [500]，见下方说明
 )
 ```
 
@@ -263,9 +275,25 @@ np.savez(
 data = np.load("scores.npz")
 image_ids = data["image_ids"]
 scores = data["scores"]
+class_indices = data["class_indices"]
 ```
 
-**`scores[i, j]` 的含义**：第 `i` 张图片对第 `j` 类的**分类分数**（不强制是概率，可以是 decision score、logit 或 probability），分数越高代表模型认为该样本越可能属于该类，用于排序和计算Top-k。
+**`scores[i, j]` 的含义**：第 `i` 张图片对第 `j` **列**的分类分数（不强制是概率，可以是 decision score、logit 或 probability），分数越高代表模型认为该样本越可能属于对应类别，用于排序和计算Top-k。
+
+🔴 **`class_indices`的取值规则（关键，容易出错）**：第 `j` 列对应的真实类别，**不能想当然地认为就是`class_idx=j`**，必须显式保存映射：
+
+| 方法 | `class_indices`的生成方式 |
+|---|---|
+| CNN（C/D） | 只要输出层顺序按0-499排列，`class_indices = np.arange(500)` |
+| SVM | `class_indices = model.classes_`（sklearn的`decision_function()`/`predict_proba()`第j列对应`model.classes_[j]`，顺序不一定是0-499原始顺序） |
+| Random Forest | `class_indices = model.classes_`（同上） |
+
+E计算Top-5时，**不能直接把列号当类别编号**，必须做映射：
+
+```python
+top5_columns = np.argsort(scores, axis=1)[:, -5:]
+top5_labels = class_indices[top5_columns]     # 正确：先取列号，再映射回真实class_idx
+```
 
 各方法具体用什么分数，按各自最自然、最快的方式来，不强制统一成概率：
 
@@ -275,11 +303,7 @@ scores = data["scores"]
 | Random Forest | `predict_proba()` |
 | CNN（C/D） | softmax概率或logits均可 |
 
-E计算Top-5时统一用：
-
-```python
-top5 = np.argsort(scores, axis=1)[:, -5:]
-```
+E计算Top-5时统一按前面给出的方式，**先取argsort列号，再通过`class_indices`映射回真实类别**，不得直接把列号当作class_idx使用。
 
 🔴 **重要**：由于不同方法的分数尺度不同（SVM的decision score、RF的probability、CNN的softmax不在同一量纲），**E不得跨模型直接比较"置信度大小"**，分数仅用于同一模型内部的类别排序（Top-k计算），跨模型比较只能用accuracy/F1等标准化指标。
 
@@ -343,12 +367,20 @@ outputs/
 │   ├── sift_bovw_svm/
 │   │   ├── predictions.csv
 │   │   ├── scores.npz
-│   │   ├── metrics.json
-│   │   └── runtime.json
+│   │   ├── runtime.json
+│   │   └── evaluation/               # E生成的评估结果，统一放子目录，不与原始输出混放
+│   │       ├── metrics.json
+│   │       ├── confusion_matrix.npy
+│   │       ├── confusion_matrix.png
+│   │       ├── per_class_metrics.csv
+│   │       ├── top_confused_pairs.csv
+│   │       └── failure_cases.csv
+│   │
 │   └── hog_random_forest/
 │       ├── predictions.csv
 │       ├── scores.npz
-│       └── runtime.json
+│       ├── runtime.json
+│       └── evaluation/
 │
 ├── scratch/
 │   ├── resnet18_scratch_no_aug/
@@ -359,15 +391,39 @@ outputs/
 │       ├── predictions.csv
 │       ├── scores.npz
 │       ├── training_history.csv
-│       └── runtime.json
+│       ├── runtime.json
+│       └── evaluation/
 │
-└── transfer/
-    ├── resnet18_pretrained_frozen/
-    └── resnet18_pretrained_finetuned/
-        ├── predictions.csv
-        ├── scores.npz
-        ├── training_history.csv
-        └── runtime.json
+├── transfer/
+│   ├── resnet18_pretrained_frozen/
+│   └── resnet18_pretrained_finetuned/
+│       ├── predictions.csv
+│       ├── scores.npz
+│       ├── training_history.csv
+│       ├── runtime.json
+│       └── evaluation/
+│
+├── robustness/
+│   ├── sift_bovw_svm/
+│   │   ├── gaussian_noise/
+│   │   │   ├── severity_1/
+│   │   │   │   ├── predictions.csv
+│   │   │   │   ├── scores.npz
+│   │   │   │   └── runtime.json
+│   │   │   ├── severity_2/
+│   │   │   └── ...
+│   │   ├── blur/
+│   │   ├── brightness/
+│   │   └── jpeg_compression/
+│   ├── hog_random_forest/
+│   ├── resnet18_scratch_basic_aug/
+│   └── resnet18_pretrained_finetuned/
+│
+└── evaluation/                          # E做跨方法横向汇总的最终产出，只有这一层，不属于任何单一模型
+    ├── all_methods_comparison.csv       # 所有method的指标汇总表
+    ├── accuracy_vs_time.png             # 报告里的性能-耗时对比图
+    ├── robustness_curves.png            # 各方法在不同退化severity下的曲线对比
+    └── final_report_tables/             # 直接可以贴进报告的表格
 ```
 
 **method命名清单（唯一标准，与目录结构完全一致，不得自创新名字，需扩展先在群里同步）：**
@@ -400,7 +456,7 @@ python src/evaluation/evaluate.py \
   --output outputs/traditional/sift_bovw_svm/evaluation
 ```
 
-自动产出的评估指标（**完整清单，需在报告Experimental Results中全部体现**）：
+自动计算的评估指标（**完整清单，需在报告Experimental Results中全部体现**）：
 
 ```text
 Top-1 accuracy
@@ -414,7 +470,7 @@ Confusion matrix（全类别 + 挑选子集的详细版）
 Training time / Inference time（引用runtime.json）
 ```
 
-对应输出文件：
+对应输出文件（**统一存放在`<method_dir>/evaluation/`子目录下**，与5.1-5.3节模型自己产出的`predictions.csv`/`scores.npz`/`runtime.json`区分开）：
 
 ```text
 metrics.json
@@ -424,6 +480,11 @@ per_class_metrics.csv
 top_confused_pairs.csv
 failure_cases.csv
 ```
+
+**三层职责划分**：
+- `<method_dir>/`根部（predictions.csv, scores.npz, runtime.json）：由B/C/D各自模型产出，属于"原始输出"
+- `<method_dir>/evaluation/`：由E运行`evaluate.py`针对单一方法生成的深度分析（confusion matrix、per-class指标等）
+- `outputs/evaluation/`（顶层）：由E做跨方法横向汇总的最终产出（见第一节目录结构），不属于任何单一方法
 
 ---
 
@@ -463,21 +524,31 @@ def apply_degradation(
 
 ### 8.3 退化参数表（由E写入 `configs/robustness.yaml`，具体数值可后续微调）
 
-| 退化类型 | Severity 1 | Severity 3 | Severity 5 |
-|---|---:|---:|---:|
-| Gaussian noise | σ=0.02 | σ=0.06 | σ=0.10 |
-| Gaussian blur | radius=1 | radius=3 | radius=5 |
-| Brightness | 0.9 | 0.7 | 0.5 |
-| JPEG quality | 80 | 40 | 10 |
+正式采用 **1-5 五档**（比只测3档能画出更平滑的performance-versus-severity曲线，spec只要求"多个severity levels"，未强制档位数量，五档在计算量可接受范围内信息量更充分）：
 
-B/C/D在自己的推理脚本中调用`apply_degradation`函数，对同一批`test.csv`图片实时做退化处理后再推理，输出格式与第五节一致：
+| 退化类型 | S1 | S2 | S3 | S4 | S5 |
+|---|---:|---:|---:|---:|---:|
+| Gaussian noise σ | 0.02 | 0.04 | 0.06 | 0.08 | 0.10 |
+| Gaussian blur radius | 1 | 2 | 3 | 4 | 5 |
+| Brightness factor | 0.9 | 0.8 | 0.7 | 0.6 | 0.5 |
+| JPEG quality | 80 | 60 | 40 | 25 | 10 |
+
+B/C/D在自己的推理脚本中调用`apply_degradation`函数，对同一批`test.csv`图片实时做退化处理后再推理，输出格式与第五节一致，**输出路径命名统一为 `outputs/robustness/<method_name>/<degradation_type>/severity_<N>/`**（与第六节目录结构完全一致，不使用缩写如`noise_3`）：
 
 ```bash
 python predict.py \
   --test_csv data/metadata/test.csv \
   --degradation gaussian_noise \
   --severity 3 \
-  --output outputs/robustness/resnet18_scratch_basic_aug/noise_3
+  --output outputs/robustness/resnet18_scratch_basic_aug/gaussian_noise/severity_3
+```
+
+🔴 **Robustness每组结果强制输出三个文件**（与第五节标准一致，不做例外）：
+
+```text
+predictions.csv
+scores.npz
+runtime.json     # 记录该退化+severity下的推理耗时、样本数、硬件环境，主要用于复现，不用于training time对比
 ```
 
 **职责边界**：
@@ -503,10 +574,16 @@ resnet18_scratch_longtail_unbalanced    ← 长尾分布，未做任何平衡处
 resnet18_scratch_longtail_resampled     ← 长尾分布 + 重采样/加权
 ```
 
+⚠️ **关于"重采样"的具体实现，不强制生成静态CSV，两种方式都可以**：
+
+- **方式A（静态过采样）**：直接对长尾数据做过采样，生成一份`longtail_resampled_train.csv`。注意这种方式下同一张图片会在CSV中重复出现多次，`image_id`不再唯一，仅用于该组训练的输入清单，不应被当成常规数据统计使用。
+- **方式B（动态采样，推荐）**：使用`WeightedRandomSampler`等训练时动态重采样机制，**不需要**生成`longtail_resampled_train.csv`，只需保留原始的`longtail_train.csv`，并在`longtail_config.json`中记录采样策略和参数即可。
+
 **需要保存的文件**：
 
-- `longtail_train.csv` / `longtail_resampled_train.csv`
-- `longtail_config.json`，记录长尾构造规则（如保留比例、衰减方式）与random seed，保证可复现：
+- `longtail_train.csv`（必须，长尾分布本身）
+- `longtail_resampled_train.csv`（**可选**，仅当采用方式A静态过采样时才需要生成；若采用方式B动态Sampler则不生成此文件）
+- `longtail_config.json`，记录长尾构造规则（如保留比例、衰减方式）、重采样方式与random seed，保证可复现：
 
 ```json
 {
@@ -514,9 +591,11 @@ resnet18_scratch_longtail_resampled     ← 长尾分布 + 重采样/加权
   "longtail_ratio": "exponential_decay",
   "min_images_per_class": 5,
   "max_images_per_class": 40,
-  "resampling_strategy": "oversampling_minority"
+  "resampling_strategy": "weighted_random_sampler"
 }
 ```
+
+> 若采用方式A，`resampling_strategy`可写`"static_oversampling"`；若采用方式B，写`"weighted_random_sampler"`（或其他动态方法名），并在报告Methods部分说明具体实现。
 
 报告里需要对比"均衡 vs 长尾未处理 vs 长尾+重采样"三组的整体accuracy/F1，以及**per-class表现**（尤其是样本量少的类别），才能说明重采样的实际效果。
 
@@ -588,8 +667,10 @@ Test：仅用于最终评价、error analysis、以及固定模型下的Robustne
 | train/val/test.csv、class_to_idx.json、idx_to_class.json、split_config.json | A | Week 7 前半段 |
 | Evaluation Pipeline 框架 + degradation.py + configs/robustness.yaml | E | Week 7 |
 | B/C/D 确认能否按格式输出（尤其SVM decision_function是否够用） | B/C/D | Week 8 内反馈 |
-| 长尾数据构造（longtail_train.csv等） | A（配合C跑实验） | Week 8-9 |
-| 中期格式联调（各交一版初步predictions.csv试跑） | 全员 | Week 8 |
+| 长尾数据构造（longtail_train.csv等） | A（配合C跑实验） | Week 7-8 |
+| 中期格式联调（各交一套小规模测试输出：predictions.csv + scores.npz + runtime.json，重点检查scores.npz的shape、image_id对齐、class_indices映射是否正确） | 全员 | Week 8 |
+
+
 
 ---
 
