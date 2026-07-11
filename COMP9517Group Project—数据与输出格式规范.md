@@ -330,7 +330,7 @@ E计算Top-5时统一按前面给出的方式，**先取argsort列号，再通�
   },
   "software": {
     "python": "3.11",
-    "scikit_learn": "1.6.1"
+    "scikit_learn": "1.5.1"
   }
 }
 ```
