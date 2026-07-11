@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "method_name": "dummy_classifier",
+  "split": "test",
+  "num_samples": 12,
+  "num_classes": 3,
+  "metrics": {
+    "top1_accuracy": 0.8333333333333334,
+    "top5_accuracy": 1.0,
+    "overall_accuracy": 0.8333333333333334,
+    "balanced_accuracy": 0.8333333333333334,
+    "macro_precision": 0.85,
+    "macro_recall": 0.8333333333333334,
+    "macro_f1": 0.832010582010582
+  },
+  "runtime": {
+    "training_time_seconds": 1.2,
+    "inference_time_seconds": 0.08,
+    "num_test_images": 12,
+    "hardware": {
+      "platform": "demo",
+      "cpu": "dummy",
+      "gpu": null
+    },
+    "software": {
+      "python": "3.11",
+      "model": "dummy"
+    }
+  },
+  "source_files": {
+    "predictions": "demo/evaluation_mvp/input/predictions.csv",
+    "scores": "demo/evaluation_mvp/input/scores.npz",
+    "classes": "demo/evaluation_mvp/input/idx_to_class.json",
+    "runtime": "demo/evaluation_mvp/input/runtime.json"
+  }
+}

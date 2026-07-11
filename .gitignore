@@ -1,0 +1,34 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Raw dataset and generated artifacts live in Google Drive.
+# Small shared metadata under data/metadata/ is intentionally tracked.
+data/raw/**
+!data/raw/.gitkeep
+outputs/**
+!outputs/.gitkeep
+
+# Models and experiment logs must not enter the code submission
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+wandb/
+runs/
+
+# Local handoff archives and supplied course/chat source material
+handoff/*.zip
+docs/source/official/
+docs/source/screenshots/
+
+# Temporary PDF review artifacts
+tmp/

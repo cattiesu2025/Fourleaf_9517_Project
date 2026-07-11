@@ -1,0 +1,15 @@
+random_seed: 9517
+severity_levels: [1, 2, 3, 4, 5]
+degradations:
+  gaussian_noise:
+    parameter: sigma
+    values: [0.02, 0.04, 0.06, 0.08, 0.10]
+  blur:
+    parameter: radius
+    values: [1, 2, 3, 4, 5]
+  brightness:
+    parameter: factor
+    values: [0.9, 0.8, 0.7, 0.6, 0.5]
+  jpeg_compression:
+    parameter: quality
+    values: [80, 60, 40, 25, 10]

@@ -1,0 +1,13 @@
+image_id,true_label,pred_label,top1_score,method_name,split
+sample-00,0,0,1.4575848689185333,dummy_classifier,test
+sample-01,1,1,1.3018738861529031,dummy_classifier,test
+sample-02,2,2,1.1723979299503604,dummy_classifier,test
+sample-03,0,0,1.6625155420104059,dummy_classifier,test
+sample-04,1,2,1.72739449277447,dummy_classifier,test
+sample-05,2,2,1.876453015782895,dummy_classifier,test
+sample-06,0,0,1.3544891477646133,dummy_classifier,test
+sample-07,1,1,1.5382082435207443,dummy_classifier,test
+sample-08,2,2,1.2247979239473041,dummy_classifier,test
+sample-09,0,1,2.5239842919212334,dummy_classifier,test
+sample-10,1,1,1.4425827835141198,dummy_classifier,test
+sample-11,2,2,1.4524697490466276,dummy_classifier,test
