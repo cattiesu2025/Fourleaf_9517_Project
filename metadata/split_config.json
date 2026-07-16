@@ -1,0 +1,10 @@
+{
+  "random_seed": 500,
+  "num_classes": 500,
+  "class_selection_method": "uniform_random_sampling",
+  "train_images_per_class": 40,
+  "val_images_per_class": 10,
+  "test_images_per_class": 10,
+  "image_size": 224,
+  "dataset": "iNaturalist-2021"
+}
