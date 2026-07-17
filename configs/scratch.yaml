@@ -1,0 +1,47 @@
+# Scratch ResNet18 experiment defaults.
+#
+# The Python scripts expose these values as CLI arguments; this file records the
+# planned ablation settings for easier handoff to the group.
+
+metadata_dir: data/metadata
+num_classes: 500
+image_size: 224
+epochs: 30
+batch_size: 64
+lr: 0.001
+weight_decay: 0.0001
+optimizer: adamw
+scheduler: cosine
+seed: 9517
+
+experiments:
+  - method_name: resnet18_scratch_no_aug
+    transform_type: none
+    train_csv: data/metadata/train.csv
+    val_csv: data/metadata/val.csv
+    output_dir: outputs/scratch/resnet18_scratch_no_aug
+    sampler: none
+  - method_name: resnet18_scratch_basic_aug
+    transform_type: basic_aug
+    train_csv: data/metadata/train.csv
+    val_csv: data/metadata/val.csv
+    output_dir: outputs/scratch/resnet18_scratch_basic_aug
+    sampler: none
+  - method_name: resnet18_scratch_strong_aug
+    transform_type: strong_aug
+    train_csv: data/metadata/train.csv
+    val_csv: data/metadata/val.csv
+    output_dir: outputs/scratch/resnet18_scratch_strong_aug
+    sampler: none
+  - method_name: resnet18_scratch_longtail_unbalanced
+    transform_type: basic_aug
+    train_csv: data/metadata/longtail_train.csv
+    val_csv: data/metadata/val.csv
+    output_dir: outputs/scratch/resnet18_scratch_longtail_unbalanced
+    sampler: none
+  - method_name: resnet18_scratch_longtail_resampled
+    transform_type: basic_aug
+    train_csv: data/metadata/longtail_train.csv
+    val_csv: data/metadata/val.csv
+    output_dir: outputs/scratch/resnet18_scratch_longtail_resampled
+    sampler: weighted_random

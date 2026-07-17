@@ -1,0 +1,21 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Local dependency/cache folders
+.deps/
+
+# Large local dataset files. Keep metadata tracked.
+data/raw/
+data/**/*.zip
+data/**/*.tar
+data/**/*.tar.gz
+
+# Model artifacts and generated experiment outputs
+outputs/
+*.pth
+*.pt
+*.ckpt
+
+# Local backup from replacing the old placeholder file with data/
+data.placeholder
