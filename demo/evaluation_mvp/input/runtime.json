@@ -1,0 +1,14 @@
+{
+  "training_time_seconds": 1.2,
+  "inference_time_seconds": 0.08,
+  "num_test_images": 12,
+  "hardware": {
+    "platform": "demo",
+    "cpu": "dummy",
+    "gpu": null
+  },
+  "software": {
+    "python": "3.11",
+    "model": "dummy"
+  }
+}

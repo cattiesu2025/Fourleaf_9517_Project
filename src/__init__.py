@@ -1,1 +1,1 @@
-"""Project source package."""
+"""COMP9517 project source package."""

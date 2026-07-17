@@ -1,0 +1,4 @@
+class_idx,class_name,precision,recall,f1,support,per_class_accuracy
+0,Demo class 0,1.0,0.75,0.8571428571428571,4,0.75
+1,Demo class 1,0.75,0.75,0.75,4,0.75
+2,Demo class 2,0.8,1.0,0.8888888888888888,4,1.0

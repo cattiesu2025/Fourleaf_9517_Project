@@ -1,21 +1,45 @@
-.DS_Store
+# Python
+.venv/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Raw dataset and generated artifacts live in Google Drive.
+# Small shared metadata under data/metadata/ is intentionally tracked.
+data/raw/**
+!data/raw/.gitkeep
+outputs/**
+!outputs/.gitkeep
+
+# Models and experiment logs must not enter the code submission
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+wandb/
+runs/
+
+# Local handoff archives and supplied course/chat source material
+handoff/*.zip
+docs/source/official/
+docs/source/screenshots/
+
+# Temporary PDF review artifacts
+tmp/
 
 # Local dependency/cache folders
 .deps/
 
-# Large local dataset files. Keep metadata tracked.
-data/raw/
+# Large local dataset archives. Keep metadata tracked.
 data/**/*.zip
 data/**/*.tar
 data/**/*.tar.gz
-
-# Model artifacts and generated experiment outputs
-outputs/
-*.pth
-*.pt
-*.ckpt
 
 # Local development notes
 docs/dev_log.md
