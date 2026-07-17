@@ -1,0 +1,7 @@
+{
+  "random_seed": 500,
+  "longtail_ratio": "exponential_decay",
+  "min_images_per_class": 5,
+  "max_images_per_class": 40,
+  "resampling_strategy": "weighted_random_sampler"
+}

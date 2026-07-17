@@ -311,9 +311,9 @@ E计算Top-5时统一按前面给出的方式，**先取argsort列号，再通�
 
 ### 5.3 `runtime.json`
 
-⚠️ **硬件约定按方法类型分开，不强制全部使用Colab T4**：SIFT/HOG/K-Means/SVM/Random Forest主要吃CPU，GPU对它们没有帮助，强行都用Colab T4意义不大，反而可能因为Colab分配的CPU负载不稳定而失真。改为：
+⚠️ **统一硬件环境约定**：B/C/D 的正式训练、测试推理和 runtime 统计必须在同一个环境下完成，例如统一使用 Katana 上相同资源配置的 job，或统一使用同一个 Colab T4 runtime。B 的传统方法主要使用 CPU，GPU 可能不会被模型调用，但仍应在同一平台、同一 CPU/GPU/RAM 环境中运行并记录，避免因本地机器差异影响时间对比。
 
-> 同类型方法内部（传统方法之间、深度学习方法之间）的时间比较应尽量在相同硬件环境下完成；传统方法与深度学习方法之间的时间差异可作为实际运行成本参考，但**不做严格的跨类型效率结论**（因为CPU vs GPU本身不可比），需在报告Discussion中说明这一点。
+> B/C/D 的 runtime 可以作为同一实验环境下的实际运行成本对比；但报告 Discussion 中仍需说明不同方法实际使用的计算资源可能不同，例如传统方法主要用 CPU，CNN 方法主要用 GPU。
 
 传统方法（B）记录：
 
@@ -325,7 +325,7 @@ E计算Top-5时统一按前面给出的方式，**先取argsort列号，再通�
   "hardware": {
     "platform": "Google Colab",
     "cpu": "Intel Xeon (Colab分配)",
-    "gpu": null,
+    "gpu": "NVIDIA T4 (available; not used by model)",
     "ram_gb": 12.7
   },
   "software": {
@@ -355,7 +355,9 @@ E计算Top-5时统一按前面给出的方式，**先取argsort列号，再通�
 }
 ```
 
-**C/D的正式对比实验（用于报告里training/inference time比较）统一在Colab T4上跑**，日常调试可用自己电脑，但最终报告引用的深度学习时间数据必须来自同一类硬件。若个别实验条件受限必须用本地机器，需如实注明，并在报告Discussion里说明硬件差异对时间对比的影响。
+以上 JSON 里的 `platform/cpu/gpu` 只是示例；如果在 Katana 上运行，应如实记录 Katana 分配到的节点、CPU、GPU 型号和内存。
+
+**B/C/D 的正式对比实验（用于报告里的 training/inference time 比较）必须统一在同一个环境下跑**。日常调试可用自己电脑，但最终报告引用的 runtime 数据必须来自同一环境。若个别实验条件受限必须换环境，需如实注明，并在报告 Discussion 中说明硬件差异对时间对比的影响。
 
 ---
 
@@ -648,9 +650,9 @@ Test：仅用于最终评价、error analysis、以及固定模型下的Robustne
    退化必须发生在"读取原图之后、各模型自己预处理之前"（见第八节），
    B/C/D 仅负责调用，不得自行更改退化参数或插入位置。
 
-9. 时间对比按方法类型分开记录硬件环境（见5.3节），
-   深度学习方法的正式对比实验统一使用 Colab T4 GPU 运行；
-   若条件受限使用本地硬件，须在 runtime.json 中如实注明并在报告中说明。
+9. B/C/D 的正式训练、测试推理和 runtime 统计必须在同一个环境中完成（见5.3节），
+   例如统一使用 Katana 上相同资源配置的 job，或统一使用 Colab T4 runtime；
+   若条件受限更换硬件，须在 runtime.json 中如实注明并在报告中说明。
 
 10. method 名称严格使用第六节清单中的名称，如需新增，先在群内同步确认。
 

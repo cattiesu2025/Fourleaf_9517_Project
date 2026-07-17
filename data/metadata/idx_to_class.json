@@ -1,0 +1,2502 @@
+{
+  "0": {
+    "original_class_id": 6729,
+    "class_name": "Cota tinctoria",
+    "category": "Plants"
+  },
+  "1": {
+    "original_class_id": 5403,
+    "class_name": "Cladonia rangiferina",
+    "category": "Fungi"
+  },
+  "2": {
+    "original_class_id": 3728,
+    "class_name": "Certhia americana",
+    "category": "Birds"
+  },
+  "3": {
+    "original_class_id": 560,
+    "class_name": "Anasa tristis",
+    "category": "Insects"
+  },
+  "4": {
+    "original_class_id": 9796,
+    "class_name": "Thuja plicata",
+    "category": "Plants"
+  },
+  "5": {
+    "original_class_id": 2751,
+    "class_name": "Porcellio laevis",
+    "category": "Animalia"
+  },
+  "6": {
+    "original_class_id": 5495,
+    "class_name": "Amanita novinupta",
+    "category": "Fungi"
+  },
+  "7": {
+    "original_class_id": 1644,
+    "class_name": "Leucania adjuta",
+    "category": "Insects"
+  },
+  "8": {
+    "original_class_id": 7382,
+    "class_name": "Hamatocactus hamatacanthus",
+    "category": "Plants"
+  },
+  "9": {
+    "original_class_id": 3456,
+    "class_name": "Calidris canutus",
+    "category": "Birds"
+  },
+  "10": {
+    "original_class_id": 6070,
+    "class_name": "Platanthera aquilonis",
+    "category": "Plants"
+  },
+  "11": {
+    "original_class_id": 1849,
+    "class_name": "Eueides isabella",
+    "category": "Insects"
+  },
+  "12": {
+    "original_class_id": 8729,
+    "class_name": "Lantana montevidensis",
+    "category": "Plants"
+  },
+  "13": {
+    "original_class_id": 7845,
+    "class_name": "Bonellia macrocarpa",
+    "category": "Plants"
+  },
+  "14": {
+    "original_class_id": 1195,
+    "class_name": "Dyspteris abortivaria",
+    "category": "Insects"
+  },
+  "15": {
+    "original_class_id": 8373,
+    "class_name": "Geranium erianthum",
+    "category": "Plants"
+  },
+  "16": {
+    "original_class_id": 9845,
+    "class_name": "Tsuga canadensis",
+    "category": "Plants"
+  },
+  "17": {
+    "original_class_id": 611,
+    "class_name": "Carpocoris mediterraneus",
+    "category": "Insects"
+  },
+  "18": {
+    "original_class_id": 9828,
+    "class_name": "Pinus monticola",
+    "category": "Plants"
+  },
+  "19": {
+    "original_class_id": 5250,
+    "class_name": "Ruditapes philippinarum",
+    "category": "Mollusks"
+  },
+  "20": {
+    "original_class_id": 651,
+    "class_name": "Phymata americana",
+    "category": "Insects"
+  },
+  "21": {
+    "original_class_id": 7194,
+    "class_name": "Phacelia hastata",
+    "category": "Plants"
+  },
+  "22": {
+    "original_class_id": 6322,
+    "class_name": "Andropogon gerardi",
+    "category": "Plants"
+  },
+  "23": {
+    "original_class_id": 4348,
+    "class_name": "Vireo plumbeus",
+    "category": "Birds"
+  },
+  "24": {
+    "original_class_id": 413,
+    "class_name": "Bolitotherus cornutus",
+    "category": "Insects"
+  },
+  "25": {
+    "original_class_id": 6884,
+    "class_name": "Madia elegans",
+    "category": "Plants"
+  },
+  "26": {
+    "original_class_id": 2191,
+    "class_name": "Eumorpha pandorus",
+    "category": "Insects"
+  },
+  "27": {
+    "original_class_id": 9476,
+    "class_name": "Rubus saxatilis",
+    "category": "Plants"
+  },
+  "28": {
+    "original_class_id": 5412,
+    "class_name": "Letharia columbiana",
+    "category": "Fungi"
+  },
+  "29": {
+    "original_class_id": 843,
+    "class_name": "Vespula maculifrons",
+    "category": "Insects"
+  },
+  "30": {
+    "original_class_id": 1839,
+    "class_name": "Dryadula phaetusa",
+    "category": "Insects"
+  },
+  "31": {
+    "original_class_id": 190,
+    "class_name": "Cantharis rustica",
+    "category": "Insects"
+  },
+  "32": {
+    "original_class_id": 9994,
+    "class_name": "Woodsia obtusa",
+    "category": "Plants"
+  },
+  "33": {
+    "original_class_id": 7807,
+    "class_name": "Collomia linearis",
+    "category": "Plants"
+  },
+  "34": {
+    "original_class_id": 6340,
+    "class_name": "Bouteloua rigidiseta",
+    "category": "Plants"
+  },
+  "35": {
+    "original_class_id": 2794,
+    "class_name": "Naso lituratus",
+    "category": "Ray-finned Fishes"
+  },
+  "36": {
+    "original_class_id": 289,
+    "class_name": "Leptinotarsa decemlineata",
+    "category": "Insects"
+  },
+  "37": {
+    "original_class_id": 3253,
+    "class_name": "Mareca americana",
+    "category": "Birds"
+  },
+  "38": {
+    "original_class_id": 8070,
+    "class_name": "Senna roemeriana",
+    "category": "Plants"
+  },
+  "39": {
+    "original_class_id": 3101,
+    "class_name": "Salamandra lanzai",
+    "category": "Amphibians"
+  },
+  "40": {
+    "original_class_id": 7885,
+    "class_name": "Sarracenia purpurea",
+    "category": "Plants"
+  },
+  "41": {
+    "original_class_id": 4267,
+    "class_name": "Catharus guttatus",
+    "category": "Birds"
+  },
+  "42": {
+    "original_class_id": 7822,
+    "class_name": "Linanthus dianthiflorus",
+    "category": "Plants"
+  },
+  "43": {
+    "original_class_id": 9707,
+    "class_name": "Ipomoea sagittata",
+    "category": "Plants"
+  },
+  "44": {
+    "original_class_id": 2943,
+    "class_name": "Anaxyrus boreas",
+    "category": "Amphibians"
+  },
+  "45": {
+    "original_class_id": 9976,
+    "class_name": "Myriopteris aurea",
+    "category": "Plants"
+  },
+  "46": {
+    "original_class_id": 296,
+    "class_name": "Trachymela sloanei",
+    "category": "Insects"
+  },
+  "47": {
+    "original_class_id": 1648,
+    "class_name": "Leuconycta lepidula",
+    "category": "Insects"
+  },
+  "48": {
+    "original_class_id": 689,
+    "class_name": "Bombus hypnorum",
+    "category": "Insects"
+  },
+  "49": {
+    "original_class_id": 9996,
+    "class_name": "Tmesipteris elongata",
+    "category": "Plants"
+  },
+  "50": {
+    "original_class_id": 4499,
+    "class_name": "Calyptorhynchus banksii",
+    "category": "Birds"
+  },
+  "51": {
+    "original_class_id": 5994,
+    "class_name": "Anacamptis papilionacea",
+    "category": "Plants"
+  },
+  "52": {
+    "original_class_id": 6225,
+    "class_name": "Bromelia pinguin",
+    "category": "Plants"
+  },
+  "53": {
+    "original_class_id": 3642,
+    "class_name": "Gavia immer",
+    "category": "Birds"
+  },
+  "54": {
+    "original_class_id": 7604,
+    "class_name": "Cornus sericea",
+    "category": "Plants"
+  },
+  "55": {
+    "original_class_id": 9146,
+    "class_name": "Berberis repens",
+    "category": "Plants"
+  },
+  "56": {
+    "original_class_id": 5461,
+    "class_name": "Sarcoscypha coccinea",
+    "category": "Fungi"
+  },
+  "57": {
+    "original_class_id": 7634,
+    "class_name": "Centranthus ruber",
+    "category": "Plants"
+  },
+  "58": {
+    "original_class_id": 5647,
+    "class_name": "Mutinus elegans",
+    "category": "Fungi"
+  },
+  "59": {
+    "original_class_id": 9151,
+    "class_name": "Caulophyllum thalictroides",
+    "category": "Plants"
+  },
+  "60": {
+    "original_class_id": 8134,
+    "class_name": "Polygala senega",
+    "category": "Plants"
+  },
+  "61": {
+    "original_class_id": 3326,
+    "class_name": "Selasphorus platycercus",
+    "category": "Birds"
+  },
+  "62": {
+    "original_class_id": 5559,
+    "class_name": "Volvopluteus gloiocephalus",
+    "category": "Fungi"
+  },
+  "63": {
+    "original_class_id": 4240,
+    "class_name": "Tachyphonus rufus",
+    "category": "Birds"
+  },
+  "64": {
+    "original_class_id": 4866,
+    "class_name": "Acanthocercus atricollis",
+    "category": "Reptiles"
+  },
+  "65": {
+    "original_class_id": 7343,
+    "class_name": "Coryphantha macromeris",
+    "category": "Plants"
+  },
+  "66": {
+    "original_class_id": 6799,
+    "class_name": "Gaillardia aestivalis",
+    "category": "Plants"
+  },
+  "67": {
+    "original_class_id": 2868,
+    "class_name": "Chromis chromis",
+    "category": "Ray-finned Fishes"
+  },
+  "68": {
+    "original_class_id": 5665,
+    "class_name": "Meripilus giganteus",
+    "category": "Fungi"
+  },
+  "69": {
+    "original_class_id": 7465,
+    "class_name": "Stellaria media",
+    "category": "Plants"
+  },
+  "70": {
+    "original_class_id": 4014,
+    "class_name": "Oriolus chinensis",
+    "category": "Birds"
+  },
+  "71": {
+    "original_class_id": 5709,
+    "class_name": "Russula brevipes",
+    "category": "Fungi"
+  },
+  "72": {
+    "original_class_id": 2700,
+    "class_name": "Lepisma saccharina",
+    "category": "Insects"
+  },
+  "73": {
+    "original_class_id": 4994,
+    "class_name": "Woodworthia maculata",
+    "category": "Reptiles"
+  },
+  "74": {
+    "original_class_id": 6078,
+    "class_name": "Platanthera huronensis",
+    "category": "Plants"
+  },
+  "75": {
+    "original_class_id": 3909,
+    "class_name": "Lanius cristatus",
+    "category": "Birds"
+  },
+  "76": {
+    "original_class_id": 6837,
+    "class_name": "Heterotheca grandiflora",
+    "category": "Plants"
+  },
+  "77": {
+    "original_class_id": 6053,
+    "class_name": "Neottia cordata",
+    "category": "Plants"
+  },
+  "78": {
+    "original_class_id": 8605,
+    "class_name": "Pedicularis canadensis",
+    "category": "Plants"
+  },
+  "79": {
+    "original_class_id": 6502,
+    "class_name": "Daucus pusillus",
+    "category": "Plants"
+  },
+  "80": {
+    "original_class_id": 4313,
+    "class_name": "Myiarchus cinerascens",
+    "category": "Birds"
+  },
+  "81": {
+    "original_class_id": 8308,
+    "class_name": "Gentianella amarella",
+    "category": "Plants"
+  },
+  "82": {
+    "original_class_id": 5331,
+    "class_name": "Deroceras reticulatum",
+    "category": "Mollusks"
+  },
+  "83": {
+    "original_class_id": 8135,
+    "class_name": "Polygaloides chamaebuxus",
+    "category": "Plants"
+  },
+  "84": {
+    "original_class_id": 9442,
+    "class_name": "Rosa acicularis",
+    "category": "Plants"
+  },
+  "85": {
+    "original_class_id": 3912,
+    "class_name": "Lanius minor",
+    "category": "Birds"
+  },
+  "86": {
+    "original_class_id": 5899,
+    "class_name": "Hesperoyucca whipplei",
+    "category": "Plants"
+  },
+  "87": {
+    "original_class_id": 7497,
+    "class_name": "Abronia latifolia",
+    "category": "Plants"
+  },
+  "88": {
+    "original_class_id": 9922,
+    "class_name": "Woodwardia fimbriata",
+    "category": "Plants"
+  },
+  "89": {
+    "original_class_id": 7660,
+    "class_name": "Succisa pratensis",
+    "category": "Plants"
+  },
+  "90": {
+    "original_class_id": 369,
+    "class_name": "Malachius bipustulatus",
+    "category": "Insects"
+  },
+  "91": {
+    "original_class_id": 7842,
+    "class_name": "Polemonium viscosum",
+    "category": "Plants"
+  },
+  "92": {
+    "original_class_id": 4323,
+    "class_name": "Sayornis nigricans",
+    "category": "Birds"
+  },
+  "93": {
+    "original_class_id": 1052,
+    "class_name": "Hypena proboscidalis",
+    "category": "Insects"
+  },
+  "94": {
+    "original_class_id": 1834,
+    "class_name": "Dione juno",
+    "category": "Insects"
+  },
+  "95": {
+    "original_class_id": 5705,
+    "class_name": "Lactarius indigo",
+    "category": "Fungi"
+  },
+  "96": {
+    "original_class_id": 8,
+    "class_name": "Araneus bicentenarius",
+    "category": "Arachnids"
+  },
+  "97": {
+    "original_class_id": 9107,
+    "class_name": "Oxalis violacea",
+    "category": "Plants"
+  },
+  "98": {
+    "original_class_id": 4015,
+    "class_name": "Oriolus larvatus",
+    "category": "Birds"
+  },
+  "99": {
+    "original_class_id": 1008,
+    "class_name": "Chytolita morbidalis",
+    "category": "Insects"
+  },
+  "100": {
+    "original_class_id": 3734,
+    "class_name": "Cisticola juncidis",
+    "category": "Birds"
+  },
+  "101": {
+    "original_class_id": 1514,
+    "class_name": "Plebejus idas",
+    "category": "Insects"
+  },
+  "102": {
+    "original_class_id": 6507,
+    "class_name": "Eryngium maritimum",
+    "category": "Plants"
+  },
+  "103": {
+    "original_class_id": 6168,
+    "class_name": "Lilium bulbiferum",
+    "category": "Plants"
+  },
+  "104": {
+    "original_class_id": 2178,
+    "class_name": "Ceratomia undulosa",
+    "category": "Insects"
+  },
+  "105": {
+    "original_class_id": 1769,
+    "class_name": "Aglais io",
+    "category": "Insects"
+  },
+  "106": {
+    "original_class_id": 806,
+    "class_name": "Sphex nudus",
+    "category": "Insects"
+  },
+  "107": {
+    "original_class_id": 7933,
+    "class_name": "Ceratonia siliqua",
+    "category": "Plants"
+  },
+  "108": {
+    "original_class_id": 2129,
+    "class_name": "Moodna ostrinella",
+    "category": "Insects"
+  },
+  "109": {
+    "original_class_id": 2820,
+    "class_name": "Cirrhitichthys aprinus",
+    "category": "Ray-finned Fishes"
+  },
+  "110": {
+    "original_class_id": 5956,
+    "class_name": "Astelia nervosa",
+    "category": "Plants"
+  },
+  "111": {
+    "original_class_id": 729,
+    "class_name": "Amphibolips quercuspomiformis",
+    "category": "Insects"
+  },
+  "112": {
+    "original_class_id": 47,
+    "class_name": "Trichonephila fenestrata",
+    "category": "Arachnids"
+  },
+  "113": {
+    "original_class_id": 9659,
+    "class_name": "Micranthes californica",
+    "category": "Plants"
+  },
+  "114": {
+    "original_class_id": 1312,
+    "class_name": "Synchlora aerata",
+    "category": "Insects"
+  },
+  "115": {
+    "original_class_id": 8396,
+    "class_name": "Avicennia marina",
+    "category": "Plants"
+  },
+  "116": {
+    "original_class_id": 2234,
+    "class_name": "Argyrotaenia quercifoliana",
+    "category": "Insects"
+  },
+  "117": {
+    "original_class_id": 9051,
+    "class_name": "Ludwigia alternifolia",
+    "category": "Plants"
+  },
+  "118": {
+    "original_class_id": 6508,
+    "class_name": "Eryngium planum",
+    "category": "Plants"
+  },
+  "119": {
+    "original_class_id": 4938,
+    "class_name": "Nerodia fasciata",
+    "category": "Reptiles"
+  },
+  "120": {
+    "original_class_id": 2262,
+    "class_name": "Platynota rostrana",
+    "category": "Insects"
+  },
+  "121": {
+    "original_class_id": 1634,
+    "class_name": "Hemieuxoa rudens",
+    "category": "Insects"
+  },
+  "122": {
+    "original_class_id": 8516,
+    "class_name": "Teucrium chamaedrys",
+    "category": "Plants"
+  },
+  "123": {
+    "original_class_id": 377,
+    "class_name": "Cetonia aurata",
+    "category": "Insects"
+  },
+  "124": {
+    "original_class_id": 5542,
+    "class_name": "Sarcomyxa serotina",
+    "category": "Fungi"
+  },
+  "125": {
+    "original_class_id": 8976,
+    "class_name": "Sidalcea oregana",
+    "category": "Plants"
+  },
+  "126": {
+    "original_class_id": 7776,
+    "class_name": "Rhododendron canescens",
+    "category": "Plants"
+  },
+  "127": {
+    "original_class_id": 8010,
+    "class_name": "Lupinus polyphyllus",
+    "category": "Plants"
+  },
+  "128": {
+    "original_class_id": 5220,
+    "class_name": "Clinocardium nuttallii",
+    "category": "Mollusks"
+  },
+  "129": {
+    "original_class_id": 6794,
+    "class_name": "Eurybia sibirica",
+    "category": "Plants"
+  },
+  "130": {
+    "original_class_id": 9497,
+    "class_name": "Waldsteinia fragarioides",
+    "category": "Plants"
+  },
+  "131": {
+    "original_class_id": 6715,
+    "class_name": "Cirsium scariosum",
+    "category": "Plants"
+  },
+  "132": {
+    "original_class_id": 7161,
+    "class_name": "Lithospermum canescens",
+    "category": "Plants"
+  },
+  "133": {
+    "original_class_id": 5960,
+    "class_name": "Chasmanthe floribunda",
+    "category": "Plants"
+  },
+  "134": {
+    "original_class_id": 9792,
+    "class_name": "Taxodium ascendens",
+    "category": "Plants"
+  },
+  "135": {
+    "original_class_id": 4753,
+    "class_name": "Lepus americanus",
+    "category": "Mammals"
+  },
+  "136": {
+    "original_class_id": 3831,
+    "class_name": "Pyrrhula pyrrhula",
+    "category": "Birds"
+  },
+  "137": {
+    "original_class_id": 5486,
+    "class_name": "Podaxis pistillaris",
+    "category": "Fungi"
+  },
+  "138": {
+    "original_class_id": 8060,
+    "class_name": "Senegalia greggii",
+    "category": "Plants"
+  },
+  "139": {
+    "original_class_id": 920,
+    "class_name": "Parapoynx badiusalis",
+    "category": "Insects"
+  },
+  "140": {
+    "original_class_id": 9903,
+    "class_name": "Asplenium rhizophyllum",
+    "category": "Plants"
+  },
+  "141": {
+    "original_class_id": 603,
+    "class_name": "Stenotus binotatus",
+    "category": "Insects"
+  },
+  "142": {
+    "original_class_id": 8024,
+    "class_name": "Melilotus albus",
+    "category": "Plants"
+  },
+  "143": {
+    "original_class_id": 275,
+    "class_name": "Chrysolina fastuosa",
+    "category": "Insects"
+  },
+  "144": {
+    "original_class_id": 1098,
+    "class_name": "Palthis angulalis",
+    "category": "Insects"
+  },
+  "145": {
+    "original_class_id": 8009,
+    "class_name": "Lupinus perennis",
+    "category": "Plants"
+  },
+  "146": {
+    "original_class_id": 2578,
+    "class_name": "Tramea carolina",
+    "category": "Insects"
+  },
+  "147": {
+    "original_class_id": 9729,
+    "class_name": "Physalis heterophylla",
+    "category": "Plants"
+  },
+  "148": {
+    "original_class_id": 3003,
+    "class_name": "Smilisca baudinii",
+    "category": "Amphibians"
+  },
+  "149": {
+    "original_class_id": 9175,
+    "class_name": "Eschscholzia californica",
+    "category": "Plants"
+  },
+  "150": {
+    "original_class_id": 8764,
+    "class_name": "Magnolia virginiana",
+    "category": "Plants"
+  },
+  "151": {
+    "original_class_id": 5836,
+    "class_name": "Allium canadense",
+    "category": "Plants"
+  },
+  "152": {
+    "original_class_id": 9876,
+    "class_name": "Dicranopteris linearis",
+    "category": "Plants"
+  },
+  "153": {
+    "original_class_id": 9625,
+    "class_name": "Ribes americanum",
+    "category": "Plants"
+  },
+  "154": {
+    "original_class_id": 9987,
+    "class_name": "Pteris vittata",
+    "category": "Plants"
+  },
+  "155": {
+    "original_class_id": 7783,
+    "class_name": "Rhododendron menziesii",
+    "category": "Plants"
+  },
+  "156": {
+    "original_class_id": 6555,
+    "class_name": "Hedera helix",
+    "category": "Plants"
+  },
+  "157": {
+    "original_class_id": 6790,
+    "class_name": "Eupatorium rotundifolium",
+    "category": "Plants"
+  },
+  "158": {
+    "original_class_id": 5311,
+    "class_name": "Doris montereyensis",
+    "category": "Mollusks"
+  },
+  "159": {
+    "original_class_id": 1857,
+    "class_name": "Euploea mulciber",
+    "category": "Insects"
+  },
+  "160": {
+    "original_class_id": 2391,
+    "class_name": "Ischnura posita",
+    "category": "Insects"
+  },
+  "161": {
+    "original_class_id": 8330,
+    "class_name": "Coprosma repens",
+    "category": "Plants"
+  },
+  "162": {
+    "original_class_id": 5539,
+    "class_name": "Mycena pura",
+    "category": "Fungi"
+  },
+  "163": {
+    "original_class_id": 29,
+    "class_name": "Gasteracantha kuhli",
+    "category": "Arachnids"
+  },
+  "164": {
+    "original_class_id": 8917,
+    "class_name": "Viola tricolor",
+    "category": "Plants"
+  },
+  "165": {
+    "original_class_id": 7989,
+    "class_name": "Lespedeza capitata",
+    "category": "Plants"
+  },
+  "166": {
+    "original_class_id": 1705,
+    "class_name": "Spodoptera litura",
+    "category": "Insects"
+  },
+  "167": {
+    "original_class_id": 9218,
+    "class_name": "Aquilegia coerulea",
+    "category": "Plants"
+  },
+  "168": {
+    "original_class_id": 6643,
+    "class_name": "Baccharis neglecta",
+    "category": "Plants"
+  },
+  "169": {
+    "original_class_id": 1611,
+    "class_name": "Cucullia convexipennis",
+    "category": "Insects"
+  },
+  "170": {
+    "original_class_id": 3375,
+    "class_name": "Vanellus senegallus",
+    "category": "Birds"
+  },
+  "171": {
+    "original_class_id": 9337,
+    "class_name": "Frangula alnus",
+    "category": "Plants"
+  },
+  "172": {
+    "original_class_id": 6757,
+    "class_name": "Emilia fosbergii",
+    "category": "Plants"
+  },
+  "173": {
+    "original_class_id": 1901,
+    "class_name": "Lethe confusa",
+    "category": "Insects"
+  },
+  "174": {
+    "original_class_id": 9055,
+    "class_name": "Ludwigia peruviana",
+    "category": "Plants"
+  },
+  "175": {
+    "original_class_id": 421,
+    "class_name": "Dioctria hyalipennis",
+    "category": "Insects"
+  },
+  "176": {
+    "original_class_id": 8141,
+    "class_name": "Alnus rhombifolia",
+    "category": "Plants"
+  },
+  "177": {
+    "original_class_id": 8481,
+    "class_name": "Pycnanthemum virginianum",
+    "category": "Plants"
+  },
+  "178": {
+    "original_class_id": 4612,
+    "class_name": "Trygonorrhina fasciata",
+    "category": "Animalia"
+  },
+  "179": {
+    "original_class_id": 7499,
+    "class_name": "Abronia umbellata",
+    "category": "Plants"
+  },
+  "180": {
+    "original_class_id": 8280,
+    "class_name": "Plumeria rubra",
+    "category": "Plants"
+  },
+  "181": {
+    "original_class_id": 5576,
+    "class_name": "Agrocybe praecox",
+    "category": "Fungi"
+  },
+  "182": {
+    "original_class_id": 616,
+    "class_name": "Cosmopepla lintneriana",
+    "category": "Insects"
+  },
+  "183": {
+    "original_class_id": 7953,
+    "class_name": "Dichrostachys cinerea",
+    "category": "Plants"
+  },
+  "184": {
+    "original_class_id": 572,
+    "class_name": "Thasus gigas",
+    "category": "Insects"
+  },
+  "185": {
+    "original_class_id": 6736,
+    "class_name": "Cyclachaena xanthiifolia",
+    "category": "Plants"
+  },
+  "186": {
+    "original_class_id": 6974,
+    "class_name": "Senecio inaequidens",
+    "category": "Plants"
+  },
+  "187": {
+    "original_class_id": 9485,
+    "class_name": "Sibbaldia procumbens",
+    "category": "Plants"
+  },
+  "188": {
+    "original_class_id": 3007,
+    "class_name": "Engystomops pustulosus",
+    "category": "Amphibians"
+  },
+  "189": {
+    "original_class_id": 4471,
+    "class_name": "Ramphastos sulfuratus",
+    "category": "Birds"
+  },
+  "190": {
+    "original_class_id": 5054,
+    "class_name": "Sceloporus olivaceus",
+    "category": "Reptiles"
+  },
+  "191": {
+    "original_class_id": 7819,
+    "class_name": "Leptosiphon nuttallii",
+    "category": "Plants"
+  },
+  "192": {
+    "original_class_id": 9795,
+    "class_name": "Thuja occidentalis",
+    "category": "Plants"
+  },
+  "193": {
+    "original_class_id": 5698,
+    "class_name": "Auriscalpium vulgare",
+    "category": "Fungi"
+  },
+  "194": {
+    "original_class_id": 8249,
+    "class_name": "Asclepias oenotheroides",
+    "category": "Plants"
+  },
+  "195": {
+    "original_class_id": 9174,
+    "class_name": "Eschscholzia caespitosa",
+    "category": "Plants"
+  },
+  "196": {
+    "original_class_id": 1208,
+    "class_name": "Epyaxa rosearia",
+    "category": "Insects"
+  },
+  "197": {
+    "original_class_id": 4800,
+    "class_name": "Microtus pennsylvanicus",
+    "category": "Mammals"
+  },
+  "198": {
+    "original_class_id": 7774,
+    "class_name": "Rhododendron calendulaceum",
+    "category": "Plants"
+  },
+  "199": {
+    "original_class_id": 420,
+    "class_name": "Forficula auricularia",
+    "category": "Insects"
+  },
+  "200": {
+    "original_class_id": 2051,
+    "class_name": "Aporia crataegi",
+    "category": "Insects"
+  },
+  "201": {
+    "original_class_id": 92,
+    "class_name": "Phidippus audax",
+    "category": "Arachnids"
+  },
+  "202": {
+    "original_class_id": 70,
+    "class_name": "Dolomedes triton",
+    "category": "Arachnids"
+  },
+  "203": {
+    "original_class_id": 2706,
+    "class_name": "Cancer productus",
+    "category": "Animalia"
+  },
+  "204": {
+    "original_class_id": 7676,
+    "class_name": "Sambucus nigra",
+    "category": "Plants"
+  },
+  "205": {
+    "original_class_id": 5955,
+    "class_name": "Astelia hastata",
+    "category": "Plants"
+  },
+  "206": {
+    "original_class_id": 6251,
+    "class_name": "Carex macrocephala",
+    "category": "Plants"
+  },
+  "207": {
+    "original_class_id": 856,
+    "class_name": "Zeuzera pyrina",
+    "category": "Insects"
+  },
+  "208": {
+    "original_class_id": 7864,
+    "class_name": "Myrsine divaricata",
+    "category": "Plants"
+  },
+  "209": {
+    "original_class_id": 3109,
+    "class_name": "Botrylloides violaceus",
+    "category": "Animalia"
+  },
+  "210": {
+    "original_class_id": 458,
+    "class_name": "Hermetia illucens",
+    "category": "Insects"
+  },
+  "211": {
+    "original_class_id": 2719,
+    "class_name": "Pachygrapsus marmoratus",
+    "category": "Animalia"
+  },
+  "212": {
+    "original_class_id": 629,
+    "class_name": "Murgantia histrionica",
+    "category": "Insects"
+  },
+  "213": {
+    "original_class_id": 2888,
+    "class_name": "Chrysophrys auratus",
+    "category": "Ray-finned Fishes"
+  },
+  "214": {
+    "original_class_id": 1507,
+    "class_name": "Lycaena tityrus",
+    "category": "Insects"
+  },
+  "215": {
+    "original_class_id": 243,
+    "class_name": "Prionus californicus",
+    "category": "Insects"
+  },
+  "216": {
+    "original_class_id": 4956,
+    "class_name": "Regina septemvittata",
+    "category": "Reptiles"
+  },
+  "217": {
+    "original_class_id": 9425,
+    "class_name": "Prunus ilicifolia",
+    "category": "Plants"
+  },
+  "218": {
+    "original_class_id": 6442,
+    "class_name": "Sparganium eurycarpum",
+    "category": "Plants"
+  },
+  "219": {
+    "original_class_id": 67,
+    "class_name": "Dolomedes minor",
+    "category": "Arachnids"
+  },
+  "220": {
+    "original_class_id": 579,
+    "class_name": "Lycorma delicatula",
+    "category": "Insects"
+  },
+  "221": {
+    "original_class_id": 7464,
+    "class_name": "Stellaria graminea",
+    "category": "Plants"
+  },
+  "222": {
+    "original_class_id": 3769,
+    "class_name": "Garrulus glandarius",
+    "category": "Birds"
+  },
+  "223": {
+    "original_class_id": 703,
+    "class_name": "Bombus terricola",
+    "category": "Insects"
+  },
+  "224": {
+    "original_class_id": 3783,
+    "class_name": "Dicrurus bracteatus",
+    "category": "Birds"
+  },
+  "225": {
+    "original_class_id": 5867,
+    "class_name": "Scadoxus puniceus",
+    "category": "Plants"
+  },
+  "226": {
+    "original_class_id": 7309,
+    "class_name": "Tetragonia tetragonoides",
+    "category": "Plants"
+  },
+  "227": {
+    "original_class_id": 1056,
+    "class_name": "Hyphantria cunea",
+    "category": "Insects"
+  },
+  "228": {
+    "original_class_id": 6816,
+    "class_name": "Hazardia squarrosa",
+    "category": "Plants"
+  },
+  "229": {
+    "original_class_id": 2049,
+    "class_name": "Anthocharis midea",
+    "category": "Insects"
+  },
+  "230": {
+    "original_class_id": 1787,
+    "class_name": "Argynnis paphia",
+    "category": "Insects"
+  },
+  "231": {
+    "original_class_id": 7088,
+    "class_name": "Campanula lasiocarpa",
+    "category": "Plants"
+  },
+  "232": {
+    "original_class_id": 6453,
+    "class_name": "Musa acuminata",
+    "category": "Plants"
+  },
+  "233": {
+    "original_class_id": 2657,
+    "class_name": "Zonocerus elegans",
+    "category": "Insects"
+  },
+  "234": {
+    "original_class_id": 8890,
+    "class_name": "Viola canina",
+    "category": "Plants"
+  },
+  "235": {
+    "original_class_id": 1472,
+    "class_name": "Euchrysops cnejus",
+    "category": "Insects"
+  },
+  "236": {
+    "original_class_id": 9950,
+    "class_name": "Rumohra adiantiformis",
+    "category": "Plants"
+  },
+  "237": {
+    "original_class_id": 272,
+    "class_name": "Chrysochus cobaltinus",
+    "category": "Insects"
+  },
+  "238": {
+    "original_class_id": 5039,
+    "class_name": "Phrynosoma mcallii",
+    "category": "Reptiles"
+  },
+  "239": {
+    "original_class_id": 2414,
+    "class_name": "Epitheca princeps",
+    "category": "Insects"
+  },
+  "240": {
+    "original_class_id": 7917,
+    "class_name": "Astragalus nuttallianus",
+    "category": "Plants"
+  },
+  "241": {
+    "original_class_id": 5418,
+    "class_name": "Punctelia rudecta",
+    "category": "Fungi"
+  },
+  "242": {
+    "original_class_id": 2811,
+    "class_name": "Chaetodon auriga",
+    "category": "Ray-finned Fishes"
+  },
+  "243": {
+    "original_class_id": 7941,
+    "class_name": "Crotalaria spectabilis",
+    "category": "Plants"
+  },
+  "244": {
+    "original_class_id": 2939,
+    "class_name": "Ascaphus truei",
+    "category": "Amphibians"
+  },
+  "245": {
+    "original_class_id": 5790,
+    "class_name": "Sagittaria sagittifolia",
+    "category": "Plants"
+  },
+  "246": {
+    "original_class_id": 9129,
+    "class_name": "Leucadendron rubrum",
+    "category": "Plants"
+  },
+  "247": {
+    "original_class_id": 4242,
+    "class_name": "Tangara gyrola",
+    "category": "Birds"
+  },
+  "248": {
+    "original_class_id": 3128,
+    "class_name": "Buteo lagopus",
+    "category": "Birds"
+  },
+  "249": {
+    "original_class_id": 8604,
+    "class_name": "Pedicularis bracteosa",
+    "category": "Plants"
+  },
+  "250": {
+    "original_class_id": 8486,
+    "class_name": "Salvia columbariae",
+    "category": "Plants"
+  },
+  "251": {
+    "original_class_id": 800,
+    "class_name": "Chalybion californicum",
+    "category": "Insects"
+  },
+  "252": {
+    "original_class_id": 1300,
+    "class_name": "Psamatodes abydata",
+    "category": "Insects"
+  },
+  "253": {
+    "original_class_id": 4779,
+    "class_name": "Ateles geoffroyi",
+    "category": "Mammals"
+  },
+  "254": {
+    "original_class_id": 6801,
+    "class_name": "Gaillardia pinnatifida",
+    "category": "Plants"
+  },
+  "255": {
+    "original_class_id": 9865,
+    "class_name": "Dicksonia squarrosa",
+    "category": "Plants"
+  },
+  "256": {
+    "original_class_id": 9875,
+    "class_name": "Equisetum variegatum",
+    "category": "Plants"
+  },
+  "257": {
+    "original_class_id": 9104,
+    "class_name": "Oxalis polyphylla",
+    "category": "Plants"
+  },
+  "258": {
+    "original_class_id": 257,
+    "class_name": "Strangalia luteicornis",
+    "category": "Insects"
+  },
+  "259": {
+    "original_class_id": 8363,
+    "class_name": "Sherardia arvensis",
+    "category": "Plants"
+  },
+  "260": {
+    "original_class_id": 5682,
+    "class_name": "Ganoderma tsugae",
+    "category": "Fungi"
+  },
+  "261": {
+    "original_class_id": 9399,
+    "class_name": "Malus \u00d7domestica",
+    "category": "Plants"
+  },
+  "262": {
+    "original_class_id": 4767,
+    "class_name": "Tachyglossus aculeatus",
+    "category": "Mammals"
+  },
+  "263": {
+    "original_class_id": 3612,
+    "class_name": "Crax rubra",
+    "category": "Birds"
+  },
+  "264": {
+    "original_class_id": 6430,
+    "class_name": "Sporobolus michauxianus",
+    "category": "Plants"
+  },
+  "265": {
+    "original_class_id": 1780,
+    "class_name": "Apatura ilia",
+    "category": "Insects"
+  },
+  "266": {
+    "original_class_id": 1394,
+    "class_name": "Polites peckius",
+    "category": "Insects"
+  },
+  "267": {
+    "original_class_id": 9364,
+    "class_name": "Aruncus dioicus",
+    "category": "Plants"
+  },
+  "268": {
+    "original_class_id": 4110,
+    "class_name": "Melozone fusca",
+    "category": "Birds"
+  },
+  "269": {
+    "original_class_id": 3594,
+    "class_name": "Falco berigora",
+    "category": "Birds"
+  },
+  "270": {
+    "original_class_id": 3625,
+    "class_name": "Alectoris chukar",
+    "category": "Birds"
+  },
+  "271": {
+    "original_class_id": 3870,
+    "class_name": "Cassiculus melanicterus",
+    "category": "Birds"
+  },
+  "272": {
+    "original_class_id": 5326,
+    "class_name": "Polycera atra",
+    "category": "Mollusks"
+  },
+  "273": {
+    "original_class_id": 9249,
+    "class_name": "Helleborus foetidus",
+    "category": "Plants"
+  },
+  "274": {
+    "original_class_id": 411,
+    "class_name": "Phosphuga atrata",
+    "category": "Insects"
+  },
+  "275": {
+    "original_class_id": 9710,
+    "class_name": "Hydrolea ovata",
+    "category": "Plants"
+  },
+  "276": {
+    "original_class_id": 4826,
+    "class_name": "Funambulus pennantii",
+    "category": "Mammals"
+  },
+  "277": {
+    "original_class_id": 5213,
+    "class_name": "Strongylocentrotus purpuratus",
+    "category": "Animalia"
+  },
+  "278": {
+    "original_class_id": 8537,
+    "class_name": "Utricularia subulata",
+    "category": "Plants"
+  },
+  "279": {
+    "original_class_id": 6349,
+    "class_name": "Bromus tectorum",
+    "category": "Plants"
+  },
+  "280": {
+    "original_class_id": 8628,
+    "class_name": "Erythranthe lewisii",
+    "category": "Plants"
+  },
+  "281": {
+    "original_class_id": 8570,
+    "class_name": "Castilleja attenuata",
+    "category": "Plants"
+  },
+  "282": {
+    "original_class_id": 6556,
+    "class_name": "Hydrocotyle bonariensis",
+    "category": "Plants"
+  },
+  "283": {
+    "original_class_id": 8118,
+    "class_name": "Vicia sepium",
+    "category": "Plants"
+  },
+  "284": {
+    "original_class_id": 1521,
+    "class_name": "Prosotas dubiosa",
+    "category": "Insects"
+  },
+  "285": {
+    "original_class_id": 8626,
+    "class_name": "Erythranthe cardinalis",
+    "category": "Plants"
+  },
+  "286": {
+    "original_class_id": 6048,
+    "class_name": "Liparis liliifolia",
+    "category": "Plants"
+  },
+  "287": {
+    "original_class_id": 2857,
+    "class_name": "Etheostoma caeruleum",
+    "category": "Ray-finned Fishes"
+  },
+  "288": {
+    "original_class_id": 8700,
+    "class_name": "Veronica salicifolia",
+    "category": "Plants"
+  },
+  "289": {
+    "original_class_id": 8824,
+    "class_name": "Triadica sebifera",
+    "category": "Plants"
+  },
+  "290": {
+    "original_class_id": 6475,
+    "class_name": "Selaginella bigelovii",
+    "category": "Plants"
+  },
+  "291": {
+    "original_class_id": 6873,
+    "class_name": "Leptosyne maritima",
+    "category": "Plants"
+  },
+  "292": {
+    "original_class_id": 685,
+    "class_name": "Bombus fervidus",
+    "category": "Insects"
+  },
+  "293": {
+    "original_class_id": 4372,
+    "class_name": "Cochlearius cochlearius",
+    "category": "Birds"
+  },
+  "294": {
+    "original_class_id": 9395,
+    "class_name": "Heteromeles arbutifolia",
+    "category": "Plants"
+  },
+  "295": {
+    "original_class_id": 9352,
+    "class_name": "Adenostoma fasciculatum",
+    "category": "Plants"
+  },
+  "296": {
+    "original_class_id": 5909,
+    "class_name": "Maianthemum stellatum",
+    "category": "Plants"
+  },
+  "297": {
+    "original_class_id": 994,
+    "class_name": "Catocala amatrix",
+    "category": "Insects"
+  },
+  "298": {
+    "original_class_id": 8629,
+    "class_name": "Erythranthe moschata",
+    "category": "Plants"
+  },
+  "299": {
+    "original_class_id": 7266,
+    "class_name": "Nasturtium officinale",
+    "category": "Plants"
+  },
+  "300": {
+    "original_class_id": 3903,
+    "class_name": "Sturnella neglecta",
+    "category": "Birds"
+  },
+  "301": {
+    "original_class_id": 3139,
+    "class_name": "Chondrohierax uncinatus",
+    "category": "Birds"
+  },
+  "302": {
+    "original_class_id": 7690,
+    "class_name": "Viburnum tinus",
+    "category": "Plants"
+  },
+  "303": {
+    "original_class_id": 7554,
+    "class_name": "Persicaria perfoliata",
+    "category": "Plants"
+  },
+  "304": {
+    "original_class_id": 1726,
+    "class_name": "Diphthera festiva",
+    "category": "Insects"
+  },
+  "305": {
+    "original_class_id": 2313,
+    "class_name": "Aeshna palmata",
+    "category": "Insects"
+  },
+  "306": {
+    "original_class_id": 1319,
+    "class_name": "Trichodezia albovittata",
+    "category": "Insects"
+  },
+  "307": {
+    "original_class_id": 4831,
+    "class_name": "Marmota flaviventris",
+    "category": "Mammals"
+  },
+  "308": {
+    "original_class_id": 9161,
+    "class_name": "Argemone ochroleuca",
+    "category": "Plants"
+  },
+  "309": {
+    "original_class_id": 5563,
+    "class_name": "Coprinellus micaceus",
+    "category": "Fungi"
+  },
+  "310": {
+    "original_class_id": 6644,
+    "class_name": "Baccharis pilularis",
+    "category": "Plants"
+  },
+  "311": {
+    "original_class_id": 3798,
+    "class_name": "Lagonosticta senegala",
+    "category": "Birds"
+  },
+  "312": {
+    "original_class_id": 5997,
+    "class_name": "Arethusa bulbosa",
+    "category": "Plants"
+  },
+  "313": {
+    "original_class_id": 3852,
+    "class_name": "Petrochelidon fulva",
+    "category": "Birds"
+  },
+  "314": {
+    "original_class_id": 6523,
+    "class_name": "Osmorhiza berteroi",
+    "category": "Plants"
+  },
+  "315": {
+    "original_class_id": 2410,
+    "class_name": "Dorocordulia libera",
+    "category": "Insects"
+  },
+  "316": {
+    "original_class_id": 5941,
+    "class_name": "Yucca rupicola",
+    "category": "Plants"
+  },
+  "317": {
+    "original_class_id": 9048,
+    "class_name": "Fuchsia excorticata",
+    "category": "Plants"
+  },
+  "318": {
+    "original_class_id": 4370,
+    "class_name": "Butorides striata",
+    "category": "Birds"
+  },
+  "319": {
+    "original_class_id": 4264,
+    "class_name": "Troglodytes pacificus",
+    "category": "Birds"
+  },
+  "320": {
+    "original_class_id": 5713,
+    "class_name": "Stereum versicolor",
+    "category": "Fungi"
+  },
+  "321": {
+    "original_class_id": 8332,
+    "class_name": "Coprosma robusta",
+    "category": "Plants"
+  },
+  "322": {
+    "original_class_id": 8282,
+    "class_name": "Vinca major",
+    "category": "Plants"
+  },
+  "323": {
+    "original_class_id": 3863,
+    "class_name": "Tachycineta albiventer",
+    "category": "Birds"
+  },
+  "324": {
+    "original_class_id": 4974,
+    "class_name": "Thamnophis sirtalis",
+    "category": "Reptiles"
+  },
+  "325": {
+    "original_class_id": 7279,
+    "class_name": "Streptanthus tortuosus",
+    "category": "Plants"
+  },
+  "326": {
+    "original_class_id": 8600,
+    "class_name": "Odontites vulgaris",
+    "category": "Plants"
+  },
+  "327": {
+    "original_class_id": 6282,
+    "class_name": "Cyperus strigosus",
+    "category": "Plants"
+  },
+  "328": {
+    "original_class_id": 5507,
+    "class_name": "Cortinarius violaceus",
+    "category": "Fungi"
+  },
+  "329": {
+    "original_class_id": 349,
+    "class_name": "Cypherotylus californicus",
+    "category": "Insects"
+  },
+  "330": {
+    "original_class_id": 9187,
+    "class_name": "Papaver somniferum",
+    "category": "Plants"
+  },
+  "331": {
+    "original_class_id": 4682,
+    "class_name": "Panthera leo",
+    "category": "Mammals"
+  },
+  "332": {
+    "original_class_id": 893,
+    "class_name": "Herpetogramma bipunctalis",
+    "category": "Insects"
+  },
+  "333": {
+    "original_class_id": 5942,
+    "class_name": "Yucca schidigera",
+    "category": "Plants"
+  },
+  "334": {
+    "original_class_id": 3318,
+    "class_name": "Eugenes fulgens",
+    "category": "Birds"
+  },
+  "335": {
+    "original_class_id": 2440,
+    "class_name": "Phyllogomphoides stigmatus",
+    "category": "Insects"
+  },
+  "336": {
+    "original_class_id": 5618,
+    "class_name": "Suillus pungens",
+    "category": "Fungi"
+  },
+  "337": {
+    "original_class_id": 1505,
+    "class_name": "Lycaena mariposa",
+    "category": "Insects"
+  },
+  "338": {
+    "original_class_id": 6010,
+    "class_name": "Corallorhiza trifida",
+    "category": "Plants"
+  },
+  "339": {
+    "original_class_id": 5857,
+    "class_name": "Hymenocallis littoralis",
+    "category": "Plants"
+  },
+  "340": {
+    "original_class_id": 1191,
+    "class_name": "Digrammia gnophosaria",
+    "category": "Insects"
+  },
+  "341": {
+    "original_class_id": 6471,
+    "class_name": "Lycopodium scariosum",
+    "category": "Plants"
+  },
+  "342": {
+    "original_class_id": 8621,
+    "class_name": "Diplacus bigelovii",
+    "category": "Plants"
+  },
+  "343": {
+    "original_class_id": 1282,
+    "class_name": "Pasiphila rectangulata",
+    "category": "Insects"
+  },
+  "344": {
+    "original_class_id": 5017,
+    "class_name": "Sauromalus ater",
+    "category": "Reptiles"
+  },
+  "345": {
+    "original_class_id": 901,
+    "class_name": "Lineodes integra",
+    "category": "Insects"
+  },
+  "346": {
+    "original_class_id": 4573,
+    "class_name": "Phalacrocorax aristotelis",
+    "category": "Birds"
+  },
+  "347": {
+    "original_class_id": 3015,
+    "class_name": "Litoria peronii",
+    "category": "Amphibians"
+  },
+  "348": {
+    "original_class_id": 4289,
+    "class_name": "Turdus rufiventris",
+    "category": "Birds"
+  },
+  "349": {
+    "original_class_id": 5630,
+    "class_name": "Geastrum triplex",
+    "category": "Fungi"
+  },
+  "350": {
+    "original_class_id": 124,
+    "class_name": "Steatoda triangulosa",
+    "category": "Arachnids"
+  },
+  "351": {
+    "original_class_id": 6872,
+    "class_name": "Leptosyne gigantea",
+    "category": "Plants"
+  },
+  "352": {
+    "original_class_id": 4089,
+    "class_name": "Vermivora chrysoptera",
+    "category": "Birds"
+  },
+  "353": {
+    "original_class_id": 5932,
+    "class_name": "Triteleia laxa",
+    "category": "Plants"
+  },
+  "354": {
+    "original_class_id": 1704,
+    "class_name": "Spodoptera frugiperda",
+    "category": "Insects"
+  },
+  "355": {
+    "original_class_id": 7422,
+    "class_name": "Cardionema ramosissimum",
+    "category": "Plants"
+  },
+  "356": {
+    "original_class_id": 9827,
+    "class_name": "Pinus monophylla",
+    "category": "Plants"
+  },
+  "357": {
+    "original_class_id": 9982,
+    "class_name": "Pellaea rotundifolia",
+    "category": "Plants"
+  },
+  "358": {
+    "original_class_id": 710,
+    "class_name": "Xylocopa californica",
+    "category": "Insects"
+  },
+  "359": {
+    "original_class_id": 6700,
+    "class_name": "Cirsium acaule",
+    "category": "Plants"
+  },
+  "360": {
+    "original_class_id": 2157,
+    "class_name": "Coloradia pandora",
+    "category": "Insects"
+  },
+  "361": {
+    "original_class_id": 4539,
+    "class_name": "Spheniscus magellanicus",
+    "category": "Birds"
+  },
+  "362": {
+    "original_class_id": 3721,
+    "class_name": "Pheucticus melanocephalus",
+    "category": "Birds"
+  },
+  "363": {
+    "original_class_id": 3395,
+    "class_name": "Chroicocephalus bulleri",
+    "category": "Birds"
+  },
+  "364": {
+    "original_class_id": 6121,
+    "class_name": "Dioscorea communis",
+    "category": "Plants"
+  },
+  "365": {
+    "original_class_id": 1145,
+    "class_name": "Chionodes mediofuscella",
+    "category": "Insects"
+  },
+  "366": {
+    "original_class_id": 5197,
+    "class_name": "Aurelia labiata",
+    "category": "Animalia"
+  },
+  "367": {
+    "original_class_id": 8324,
+    "class_name": "Coprosma crassifolia",
+    "category": "Plants"
+  },
+  "368": {
+    "original_class_id": 5248,
+    "class_name": "Leukoma staminea",
+    "category": "Mollusks"
+  },
+  "369": {
+    "original_class_id": 6012,
+    "class_name": "Cypripedium calceolus",
+    "category": "Plants"
+  },
+  "370": {
+    "original_class_id": 2013,
+    "class_name": "Papilio clytia",
+    "category": "Insects"
+  },
+  "371": {
+    "original_class_id": 3916,
+    "class_name": "Turdoides striata",
+    "category": "Birds"
+  },
+  "372": {
+    "original_class_id": 9202,
+    "class_name": "Adonis vernalis",
+    "category": "Plants"
+  },
+  "373": {
+    "original_class_id": 5342,
+    "class_name": "Cochlicella barbara",
+    "category": "Mollusks"
+  },
+  "374": {
+    "original_class_id": 6323,
+    "class_name": "Andropogon glomeratus",
+    "category": "Plants"
+  },
+  "375": {
+    "original_class_id": 9006,
+    "class_name": "Melastoma malabathricum",
+    "category": "Plants"
+  },
+  "376": {
+    "original_class_id": 5657,
+    "class_name": "Rhodofomes cajanderi",
+    "category": "Fungi"
+  },
+  "377": {
+    "original_class_id": 8920,
+    "class_name": "Cistus albidus",
+    "category": "Plants"
+  },
+  "378": {
+    "original_class_id": 2987,
+    "class_name": "Hyla eximia",
+    "category": "Amphibians"
+  },
+  "379": {
+    "original_class_id": 5177,
+    "class_name": "Anthopleura sola",
+    "category": "Animalia"
+  },
+  "380": {
+    "original_class_id": 9961,
+    "class_name": "Polypodium scouleri",
+    "category": "Plants"
+  },
+  "381": {
+    "original_class_id": 5586,
+    "class_name": "Stropharia ambigua",
+    "category": "Fungi"
+  },
+  "382": {
+    "original_class_id": 8136,
+    "class_name": "Polygaloides paucifolia",
+    "category": "Plants"
+  },
+  "383": {
+    "original_class_id": 3163,
+    "class_name": "Haliaeetus vocifer",
+    "category": "Birds"
+  },
+  "384": {
+    "original_class_id": 8947,
+    "class_name": "Hibiscus rosa-sinensis",
+    "category": "Plants"
+  },
+  "385": {
+    "original_class_id": 9931,
+    "class_name": "Paesia scaberula",
+    "category": "Plants"
+  },
+  "386": {
+    "original_class_id": 1578,
+    "class_name": "Anicla infecta",
+    "category": "Insects"
+  },
+  "387": {
+    "original_class_id": 4962,
+    "class_name": "Storeria dekayi",
+    "category": "Reptiles"
+  },
+  "388": {
+    "original_class_id": 3487,
+    "class_name": "Tringa brevipes",
+    "category": "Birds"
+  },
+  "389": {
+    "original_class_id": 7562,
+    "class_name": "Reynoutria sachalinensis",
+    "category": "Plants"
+  },
+  "390": {
+    "original_class_id": 4511,
+    "class_name": "Eupsittula canicularis",
+    "category": "Birds"
+  },
+  "391": {
+    "original_class_id": 5884,
+    "class_name": "Brodiaea elegans",
+    "category": "Plants"
+  },
+  "392": {
+    "original_class_id": 4417,
+    "class_name": "Phoenicopterus chilensis",
+    "category": "Birds"
+  },
+  "393": {
+    "original_class_id": 5589,
+    "class_name": "Leucopaxillus gentianeus",
+    "category": "Fungi"
+  },
+  "394": {
+    "original_class_id": 9607,
+    "class_name": "Kalanchoe delagoensis",
+    "category": "Plants"
+  },
+  "395": {
+    "original_class_id": 4944,
+    "class_name": "Opheodrys vernalis",
+    "category": "Reptiles"
+  },
+  "396": {
+    "original_class_id": 480,
+    "class_name": "Milesia virginiensis",
+    "category": "Insects"
+  },
+  "397": {
+    "original_class_id": 2394,
+    "class_name": "Ischnura verticalis",
+    "category": "Insects"
+  },
+  "398": {
+    "original_class_id": 3094,
+    "class_name": "Plethodon serratus",
+    "category": "Amphibians"
+  },
+  "399": {
+    "original_class_id": 2001,
+    "class_name": "Eurytides marcellus",
+    "category": "Insects"
+  },
+  "400": {
+    "original_class_id": 2555,
+    "class_name": "Pseudoleon superbus",
+    "category": "Insects"
+  },
+  "401": {
+    "original_class_id": 5396,
+    "class_name": "Candelaria concolor",
+    "category": "Fungi"
+  },
+  "402": {
+    "original_class_id": 2887,
+    "class_name": "Archosargus probatocephalus",
+    "category": "Ray-finned Fishes"
+  },
+  "403": {
+    "original_class_id": 9474,
+    "class_name": "Rubus phoenicolasius",
+    "category": "Plants"
+  },
+  "404": {
+    "original_class_id": 5448,
+    "class_name": "Calycina citrina",
+    "category": "Fungi"
+  },
+  "405": {
+    "original_class_id": 2077,
+    "class_name": "Glutophrissa drusilla",
+    "category": "Insects"
+  },
+  "406": {
+    "original_class_id": 9492,
+    "class_name": "Spiraea betulifolia",
+    "category": "Plants"
+  },
+  "407": {
+    "original_class_id": 38,
+    "class_name": "Neoscona crucifera",
+    "category": "Arachnids"
+  },
+  "408": {
+    "original_class_id": 4412,
+    "class_name": "Threskiornis aethiopicus",
+    "category": "Birds"
+  },
+  "409": {
+    "original_class_id": 7412,
+    "class_name": "Opuntia tomentosa",
+    "category": "Plants"
+  },
+  "410": {
+    "original_class_id": 8710,
+    "class_name": "Leucophyllum frutescens",
+    "category": "Plants"
+  },
+  "411": {
+    "original_class_id": 1133,
+    "class_name": "Utetheisa ornatrix",
+    "category": "Insects"
+  },
+  "412": {
+    "original_class_id": 7021,
+    "class_name": "Symphyotrichum drummondii",
+    "category": "Plants"
+  },
+  "413": {
+    "original_class_id": 8941,
+    "class_name": "Gossypium hirsutum",
+    "category": "Plants"
+  },
+  "414": {
+    "original_class_id": 4363,
+    "class_name": "Ardea purpurea",
+    "category": "Birds"
+  },
+  "415": {
+    "original_class_id": 3532,
+    "class_name": "Patagioenas picazuro",
+    "category": "Birds"
+  },
+  "416": {
+    "original_class_id": 5722,
+    "class_name": "Allodus podophylli",
+    "category": "Fungi"
+  },
+  "417": {
+    "original_class_id": 3720,
+    "class_name": "Pheucticus ludovicianus",
+    "category": "Birds"
+  },
+  "418": {
+    "original_class_id": 7952,
+    "class_name": "Desmodium paniculatum",
+    "category": "Plants"
+  },
+  "419": {
+    "original_class_id": 492,
+    "class_name": "Toxomerus occidentalis",
+    "category": "Insects"
+  },
+  "420": {
+    "original_class_id": 2900,
+    "class_name": "Oncorhynchus mykiss",
+    "category": "Ray-finned Fishes"
+  },
+  "421": {
+    "original_class_id": 6159,
+    "class_name": "Erythronium umbilicatum",
+    "category": "Plants"
+  },
+  "422": {
+    "original_class_id": 7924,
+    "class_name": "Bituminaria bituminosa",
+    "category": "Plants"
+  },
+  "423": {
+    "original_class_id": 5639,
+    "class_name": "Pseudoinonotus dryadeus",
+    "category": "Fungi"
+  },
+  "424": {
+    "original_class_id": 2960,
+    "class_name": "Incilius alvarius",
+    "category": "Amphibians"
+  },
+  "425": {
+    "original_class_id": 9551,
+    "class_name": "Bursera simaruba",
+    "category": "Plants"
+  },
+  "426": {
+    "original_class_id": 3558,
+    "class_name": "Megaceryle maxima",
+    "category": "Birds"
+  },
+  "427": {
+    "original_class_id": 6766,
+    "class_name": "Ericameria linearifolia",
+    "category": "Plants"
+  },
+  "428": {
+    "original_class_id": 6415,
+    "class_name": "Phragmites australis",
+    "category": "Plants"
+  },
+  "429": {
+    "original_class_id": 5496,
+    "class_name": "Amanita pantherina",
+    "category": "Fungi"
+  },
+  "430": {
+    "original_class_id": 6455,
+    "class_name": "Alpinia zerumbet",
+    "category": "Plants"
+  },
+  "431": {
+    "original_class_id": 2086,
+    "class_name": "Nathalis iole",
+    "category": "Insects"
+  },
+  "432": {
+    "original_class_id": 73,
+    "class_name": "Anasaitis canosa",
+    "category": "Arachnids"
+  },
+  "433": {
+    "original_class_id": 4506,
+    "class_name": "Ara ararauna",
+    "category": "Birds"
+  },
+  "434": {
+    "original_class_id": 2114,
+    "class_name": "Aglossa pinguinalis",
+    "category": "Insects"
+  },
+  "435": {
+    "original_class_id": 199,
+    "class_name": "Cicindela aurulenta",
+    "category": "Insects"
+  },
+  "436": {
+    "original_class_id": 4180,
+    "class_name": "Regulus satrapa",
+    "category": "Birds"
+  },
+  "437": {
+    "original_class_id": 6132,
+    "class_name": "Calochortus argillosus",
+    "category": "Plants"
+  },
+  "438": {
+    "original_class_id": 9723,
+    "class_name": "Lycium ferocissimum",
+    "category": "Plants"
+  },
+  "439": {
+    "original_class_id": 5688,
+    "class_name": "Trametes betulina",
+    "category": "Fungi"
+  },
+  "440": {
+    "original_class_id": 8939,
+    "class_name": "Eremalche rotundifolia",
+    "category": "Plants"
+  },
+  "441": {
+    "original_class_id": 587,
+    "class_name": "Lygaeus equestris",
+    "category": "Insects"
+  },
+  "442": {
+    "original_class_id": 8534,
+    "class_name": "Utricularia intermedia",
+    "category": "Plants"
+  },
+  "443": {
+    "original_class_id": 2955,
+    "class_name": "Bufotes balearicus",
+    "category": "Amphibians"
+  },
+  "444": {
+    "original_class_id": 8372,
+    "class_name": "Geranium dissectum",
+    "category": "Plants"
+  },
+  "445": {
+    "original_class_id": 8108,
+    "class_name": "Vachellia rigidula",
+    "category": "Plants"
+  },
+  "446": {
+    "original_class_id": 7693,
+    "class_name": "Impatiens glandulifera",
+    "category": "Plants"
+  },
+  "447": {
+    "original_class_id": 742,
+    "class_name": "Camponotus castaneus",
+    "category": "Insects"
+  },
+  "448": {
+    "original_class_id": 2429,
+    "class_name": "Gomphurus fraternus",
+    "category": "Insects"
+  },
+  "449": {
+    "original_class_id": 3175,
+    "class_name": "Nisaetus cirrhatus",
+    "category": "Birds"
+  },
+  "450": {
+    "original_class_id": 5159,
+    "class_name": "Kinosternon subrubrum",
+    "category": "Reptiles"
+  },
+  "451": {
+    "original_class_id": 7590,
+    "class_name": "Paxistima myrsinites",
+    "category": "Plants"
+  },
+  "452": {
+    "original_class_id": 813,
+    "class_name": "Brachygastra mellifica",
+    "category": "Insects"
+  },
+  "453": {
+    "original_class_id": 2792,
+    "class_name": "Acanthurus olivaceus",
+    "category": "Ray-finned Fishes"
+  },
+  "454": {
+    "original_class_id": 2991,
+    "class_name": "Hyla japonica",
+    "category": "Amphibians"
+  },
+  "455": {
+    "original_class_id": 3949,
+    "class_name": "Toxostoma redivivum",
+    "category": "Birds"
+  },
+  "456": {
+    "original_class_id": 4188,
+    "class_name": "Sitta europaea",
+    "category": "Birds"
+  },
+  "457": {
+    "original_class_id": 7313,
+    "class_name": "Amaranthus palmeri",
+    "category": "Plants"
+  },
+  "458": {
+    "original_class_id": 5807,
+    "class_name": "Symplocarpus foetidus",
+    "category": "Plants"
+  },
+  "459": {
+    "original_class_id": 6472,
+    "class_name": "Lycopodium volubile",
+    "category": "Plants"
+  },
+  "460": {
+    "original_class_id": 4383,
+    "class_name": "Ixobrychus sinensis",
+    "category": "Birds"
+  },
+  "461": {
+    "original_class_id": 2380,
+    "class_name": "Enallagma vesperum",
+    "category": "Insects"
+  },
+  "462": {
+    "original_class_id": 8679,
+    "class_name": "Plantago media",
+    "category": "Plants"
+  },
+  "463": {
+    "original_class_id": 3453,
+    "class_name": "Calidris alba",
+    "category": "Birds"
+  },
+  "464": {
+    "original_class_id": 8435,
+    "class_name": "Clinopodium vulgare",
+    "category": "Plants"
+  },
+  "465": {
+    "original_class_id": 8401,
+    "class_name": "Justicia californica",
+    "category": "Plants"
+  },
+  "466": {
+    "original_class_id": 601,
+    "class_name": "Lygus lineolaris",
+    "category": "Insects"
+  },
+  "467": {
+    "original_class_id": 1460,
+    "class_name": "Celastrina neglecta",
+    "category": "Insects"
+  },
+  "468": {
+    "original_class_id": 921,
+    "class_name": "Parapoynx diminutalis",
+    "category": "Insects"
+  },
+  "469": {
+    "original_class_id": 1496,
+    "class_name": "Loxura atymnus",
+    "category": "Insects"
+  },
+  "470": {
+    "original_class_id": 2698,
+    "class_name": "Ctenolepisma lineata",
+    "category": "Insects"
+  },
+  "471": {
+    "original_class_id": 1911,
+    "class_name": "Limenitis populi",
+    "category": "Insects"
+  },
+  "472": {
+    "original_class_id": 3437,
+    "class_name": "Thalasseus bergii",
+    "category": "Birds"
+  },
+  "473": {
+    "original_class_id": 2490,
+    "class_name": "Erythrodiplax basifusca",
+    "category": "Insects"
+  },
+  "474": {
+    "original_class_id": 6063,
+    "class_name": "Ophrys sphegodes",
+    "category": "Plants"
+  },
+  "475": {
+    "original_class_id": 6673,
+    "class_name": "Carlina acaulis",
+    "category": "Plants"
+  },
+  "476": {
+    "original_class_id": 5778,
+    "class_name": "Chondracanthus exasperatus",
+    "category": "Plants"
+  },
+  "477": {
+    "original_class_id": 751,
+    "class_name": "Crematogaster peringueyi",
+    "category": "Insects"
+  },
+  "478": {
+    "original_class_id": 6704,
+    "class_name": "Cirsium arvense",
+    "category": "Plants"
+  },
+  "479": {
+    "original_class_id": 2183,
+    "class_name": "Deilephila elpenor",
+    "category": "Insects"
+  },
+  "480": {
+    "original_class_id": 448,
+    "class_name": "Rainieria antennaepes",
+    "category": "Insects"
+  },
+  "481": {
+    "original_class_id": 8659,
+    "class_name": "Penstemon centranthifolius",
+    "category": "Plants"
+  },
+  "482": {
+    "original_class_id": 1813,
+    "class_name": "Chlosyne janais",
+    "category": "Insects"
+  },
+  "483": {
+    "original_class_id": 8350,
+    "class_name": "Houstonia procumbens",
+    "category": "Plants"
+  },
+  "484": {
+    "original_class_id": 8757,
+    "class_name": "Asimina triloba",
+    "category": "Plants"
+  },
+  "485": {
+    "original_class_id": 3132,
+    "class_name": "Buteo regalis",
+    "category": "Birds"
+  },
+  "486": {
+    "original_class_id": 5922,
+    "class_name": "Polygonatum odoratum",
+    "category": "Plants"
+  },
+  "487": {
+    "original_class_id": 4572,
+    "class_name": "Microcarbo pygmaeus",
+    "category": "Birds"
+  },
+  "488": {
+    "original_class_id": 8783,
+    "class_name": "Euphorbia caput-medusae",
+    "category": "Plants"
+  },
+  "489": {
+    "original_class_id": 6176,
+    "class_name": "Lilium pardalinum",
+    "category": "Plants"
+  },
+  "490": {
+    "original_class_id": 1349,
+    "class_name": "Carterocephalus palaemon",
+    "category": "Insects"
+  },
+  "491": {
+    "original_class_id": 6394,
+    "class_name": "Melica nutans",
+    "category": "Plants"
+  },
+  "492": {
+    "original_class_id": 556,
+    "class_name": "Acanthocephala alata",
+    "category": "Insects"
+  },
+  "493": {
+    "original_class_id": 9494,
+    "class_name": "Spiraea japonica",
+    "category": "Plants"
+  },
+  "494": {
+    "original_class_id": 755,
+    "class_name": "Iridomyrmex purpureus",
+    "category": "Insects"
+  },
+  "495": {
+    "original_class_id": 1992,
+    "class_name": "Vanessa virginiensis",
+    "category": "Insects"
+  },
+  "496": {
+    "original_class_id": 4452,
+    "class_name": "Melanerpes erythrocephalus",
+    "category": "Birds"
+  },
+  "497": {
+    "original_class_id": 1450,
+    "class_name": "Callophrys niphon",
+    "category": "Insects"
+  },
+  "498": {
+    "original_class_id": 5499,
+    "class_name": "Amanita vaginata",
+    "category": "Fungi"
+  },
+  "499": {
+    "original_class_id": 8431,
+    "class_name": "Callicarpa americana",
+    "category": "Plants"
+  }
+}

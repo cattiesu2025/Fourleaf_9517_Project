@@ -32,3 +32,17 @@ docs/source/screenshots/
 
 # Temporary PDF review artifacts
 tmp/
+
+# Local dependency/cache folders
+.deps/
+
+# Large local dataset archives. Keep metadata tracked.
+data/**/*.zip
+data/**/*.tar
+data/**/*.tar.gz
+
+# Local development notes
+docs/dev_log.md
+
+# Local backup from replacing the old placeholder file with data/
+data.placeholder
