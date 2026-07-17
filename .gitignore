@@ -17,5 +17,8 @@ outputs/
 *.pt
 *.ckpt
 
+# Local development notes
+docs/dev_log.md
+
 # Local backup from replacing the old placeholder file with data/
 data.placeholder
