@@ -27,6 +27,8 @@ runs/
 
 # Local handoff archives and supplied course/chat source material
 handoff/*.zip
+scratch_outputs*.tar.gz
+scratch_best*.tar.gz
 docs/source/official/
 docs/source/screenshots/
 
