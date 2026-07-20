@@ -106,6 +106,16 @@ COMP9517_Project/
 
 **Test 必须来自官方 validation set**，不得从 train_mini 再抽测试集。
 
+**Seed 约定（两类seed分开管理）**：
+
+```text
+Dataset construction seed: 500
+Training seed: 9517
+```
+
+- `Dataset construction seed` 只用于A生成固定数据划分和长尾数据：`selected_classes.csv`、`train.csv`、`val.csv`、`test.csv`、`split_config.json`、`longtail_train.csv`、`longtail_config.json`。A产出的metadata一旦固定，B/C/D/E不得重新划分数据。
+- `Training seed` 用于B/C/D各自训练或推理脚本中的随机过程，例如模型初始化、DataLoader shuffle、augmentation、sampler等。训练seed不改变A已经固定的数据划分。
+
 ---
 
 ## 三、Metadata 文件规范
@@ -167,7 +177,7 @@ class_idx,original_class_id,class_name,category
 
 ```json
 {
-  "random_seed": 9517,
+  "random_seed": 500,
   "num_classes": 500,
   "class_selection_method": "uniform_random_sampling",
   "train_images_per_class": 40,
@@ -589,7 +599,7 @@ resnet18_scratch_longtail_resampled     ← 长尾分布 + 重采样/加权
 
 ```json
 {
-  "random_seed": 9517,
+  "random_seed": 500,
   "longtail_ratio": "exponential_decay",
   "min_images_per_class": 5,
   "max_images_per_class": 40,
