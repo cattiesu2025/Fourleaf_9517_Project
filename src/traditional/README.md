@@ -1,1 +1,0 @@
-Traditional computer vision pipeline.
