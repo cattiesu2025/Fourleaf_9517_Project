@@ -42,6 +42,15 @@ tmp/
 data/**/*.zip
 data/**/*.tar
 data/**/*.tar.gz
+/*.tar.gz
+
+# Generated subset metadata and quality reports can be large; rebuild locally.
+data/metadata/train_full.csv
+data/metadata/full_train_paths.txt
+data/metadata/split_config_full.json
+data/metadata/train_full_clean.csv
+data/metadata/data_quality_report.csv
+data/metadata/data_quality_summary.json
 
 # Local development notes
 docs/dev_log.md

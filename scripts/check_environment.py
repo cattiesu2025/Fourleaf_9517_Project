@@ -21,6 +21,7 @@ EXPECTED = {
     "PyYAML": "6.0.2",
     "tqdm": "4.66.5",
     "scipy": "1.14.0",
+    "ijson": "3.3.0",
 }
 
 IMPORT_NAMES = {
