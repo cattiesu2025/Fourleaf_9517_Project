@@ -1,0 +1,10 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & Top-1 & Top-5 & Macro-F1 & Bal. Acc. & Train (s) & Infer (s) \\
+\midrule
+Scratch (no augmentation) & 22.62 & 44.38 & 22.52 & 22.62 & 887.4 & 6.1 \\
+Scratch (basic augmentation) & \underline{31.76} & \underline{57.42} & \underline{31.44} & \underline{31.76} & 863.8 & 21.1 \\
+Scratch (strong augmentation) & 25.88 & 51.00 & 24.52 & 25.88 & 1693.8 & 26.3 \\
+Scratch (basic aug., 100-epoch SGD) & \textbf{37.94} & \textbf{61.24} & \textbf{37.51} & \textbf{37.94} & 4330.7 & 22.6 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,11 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & Top-1 & Top-5 & Macro-F1 & Bal. Acc. & Train (s) & Infer (s) \\
+\midrule
+SIFT + BoVW + SVM & 2.94 & 8.02 & 2.26 & 2.94 & 117.5 & 92.7 \\
+HOG + Random Forest & 1.38 & 5.26 & 0.89 & 1.38 & 686.7 & 37.3 \\
+Scratch (basic aug., 100-epoch SGD) & 37.94 & 61.24 & 37.51 & 37.94 & 4330.7 & 22.6 \\
+Pretrained ResNet18 (frozen) & \underline{53.88} & \underline{76.68} & \underline{53.55} & \underline{53.88} & 557.8 & 13.9 \\
+Pretrained ResNet18 (fine-tuned) & \textbf{66.24} & \textbf{85.82} & \textbf{66.20} & \textbf{66.24} & 725.7 & 12.8 \\
+\bottomrule
+\end{tabular}

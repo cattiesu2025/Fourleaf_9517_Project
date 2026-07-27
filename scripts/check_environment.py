@@ -21,6 +21,7 @@ EXPECTED = {
     "PyYAML": "6.0.2",
     "tqdm": "4.66.5",
     "scipy": "1.14.0",
+    "scikit-image": "0.24.0",
     "ijson": "3.3.0",
 }
 
@@ -29,6 +30,7 @@ IMPORT_NAMES = {
     "opencv-python": "cv2",
     "Pillow": "PIL",
     "PyYAML": "yaml",
+    "scikit-image": "skimage",
 }
 
 

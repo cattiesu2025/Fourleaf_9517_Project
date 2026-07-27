@@ -1,0 +1,32 @@
+models:
+  - method_name: hog_random_forest
+    kind: hog_random_forest
+    model: B_output/hog_random_forest_best_test/hog_rf_model.pkl
+    clean_predictions: B_output/hog_random_forest_best_test/hog_predictions.csv
+    image_size: 128
+    pixels_per_cell: 16
+    minimum_clean_agreement: 0.60
+    max_clean_top1_delta: 0.005
+
+  - method_name: sift_bovw_svm
+    kind: sift_bovw_svm
+    model: B_output/sift_bovw_svm_best_test/sift_svm_model.pkl
+    vocabulary: B_output/sift_bovw_svm_best_test/sift_vocab.pkl
+    clean_predictions: B_output/sift_bovw_svm_best_test/sift_predictions.csv
+    max_desc_per_image: 200
+    feature_seed: 9517
+    minimum_clean_agreement: 0.30
+    max_clean_top1_delta: 0.005
+
+  - method_name: resnet18_scratch_basic_aug_sgd
+    kind: scratch_resnet18
+    checkpoint: C_output/extracted/resnet18_scratch_basic_aug_sgd/checkpoint_best.pth
+    clean_predictions: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug_sgd/predictions.csv
+    image_size: 224
+
+  - method_name: resnet18_pretrained_finetuned
+    kind: transfer_resnet18
+    checkpoint: D_output/checkpoints/resnet18_pretrained_finetuned/checkpoint_best.pth
+    clean_predictions: D_output/outputs/transfer/resnet18_pretrained_finetuned/predictions.csv
+    image_size: 224
+    use_attention: false
