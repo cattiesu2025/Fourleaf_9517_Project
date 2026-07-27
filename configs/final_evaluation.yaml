@@ -43,10 +43,10 @@ runs:
     display_name: Scratch (strong augmentation)
     dataset_group: limited
     tables: [scratch_ablation]
-    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug/predictions.csv
-    scores: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug/scores.npz
-    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug/runtime.json
-    expected_method_name: resnet18_scratch_strong_aug
+    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/predictions.csv
+    scores: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/scores.npz
+    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/runtime.json
+    expected_method_name: resnet18_scratch_strong_aug_rerun_30epoch
 
   - id: scratch_basic_aug_sgd
     display_name: Scratch (basic aug., 100-epoch SGD)

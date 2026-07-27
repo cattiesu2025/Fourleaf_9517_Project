@@ -301,8 +301,8 @@ Self-attention 应明确写成用于分析模型容量的实验变体，不应�
 | -------------- | -----: | ---------: | -------: | ------------: |
 | Frozen         | 53.88% |     76.68% |   53.55% |    待最终统一 |
 | Fine-tuned     | 66.24% |     85.82% |   66.20% |      31.97 pp |
-| Regularized    | 65.20% |     85.42% |   65.11% |      24.43 pp |
-| Self-attention | 62.08% |     82.82% |   62.04% |      36.18 pp |
+| Regularized    | 65.20% | 待最终统一 |   65.11% |      24.43 pp |
+| Self-attention | 62.08% | 待最终统一 |   62.04% |      36.18 pp |
 
 重点分析：
 
@@ -373,8 +373,7 @@ Self-attention 应明确写成用于分析模型容量的实验变体，不应�
 
 - **Fig. 4 — Robustness under Image Degradations**
 
-正式 robustness 结果已经生成；Abstract、Discussion 和 Conclusion 中的相关结论均应以
-`report/generated/robustness_summary.csv` 为准。
+正式 robustness 结果生成前，不在 Abstract 或 Conclusion 中写具体鲁棒性结论。
 
 #### 4.7 Visual Explanations and Failure Analysis
 
@@ -530,23 +529,12 @@ References 不计入上述正文页数，可以从正文之后继续使用额外
 - 部分 Grad-CAM failure analysis；
 - dataset split 和数据质量扫描结果。
 
-E 的统一评价流程现已补齐并核验：
+仍需最终补齐或统一：
 
-- SIFT-BoVW-SVM、HOG-Random Forest、最佳 Scratch、Frozen 和 Fine-tuned
-  五个 limited-data 方法的正式 Top-1、Top-5、Macro-F1 与 runtime；
-- 四个 Scratch 设置、四个 Transfer 设置以及两个 full-data 设置的统一表；
-- 12 个运行都包含相同的 5,000 个 test `image_id -> true_label` 映射；
-- `report/generated/` 中的主结果表、消融表、full-data 表和两张可复现图。
-
-仍需最终补齐：
-
+- SIFT-BoVW-SVM 和 HOG-Random Forest 的正式指标；
+- 所有方法在同一环境下的 runtime；
 - long-tail unbalanced 与 weighted sampling 对照结果；
-- Grad-CAM 最终排版图和 A--D 对各自方法参数、数字及文字的复核。
+- 真实模型的完整 robustness 结果；
+- E 的 limited-data 跨方法统一评价表。
 
-E 的真实模型 robustness 已完成：4 个模型、4 类退化、5 档 severity，共
-80 个完整运行；同环境 severity-0 基线、汇总 CSV 和论文 PDF/PNG 图均已生成。
-
-limited-data runtime 来自不同硬件，已保留为描述性成本记录，不再要求把现有模型
-迁移到同一环境重训。正式 robustness 运行已在同一本地环境中加载固定 checkpoint；
-但不同模型的预处理计算量仍不同。在尚未完成的结果处继续保留明确待填标记，禁止
-估计或编造数字。
+在这些结果完成前，应保留明确的待填标记，禁止估计或编造数字。
