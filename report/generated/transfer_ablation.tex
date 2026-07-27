@@ -1,0 +1,10 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & Top-1 & Top-5 & Macro-F1 & Bal. Acc. & Train (s) & Infer (s) \\
+\midrule
+Pretrained ResNet18 (frozen) & 53.88 & 76.68 & 53.55 & 53.88 & 557.8 & 13.9 \\
+Pretrained ResNet18 (fine-tuned) & \textbf{66.24} & \textbf{85.82} & \textbf{66.20} & \textbf{66.24} & 725.7 & 12.8 \\
+Fine-tuned + regularization & \underline{65.20} & \underline{85.42} & \underline{65.11} & \underline{65.20} & 711.4 & 13.9 \\
+Fine-tuned + self-attention & 62.08 & 82.82 & 62.04 & 62.08 & 756.8 & 14.0 \\
+\bottomrule
+\end{tabular}

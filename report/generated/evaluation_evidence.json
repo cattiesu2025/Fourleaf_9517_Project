@@ -1,0 +1,50 @@
+{
+  "sift_bovw_svm": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "hog_random_forest": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "scratch_no_aug": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "scratch_basic_aug": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "scratch_strong_aug": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "scratch_basic_aug_sgd": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "transfer_frozen": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "transfer_finetuned": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "transfer_regularized": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "transfer_attention": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "full_scratch": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  },
+  "full_finetuned": {
+    "num_test_images": 5000,
+    "num_classes": 500
+  }
+}

@@ -1,0 +1,344 @@
+% OVERLEAF COPY-PASTE VERSION
+%
+% Required packages in the main document preamble:
+%   \usepackage{graphicx}
+%   \usepackage{booktabs}
+%
+% Upload these three files from report/generated/ to the Overleaf project:
+%   main_performance_vs_time.pdf
+%   full_data_training_curves.pdf
+%   robustness_curves.pdf
+%
+% Copy each marked block into the matching part of the group's CVPR document.
+% Do not add a second \begin{document}, Abstract, Discussion, or Conclusion if
+% the main document already contains one. All tables are inline, so this file
+% does not depend on any external table include files.
+%
+% Quantitative claims are recorded in docs/member_e_claim_evidence.md.
+
+% ======================== PASTE INTO ABSTRACT ========================
+\begin{abstract}
+The fine-grained species recognition is difficult, as there are often only
+minor morphological characteristics separating different categories, while the
+labeled samples are limited. We experimented with a unified data split and
+evaluation protocol on a fixed 500-category subset of iNaturalist 2021. Only
+40 training images are used for each category. We compare the two manual
+features of HOG and SIFT. Deep models include ResNet18 from random initialized
+training, as well as frozen and fully fine-tuned ImageNet representations. The
+experiment also examined data augmentation, regularization, additional self-
+attention modules and robustness to four test-time image degradations. We also
+use Grad-CAM to generate visual results. Full fine-tuning reaches 66.24\%
+Top-1 accuracy. It's Macro-F1 is 66.20 percent. The two indicators are 28.30
+and 28.69 percentage points higher, respectively, than the best scratch
+training model. Both augmentation policies improve on no augmentation, while
+strong augmentation provides no additional benefit over basic augmentation
+under the tested 30-epoch setting. Random initialization of self-attention
+modules does not improve the generalization. In a separate, extended experiment, we
+have maintained the validation and testing set, increasing the cleaned
+training set from 20,000 to 129,378. Under the same 15-epoch training budget,
+the fine-tuning model Top-1 has an accuracy rate of 81.58 per cent and the
+scratch model of 64.20 per cent. The fine-tuning model also maintains the
+highest accuracy in all 20 degradation test settings, although severe blur
+reduces its Top-1 accuracy to 9.02 per cent. These results show that, even
+with increased training data, pretrained representations are still useful.
+However, augmentation strength and model capacity still need to be matched
+with available supervision data.
+\end{abstract}
+
+% ======================== PASTE INTO METHODS ========================
+\subsection{Evaluation and Analysis Protocol}
+\label{sec:evaluation_protocol}
+
+All methods are evaluated on a set of 5,000 images set aside, with 10 images
+for each of the 500 categories. Model selection and hyperparameter adjustments
+only use validation sets. The test set is used only for final evaluation,
+fixed-model robustness testing and error analysis. We report Top-1 accuracy,
+Top-5 accuracy, macro-averaged precision, recall rate, F1 and balanced
+accuracy. Macro averages give the same weight to each category and complement
+the information provided by the sample-level accuracy rate.
+
+Instead of reproducing the indicators in the training log directly, we
+recalculate from the score matrix that each method saves. Before the table is
+generated, the evaluation program checks whether each run contains 5,000 image
+identifiers without repetition. The program also checks whether the shared
+500-class score mapping is used and whether the true labels of each image are
+consistent.
+
+Training and inference time are used only to provide background and should not
+be considered as a controlled hardware benchmark. The method in the limited
+data experiment operates on different central processor and graphic processor
+systems. Two full-data data jobs use the same NVIDIA L40S model and software
+environment, but operate at different physical nodes. Therefore, their elapsed
+times are only approximately comparable.
+
+Robustness tests subject decoded images to four types of degradation before
+model-specific preprocessing. These images are in RGB format. These
+degradations include the additive Gaussian noise, the Gaussian blur, the
+reduced brightness and the JPEG compression. Each degradation consists of five
+degrees of severity and model parameters remain unchanged during the test
+period. We report scores at each severity level, as well as changes to an
+undegraded severity-0 run in the same environment. Grad-CAM is used separately
+for qualitative failure analysis. The heat maps to show which areas the
+prediction is sensitive to, but does not prove causality.
+
+% ================= PASTE INTO EXPERIMENTAL RESULTS =================
+\subsection{Experimental Setup}
+\label{sec:experimental_setup}
+
+The limited data experiment uses a fixed 500-category split, with 20,000
+images in the training set and 5,000 each in the validation and test sets. The
+full data extension replaced only the training set with 129,378 clean images.
+Validation sets, test sets and category maps remain unchanged. The data split
+uses a random seed of 500. The input dimensions of all depth models are 224
+times 224, and the batch size is 64. HOG uses one hundred and twenty-eight
+times one hundred and twenty-eight greyscale images. SIFT resizes each image
+so its longest side is at most 256 pixels.
+
+The selected scratch training baseline uses 100 epochs of SGD training. The
+learning rate is 0.01, weight decay is $10^{-4}$, and cosine scheduling is
+used. The operation uses random seeds of 9517. Frozen and fine-tuned models in
+limited-data experiments use basic augmentation and are trained for 15 epochs
+with AdamW. Their learning rates are $10^{-3}$ and $10^{-4}$, respectively.
+The submitted run metadata records seed 500. All deep models are evaluated
+from the checkpoint with the highest validation accuracy.
+
+Runtime values for the limited-data experiments come from their original
+environments. The traditional method operates on a central processor for
+macOS. The selected scratch model uses Tesla V100 and the transfer learning
+model uses RTX 5070 Ti Laptop GPU. Therefore, these times are described only.
+Both jobs in the full data comparison use PyTorch 2.3.1 and CUDA 12.1. They
+also use the same PBS resource requests and NVIDIA L40S. Both jobs run on the
+k098 and k097 nodes, respectively. Thus, the graphic processor model and the
+software stack are the same, but the physical machinery is different. All
+final metrics are recalculated by shared evaluation pipeline.
+
+\subsection{Main Comparison}
+\label{sec:main_comparison}
+
+The Table~\ref{tab:main_results} compares various methods under limited data
+conditions. The handcrafted feature baseline is difficult to cope with for
+this 500-type task. The first baseline builds the bag-of-visual-words model
+using the SIFT feature and uses the an SVM. Its Top-1 accuracy is 2.94\%. The
+second baseline uses HOG features to train random forests. Its Top-1 accuracy
+is 1.38 per cent. Training ResNet18 from scratch increases Top-1 accuracy to
+37.94\%. This indicates that even with limited labeled data, the visual
+features of learning are clearly superior to those of handcrafted features.
+
+ImageNet pre-training further improved the results. Freezing the backbone and
+training only the classifier gives 53.88\% Top-1 accuracy. This is 15.94
+percentage points higher than the best start-up training. After fine-tuning
+the entire network, Top-1 has an accuracy rate of 66.24 per cent. Macro-F1 has
+reached 66.20\%. The Top-1 accuracy rate increased by 12.36 percentage points
+compared to the freezing strategy. This represents an increase of 28.30
+percentage points compared to the scratch training. Since the test set
+contains 10 images for each category, the accuracy rate, the balanced accuracy
+and the Macro-F1 values were close.
+
+\begin{table}[t]
+  \centering
+  \caption{The limited data results are from the unified 5,000 image test set.
+  The remaining values are percentages except for time. As different
+  hardware is used for operations, these times should not be compared as
+  controlled speed benchmarks.}
+  \label{tab:main_results}
+  \resizebox{\linewidth}{!}{%
+    \begin{tabular}{lrrrrrr}
+      \toprule
+      Method & Top-1 & Top-5 & Macro-F1 & Bal. Acc. & Train (s) & Infer (s) \\
+      \midrule
+      SIFT + BoVW + SVM & 2.94 & 8.02 & 2.26 & 2.94 & 117.5 & 92.7 \\
+      HOG + Random Forest & 1.38 & 5.26 & 0.89 & 1.38 & 686.7 & 37.3 \\
+      Scratch (basic aug., 100-epoch SGD) & 37.94 & 61.24 & 37.51 & 37.94 & 4330.7 & 22.6 \\
+      Pretrained ResNet18 (frozen) & \underline{53.88} & \underline{76.68} & \underline{53.55} & \underline{53.88} & 557.8 & 13.9 \\
+      Pretrained ResNet18 (fine-tuned) & \textbf{66.24} & \textbf{85.82} & \textbf{66.20} & \textbf{66.24} & 725.7 & 12.8 \\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{table}
+
+Figure~\ref{fig:performance_time} shows performance and time showing accuracy
+as well as training and inference time for recording. This figure should not
+be interpreted as a controlled speed comparison. Traditional methods operate
+on central processors. ResNet18 uses GPUs and operates in different
+environments. What is significant here is the apparent difference in the
+quality of the representation, rather than the operational time ranking on a
+particular platform.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{main_performance_vs_time.pdf}
+  \caption{Top-1 accuracy rate for the main method, as well as training and
+  inference time for recording. As limited data experiments did not
+  control hardware conditions, hardware was simultaneously marked in the
+  diagram.}
+  \label{fig:performance_time}
+\end{figure}
+
+\subsection{Full-Data Scaling Extension}
+\label{sec:full_data_results}
+
+Full-data experiments are used to test whether the initialization of ImageNet
+is still useful under matching training configurations. Both ResNet18 models
+use 129,378 training images, as well as fixed validation and testing sets.
+They all use basic augmentation, AdamW with cosine scheduling, a batch size of
+64, and a 15-epoch training budget. The scratch model reaches 64.20\% Top-1
+accuracy. It's Macro-F1 is 64.02\%. After initializing and fine-tuning a
+network using ImageNet, Top-1 increased its accuracy to 81.58\%. Macro-F1
+increased to 81.53\%. The increases in the two indicators were 17.38 and 17.52
+percentage points, respectively. Top-5 has also increased the accuracy rate
+from 84.76\% to 93.70\%.
+
+\begin{table}[t]
+  \centering
+  \caption{Full data results are matched with 15 epochs of ResNet18 training
+  budget. The remaining values are percentages except for time.}
+  \label{tab:full_data_results}
+  \resizebox{\linewidth}{!}{%
+    \begin{tabular}{lrrrrrr}
+      \toprule
+      Method & Top-1 & Top-5 & Macro-F1 & Bal. Acc. & Train (s) & Infer (s) \\
+      \midrule
+      Full-data Scratch ResNet18 & \underline{64.20} & \underline{84.76} & \underline{64.02} & \underline{64.20} & 1295.0 & 13.7 \\
+      Full-data Fine-tuned ResNet18 & \textbf{81.58} & \textbf{93.70} & \textbf{81.53} & \textbf{81.58} & 1351.7 & 5.3 \\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{table}
+
+The fine-tuning operation took 1,351.7 seconds and the training exercise from
+the beginning took 1,295.0 seconds. The difference between the two is 56.7
+seconds, or 4.38 percent. Both nodes have L40S, but they are not the same
+machines. Therefore, this time difference cannot strictly represent the
+additional cost of fine-tuning. The best validation accuracies for scratch
+training and fine-tuning occurred in the fifteenth and thirteenth epochs,
+respectively. Figure~\ref{fig:full_data_curves} show that fine-tuning models
+have higher validation performance throughout the training process.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{full_data_training_curves.pdf}
+  \caption{Training and validation curves for the matched full-data scratch and
+  fine-tuned ResNet18 runs.}
+  \label{fig:full_data_curves}
+\end{figure}
+
+The best limited-data scratch result is 37.94\%, while the full-data scratch
+result is 64.20\%. This increase can only be described and cannot be
+considered as a pure data-scale ablation. Limited data run using 100 epochs
+and SGD, while full data run using 15 epochs and AdamW. The matched full-data
+comparison supports only one narrower conclusion. The initialization of
+ImageNet continues to offer significant advantages following the expansion of
+training data.
+
+\subsection{Robustness under Image Degradation}
+\label{sec:robustness_results}
+
+Figure~\ref{fig:robustness} summarizes all 20 corrupted test settings. The
+fine-tuning model has the highest absolute Top-1 accuracy rate in each
+setting, but margins change significantly with the type of degradation. The
+greatest losses are caused by blur. At severity 5, fine-tuned Top-1 accuracy
+falls from 66.24\% to 9.02\%. The scratch model went down from 37.94 per cent
+to 3.90\%. The decrease in brightness has less impact on fine-tuning models.
+When the brightness factor is 0.5, it retains 59.92\% Top-1 accuracy, compared
+with 16.70\% for scratch. Under the strongest Gaussian noise setting, the two
+models reach 44.24\% and 27.70\%, respectively. Under the strongest JPEG
+settings, the two are 50.12\% and 27.98\% respectively.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{robustness_curves.pdf}
+  \caption{Top-1 accuracy rate for four test-time degradations. Severity zero
+  indicates undegraded inference in the same local environment as
+  severity 1--5.}
+  \label{fig:robustness}
+\end{figure}
+
+The relative retention rate shows slightly different results. The fine-tuning
+model retains 13.6 per cent, 90.5 per cent, 66.8 per cent and 75.7 per cent,
+respectively, of its clean accuracy under maximum blur, brightness reduction,
+noise and JPEG compression. Scratch retains 10.3\%, 44.0\%, 73.0\%, and
+73.7\%, respectively. Using a lower clean baseline, the scratch model was only
+slightly better at the maximum Gaussian noise. The absolute reduction of HOG
+and SIFT is small, but this cannot be understood as strong robustness. The
+starting point for both is close to the chance level of 0.2 per cent. The
+impact of noise on HOG was greatest, with the accuracy rate dropping from
+1.32\% to 0.60\%. Blur affects SIFT most, with the accuracy rate dropping from
+3.18\% to 1.26 per cent.
+
+% ======================== PASTE INTO DISCUSSION ========================
+\section{Discussion}
+\label{sec:discussion}
+
+Limited data results are more supportive of learning and pre-training
+features. Handcrafted descriptors are not sufficient to capture the colour,
+texture, shape and background information required to distinguish 500 species
+at the same time. ResNet18, which is trained from the beginning, can learn
+stronger representations, but 40 images per class are not enough to get it
+close to the pretrained models. The results of the frozen model indicate that
+the ImageNet feature can be transferred to this task. The additional 12.36
+percentage points added by fine-tuning suggests that it would be useful to
+adapt these features to species-specific cues.
+
+Greater data augmentation or greater modelling capacity is not always helpful.
+The basic augmentation improved the Top-1 accuracy of the scratch model. This
+indicator rose from 22.62\% to 31.76\%. Strong augmentation reached 31.44\%,
+only 0.32 percentage points below basic augmentation, while both policies
+clearly outperformed no augmentation. Under the tested 30-epoch setting, the
+stronger policy provided no additional benefit over the basic policy.
+Regularization, the train-validation gap in the report was reduced, with only a slight
+decrease in Top-1 accuracy. Adding self-attention lowers Top-1 accuracy from
+66.24\% to 62.08\%. The randomly initialized attention parameters may increase
+the capacity beyond the limited training set. We have tested only one
+attention configuration, so the result cannot exclude other attention
+architectures.
+
+The perspectives given in absolute robustness and relative retention rates are
+not identical. The fine-tuning model remains the most accurate method for all
+tests of degradation and is particularly stable for the reduction of
+brightness. A scratch training model retains a slightly higher percentage of
+clean accuracy under the noise of strong Gaussian. Blur removes the space
+detail on which both deep models depend, resulting in the most visible
+decline. The flatness of the conventional approach does not mean that it is
+strong. The starting points for HOG and SIFT are close to the random level of
+0.2 per cent.
+
+Full-data expansion has narrowed the gap between training from scratch and
+fine-tuning, but has not closed it. Under a matching 15-epoch configuration,
+the Top-1 accuracy of the fine-tuning model is still 17.38 percentage points
+ahead. This is consistent with the judgement that the training model would
+benefit from more supervision. However, the scratch training configuration of
+limited and full data uses different optimizers and epoch budgets. Therefore,
+changes in the gap between the two cannot be considered as a controlled
+scaling law.
+
+The study has several limitations. The experiment only uses a balanced
+500-class subset and a primary backbone network of iNaturalist 2021, and
+usually only one random seed for training in each configuration. Therefore, we
+cannot measure fluctuations between different runs or assume that this ranking
+applies to other data sets and architectures. Limited-data runtimes also come
+from different hardware. Full-data comparisons cover only two initialization
+strategies under the 15-epoch budget, and two jobs are run on different L40S
+nodes. Finally, Grad-CAM is a qualitative localization tool that cannot be
+used as evidence of a model causal reasoning. Future work should be done using
+multiple random seeds to repeat major experiments. Modern fine-grained
+backbone networks, taxonomic supervision and more matched full-data variants
+should also be tested.
+
+% ======================== PASTE INTO CONCLUSION ========================
+\section{Conclusion}
+\label{sec:conclusion}
+
+Under a unified 500-class evaluation protocol, where there are only 40 labeled
+images per class, pretrained ResNet18 representations perform better than
+manual features and scratch training. Full fine-tuning reaches 66.24\% Top-1
+accuracy in this setting. Both augmentation policies improve on no
+augmentation, but strong augmentation does not improve on basic augmentation
+under the tested 30-epoch setting. The ablation experiment also indicates that
+additional random initialization modules may not improve generalization. In the separate 129,378-image extension, the matched fine-
+tuned model reaches 81.58\% Top-1 accuracy. The scratch model reaches 64.20\%,
+showing that pretraining remains useful at the larger scale. The fine-tuning
+model also maintains the highest accuracy rate under all tests of degradation,
+but blur exposes the common dependence of the model on fine spatial detail.
+Overall, representation methods, augmentation strength and model capacity
+should be selected on the basis of available supervision. Robustness tests and
+visual failure analysis show where the model will still fail.

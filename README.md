@@ -34,6 +34,14 @@ including the scratch CNN pipeline and the Evaluation and Robustness framework.
   - Shared `ModelPredictor` protocol
   - Model-independent robustness inference runner
   - Robustness result validation and aggregation
+- `src/evaluation/compare.py`
+  - Revalidates every B/C/D prediction and score artifact
+  - Enforces one shared 5,000-image test mapping
+  - Generates the final cross-method tables and report figures
+- `src/evaluation/model_adapters.py` and `scripts/run_final_robustness.py`
+  - Load the submitted HOG, SIFT, scratch, and fine-tuned model artifacts
+  - Reproduce submitted clean predictions before degraded-image inference
+  - Run and aggregate the final four-degradation by five-severity matrix
 - `demo/evaluation_mvp/`
   - Sample `predictions.csv`
   - Sample `scores.npz`
@@ -41,9 +49,9 @@ including the scratch CNN pipeline and the Evaluation and Robustness framework.
   - Dummy predictor
   - Run instructions
 
-Final cross-method figures and real-model robustness results are intentionally
-out of scope for this MVP. They can be generated after the final model outputs
-are available.
+The unified cross-method tables, 80-run real-model robustness summary, and
+paper figures are generated under `report/generated/`.  Re-running robustness
+requires the gitignored original test images under `data/raw/val/`.
 
 ### Evaluation environment setup
 
@@ -99,6 +107,47 @@ The test suite covers metric calculation, `image_id` alignment, permuted
 `class_indices`, confusion-matrix outputs, deterministic degradation, the
 shared predictor interface, and the complete 4x5 robustness matrix.
 
+### Generate the final cross-method report artifacts
+
+After downloading and extracting the Drive handoff, run:
+
+```bash
+python -m src.evaluation.compare \
+  --manifest configs/final_evaluation.yaml \
+  --artifact-root outputs/drive_snapshot_2026-07-26 \
+  --output report/generated
+```
+
+The command refuses to generate tables if any run has malformed scores or a
+different `image_id -> true_label` mapping.
+
+### Run final real-model robustness
+
+The fixed test CSV points to 5,000 images from the official iNaturalist 2021
+validation archive.  Once those files exist under `data/raw/val/`, run:
+
+```bash
+python scripts/run_final_robustness.py \
+  --artifact-root outputs/drive_snapshot_2026-07-26 \
+  --test-csv data/metadata/test.csv \
+  --data-root . \
+  --output outputs/robustness \
+  --evaluation-output outputs/evaluation/robustness \
+  --device auto \
+  --batch-size 64 \
+  --clean-check-images 5000 \
+  --resume
+```
+
+Before the first degraded run for each model, the command records an
+undegraded severity-0 baseline in the same environment and checks it against
+the submitted clean predictions.  The final summary calculates absolute
+Top-1/Macro-F1 drops from this local baseline.  This avoids treating small
+x86/ARM numerical drift in handcrafted feature extraction as degradation loss;
+the submitted artifacts remain the source for the main comparison table.
+
+To perform only the clean-prediction check, add `--preflight-only`.
+
 ## Scratch CNN Pipeline
 
 This repository contains the C-role scratch CNN pipeline for the COMP9517 group project. It trains ResNet18 from scratch on the fixed 500-class iNaturalist subset and writes outputs in the shared evaluation format.
@@ -131,7 +180,11 @@ Use Python 3.11 and install the project dependencies:
 pip install -r requirements.txt
 ```
 
-For formal runtime comparisons, run the final B/C/D training and inference jobs in the same environment, such as Katana jobs with the same resource request or the same Colab T4 runtime, and record that hardware in `runtime.json`. Traditional B methods may not use the GPU, but they should still run on the same platform for fair timing records.
+The completed limited-data B/C/D artifacts were produced on different
+hardware.  Their `runtime.json` values are retained as descriptive cost
+records, not as a controlled speed ranking.  The full-data pair used the same
+L40S GPU model on different physical nodes and is therefore only approximately
+comparable in elapsed time.
 
 Katana is a good option when the dataset is already on UNSW storage or can be copied once to shared scratch. Request a GPU compute node before running PyTorch training; do not train on the login node. A typical interactive request is:
 
