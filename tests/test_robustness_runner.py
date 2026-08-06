@@ -38,9 +38,7 @@ class DummyBatchColourPredictor(DummyColourPredictor):
     def predict_scores(self, image: Image.Image) -> np.ndarray:
         raise AssertionError("the batch interface should be preferred")
 
-    def predict_scores_batch(
-        self, images: list[Image.Image], image_ids: list[str]
-    ) -> np.ndarray:
+    def predict_scores_batch(self, images: list[Image.Image], image_ids: list[str]) -> np.ndarray:
         del image_ids
         self.batch_calls += 1
         rows = []
@@ -59,9 +57,7 @@ def test_dummy_predictor_runs_complete_robustness_matrix(tmp_path: Path) -> None
         samples.append(RobustnessSample(f"image-{class_idx}", class_idx, image_path))
 
     robustness_root = tmp_path / "robustness"
-    run_dirs = run_robustness_inference(
-        DummyColourPredictor(), samples, robustness_root
-    )
+    run_dirs = run_robustness_inference(DummyColourPredictor(), samples, robustness_root)
     assert len(run_dirs) == 20
     for run_dir in run_dirs:
         assert (run_dir / "predictions.csv").is_file()
@@ -130,9 +126,9 @@ def test_evaluator_adds_clean_reference_and_degradation_drops(tmp_path: Path) ->
         expected_num_classes=3,
         clean_results=clean_results,
     )
-    assert set(
-        ["clean_top1_accuracy", "clean_macro_f1", "top1_drop", "macro_f1_drop"]
-    ).issubset(summary.columns)
+    assert set(["clean_top1_accuracy", "clean_macro_f1", "top1_drop", "macro_f1_drop"]).issubset(
+        summary.columns
+    )
     assert (summary["clean_top1_accuracy"] == 1.0).all()
     assert np.allclose(summary["top1_drop"], 1.0 - summary["top1_accuracy"])
 

@@ -1,23 +1,29 @@
 # Python
 .venv/
+*.egg-info/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
+logs/
 
 # Local/editor files
 .DS_Store
 .idea/
 .vscode/
 
-# Raw dataset and generated artifacts live in Google Drive.
+# Raw datasets and generated artifacts are not versioned.
 # Small shared metadata under data/metadata/ is intentionally tracked.
 data/raw/**
 !data/raw/.gitkeep
+data/subset/**
 outputs/**
 !outputs/.gitkeep
+demo/evaluation_mvp/expected_output/*.png
+report/generated/*.png
+report/generated/*.pdf
 
-# Models and experiment logs must not enter the code submission
+# Models and experiment logs are not versioned.
 checkpoints/
 *.ckpt
 *.pth
@@ -25,8 +31,7 @@ checkpoints/
 wandb/
 runs/
 
-# Local handoff archives and supplied course/chat source material
-handoff/*.zip
+# Local archives and reference material
 scratch_outputs*.tar.gz
 scratch_best*.tar.gz
 docs/source/official/
@@ -52,7 +57,7 @@ data/metadata/train_full_clean.csv
 data/metadata/data_quality_report.csv
 data/metadata/data_quality_summary.json
 
-# Local development notes
+# Development notes
 docs/dev_log.md
 
 # Local backup from replacing the old placeholder file with data/

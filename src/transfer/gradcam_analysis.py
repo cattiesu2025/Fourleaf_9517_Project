@@ -1,35 +1,30 @@
-"""
-src/transfer/gradcam_analysis.py
-----------------------------------
-Generates the Grad-CAM figures the spec's Advanced Method Development
-section asks for:
+"""Generate Grad-CAM analysis figures for transfer-learning runs:
+
     - correctly vs incorrectly classified examples
     - confusable species pairs (e.g. same genus)
+
 Reads outputs/transfer/<method_name>/predictions.csv (already produced by
 predict.py) to pick which test images to visualize, so it doesn't re-run
 inference from scratch.
 
 Output: outputs/transfer/<method_name>/gradcam_examples/*.png
-(these are figures for the report -- NOT part of the required
-predictions.csv/scores.npz/runtime.json triplet, and should not be
-included in the 40MB code ZIP; keep them out of git or in report/ instead)
 
 Usage:
-    python src/transfer/gradcam_analysis.py --strategy finetuned --num_examples 6
+    ./scripts/comp9517 transfer-gradcam --strategy finetuned --num-examples 6
 """
 
+import csv
 import os
 import sys
-import csv
-import argparse
 
-import torch
 import matplotlib.pyplot as plt
+import torch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from src.transfer.model import build_model, STRATEGY_TO_METHOD_NAME
-from src.transfer.gradcam import GradCAM, overlay_heatmap, denormalize_image
+from src.common.cli import ArgumentParser
 from src.data.dataloader import get_dataloader
+from src.transfer.gradcam import GradCAM, denormalize_image, overlay_heatmap
+from src.transfer.model import STRATEGY_TO_METHOD_NAME, build_model
 
 
 def load_predictions(path):
@@ -50,7 +45,7 @@ def find_examples(pred_rows, num_correct, num_incorrect):
 def visualize_examples(model, loader, target_ids, device, out_path, title):
     """target_ids: set of image_id strings (as read from predictions.csv) to look for.
 
-    NOTE: A's INatDataset._parse_image_id() converts numeric image_id values to
+    The dataset parser converts numeric image_id values to
     int, so the DataLoader batches them into a torch.LongTensor -- iterating it
     yields tensor scalars, not plain ints/strs. Normalize everything to str
     before comparing against target_ids (which come from predictions.csv as
@@ -62,7 +57,7 @@ def visualize_examples(model, loader, target_ids, device, out_path, title):
         for i, raw_iid in enumerate(image_ids):
             iid = str(raw_iid)
             if iid in target_ids:
-                id_to_batch_item[iid] = (images[i:i+1], labels[i].item())
+                id_to_batch_item[iid] = (images[i : i + 1], labels[i].item())
         if len(id_to_batch_item) == len(target_ids):
             break
 
@@ -99,7 +94,7 @@ def visualize_examples(model, loader, target_ids, device, out_path, title):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument("--strategy", choices=["frozen", "finetuned", "layer4"], required=True)
     parser.add_argument("--num_examples", type=int, default=6)
     parser.add_argument("--test_csv", default="data/metadata/test.csv")
@@ -108,13 +103,20 @@ def main():
     parser.add_argument("--output_root", default="outputs/transfer")
     parser.add_argument("--use_attention", action="store_true", default=False)
     parser.add_argument("--num_heads", type=int, default=8)
-    parser.add_argument("--dropout_rate", type=float, default=0.0,
-                         help="Must match the value used in train.py for this checkpoint.")
-    parser.add_argument("--output_dir", default=None,
-                         help="Exact directory to read predictions.csv/checkpoint from and "
-                              "write gradcam_examples/ into -- overrides the official "
-                              "outputs/transfer/<method_name>/ path. Use this for the "
-                              "regularization ablation (e.g. .../resnet18_pretrained_finetuned_regularized_extra).")
+    parser.add_argument(
+        "--dropout_rate",
+        type=float,
+        default=0.0,
+        help="Must match the value used in train.py for this checkpoint.",
+    )
+    parser.add_argument(
+        "--output_dir",
+        default=None,
+        help="Exact directory to read predictions.csv/checkpoint from and "
+        "write gradcam_examples/ into; overrides the standard "
+        "outputs/transfer/<method_name>/ path. Use this for the "
+        "regularization ablation (e.g. .../resnet18_pretrained_finetuned_regularized_extra).",
+    )
     args = parser.parse_args()
 
     if args.output_dir:
@@ -136,10 +138,14 @@ def main():
     # checkpoint_best.pth, matching train.py's naming (not the old checkpoints/transfer/model.pt)
     ckpt_path = os.path.join(out_dir, "checkpoint_best.pth")
     ckpt = torch.load(ckpt_path, map_location=device)
-    model = build_model(ckpt["num_classes"], pretrained=False,
-                         use_attention=args.use_attention, num_heads=args.num_heads,
-                         dropout_rate=args.dropout_rate).to(device)
-    model.load_state_dict(ckpt["model_state_dict"])  # matches C's checkpoint key name
+    model = build_model(
+        ckpt["num_classes"],
+        pretrained=False,
+        use_attention=args.use_attention,
+        num_heads=args.num_heads,
+        dropout_rate=args.dropout_rate,
+    ).to(device)
+    model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 
     test_loader = get_dataloader(
@@ -158,15 +164,25 @@ def main():
     correct_ids = {r["image_id"] for r in correct}
     incorrect_ids = {r["image_id"] for r in incorrect}
 
-    visualize_examples(model, test_loader, correct_ids, device,
-                        os.path.join(fig_dir, "correct_examples.png"),
-                        "Grad-CAM: correctly classified examples")
-    visualize_examples(model, test_loader, incorrect_ids, device,
-                        os.path.join(fig_dir, "incorrect_examples.png"),
-                        "Grad-CAM: misclassified examples")
+    visualize_examples(
+        model,
+        test_loader,
+        correct_ids,
+        device,
+        os.path.join(fig_dir, "correct_examples.png"),
+        "Grad-CAM: correctly classified examples",
+    )
+    visualize_examples(
+        model,
+        test_loader,
+        incorrect_ids,
+        device,
+        os.path.join(fig_dir, "incorrect_examples.png"),
+        "Grad-CAM: misclassified examples",
+    )
 
     print("\nNext step for confusable species pairs (e.g. same genus):")
-    print("  Once idx_to_class.json (from A) is available, look up which class_idx values")
+    print("  Use idx_to_class.json to look up which class_idx values")
     print("  share a genus/category, filter predictions.csv for those class_idx pairs,")
     print("  and call visualize_examples() again with those image_ids.")
 

@@ -1,4 +1,4 @@
-"""Adapters that expose the final B/C/D models to the shared robustness runner."""
+"""Adapters that expose trained project models to the robustness runner."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import numpy as np
 import torch
 from PIL import Image
 
+from src.common.runtime import select_device
 from src.data.transforms import get_eval_transform
 from src.scratch.model import build_resnet18_scratch
 from src.traditional.hog_random_forest import extract_hog_feature
@@ -26,7 +27,7 @@ def _load_pickle(path: str | Path) -> Any:
     """Load a trusted team-produced pickle artifact.
 
     Pickle can execute code while loading.  This helper is intentionally only
-    used for the model files produced by the project and supplied by member B.
+    used for trusted model files produced by this project.
     """
 
     model_path = Path(path)
@@ -37,18 +38,7 @@ def _load_pickle(path: str | Path) -> Any:
 
 
 def resolve_device(name: str) -> torch.device:
-    if name == "auto":
-        if torch.cuda.is_available():
-            return torch.device("cuda")
-        if torch.backends.mps.is_available():
-            return torch.device("mps")
-        return torch.device("cpu")
-    device = torch.device(name)
-    if device.type == "cuda" and not torch.cuda.is_available():
-        raise RuntimeError("CUDA was requested but is unavailable")
-    if device.type == "mps" and not torch.backends.mps.is_available():
-        raise RuntimeError("MPS was requested but is unavailable")
-    return device
+    return select_device(name)
 
 
 class HOGRandomForestPredictor:
@@ -73,22 +63,16 @@ class HOGRandomForestPredictor:
     def predict_scores(self, image: Image.Image) -> np.ndarray:
         rgb = np.asarray(image.convert("RGB"))
         gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-        feature = extract_hog_feature(
-            gray, self.image_size, self.pixels_per_cell
-        ).reshape(1, -1)
+        feature = extract_hog_feature(gray, self.image_size, self.pixels_per_cell).reshape(1, -1)
         return np.asarray(self.model.predict_proba(feature)[0], dtype=np.float64)
 
-    def predict_scores_batch(
-        self, images: list[Image.Image], image_ids: list[str]
-    ) -> np.ndarray:
+    def predict_scores_batch(self, images: list[Image.Image], image_ids: list[str]) -> np.ndarray:
         del image_ids
         features = []
         for image in images:
             rgb = np.asarray(image.convert("RGB"))
             gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-            features.append(
-                extract_hog_feature(gray, self.image_size, self.pixels_per_cell)
-            )
+            features.append(extract_hog_feature(gray, self.image_size, self.pixels_per_cell))
         return np.asarray(self.model.predict_proba(np.stack(features)), dtype=np.float64)
 
 
@@ -127,25 +111,16 @@ class SIFTBoVWSVMPredictor:
         rgb = np.asarray(image.convert("RGB"))
         gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
         gray = resize_for_sift(gray)
-        descriptors = extract_sift_descriptors(
-            gray, self.max_desc_per_image, rng=self._rng
-        )
-        return descriptors_to_bovw_features(
-            [descriptors], self.vocabulary, self.vocab_size
-        )[0]
+        descriptors = extract_sift_descriptors(gray, self.max_desc_per_image, rng=self._rng)
+        return descriptors_to_bovw_features([descriptors], self.vocabulary, self.vocab_size)[0]
 
     def predict_scores(self, image: Image.Image) -> np.ndarray:
         feature = self._feature(image).reshape(1, -1)
         return np.asarray(self.model.decision_function(feature)[0], dtype=np.float64)
 
-    def predict_scores_batch(
-        self, images: list[Image.Image], image_ids: list[str]
-    ) -> np.ndarray:
+    def predict_scores_batch(self, images: list[Image.Image], image_ids: list[str]) -> np.ndarray:
         features = np.stack(
-            [
-                self._feature(image)
-                for image, _image_id in zip(images, image_ids, strict=True)
-            ]
+            [self._feature(image) for image, _image_id in zip(images, image_ids, strict=True)]
         )
         scores = np.asarray(self.model.decision_function(features), dtype=np.float64)
         if scores.ndim == 1:
@@ -237,9 +212,7 @@ class TorchResNetPredictor:
     def predict_scores(self, image: Image.Image) -> np.ndarray:
         return self.predict_scores_batch([image], ["0"])[0]
 
-    def predict_scores_batch(
-        self, images: list[Image.Image], image_ids: list[str]
-    ) -> np.ndarray:
+    def predict_scores_batch(self, images: list[Image.Image], image_ids: list[str]) -> np.ndarray:
         del image_ids
         tensor = torch.stack([self.transform(image) for image in images]).to(self.device)
         with torch.no_grad():

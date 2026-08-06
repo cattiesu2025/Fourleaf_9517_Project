@@ -1,15 +1,4 @@
-"""Train ResNet18 transfer-learning models (frozen / finetuned).
-
-Rewritten to match C's ACTUAL get_dataloader() call signature and
-runtime.json/checkpoint conventions (from C's src/scratch/train.py),
-so D's outputs are format-identical to C's for E's aggregation.
-
-Reuses hardware_info/software_info/select_device/set_seed from
-src.scratch.train rather than reimplementing them -- if this dependency
-feels backwards (transfer importing from scratch), suggest to the group
-moving these into src/common/utils.py; not done here since that would
-require editing C's file too.
-"""
+"""Train ResNet18 transfer-learning models with shared runtime metadata."""
 
 from __future__ import annotations
 
@@ -23,7 +12,7 @@ from typing import Any
 
 import torch
 import torch.nn as nn
-from torch.optim import AdamW, SGD
+from torch.optim import SGD, AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau
 from tqdm import tqdm
 
@@ -31,10 +20,16 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.common.cli import ArgumentParser
+from src.common.runtime import (
+    hardware_info,
+    select_device,
+    set_seed,
+    software_info,
+    unpack_batch,
+)
 from src.data.dataloader import get_dataloader
-from src.transfer.model import build_model, set_finetune_strategy, STRATEGY_TO_METHOD_NAME
-# Reused from C so runtime.json / hardware info are byte-identical in format:
-from src.scratch.train import hardware_info, select_device, software_info, set_seed, unpack_batch
+from src.transfer.model import STRATEGY_TO_METHOD_NAME, build_model, set_finetune_strategy
 
 HISTORY_FIELDS = [
     "epoch",
@@ -48,31 +43,51 @@ HISTORY_FIELDS = [
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train transfer-learning ResNet18.")
+    parser = ArgumentParser(description="Train transfer-learning ResNet18.")
     parser.add_argument("--strategy", choices=["frozen", "finetuned", "layer4"], required=True)
-    parser.add_argument("--pretrained", action="store_true", default=True)
-    parser.add_argument("--use_attention", action="store_true", default=False,
-                         help="Extra ablation: insert multi-head self-attention after layer4. "
-                              "NOT an official method_name -- outputs go to a separate directory.")
+    parser.add_argument(
+        "--pretrained",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Initialize from ImageNet weights.",
+    )
+    parser.add_argument(
+        "--use_attention",
+        action="store_true",
+        default=False,
+        help="Insert multi-head self-attention after layer4 and use a distinct output name.",
+    )
     parser.add_argument("--num_heads", type=int, default=8)
     parser.add_argument("--train_csv", default="data/metadata/train.csv")
     parser.add_argument("--val_csv", default="data/metadata/val.csv")
-    parser.add_argument("--transform_type", choices=["none", "basic_aug", "strong_aug"], default="basic_aug")
+    parser.add_argument(
+        "--transform_type", choices=["none", "basic_aug", "strong_aug"], default="basic_aug"
+    )
     parser.add_argument("--num_classes", type=int, default=500)
     parser.add_argument("--image_size", type=int, default=224)
     parser.add_argument("--epochs", type=int, default=15)
     parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--num_workers", type=int, default=4)
-    parser.add_argument("--lr", type=float, default=None)  # None -> strategy-dependent default below
+    parser.add_argument(
+        "--lr", type=float, default=None
+    )  # None -> strategy-dependent default below
     parser.add_argument("--weight_decay", type=float, default=1e-4)
-    parser.add_argument("--dropout_rate", type=float, default=0.0,
-                         help="Dropout before fc layer, e.g. 0.4 -- regularization for overfitting.")
-    parser.add_argument("--label_smoothing", type=float, default=0.0,
-                         help="e.g. 0.1 -- softens hard one-hot targets, another overfitting knob.")
+    parser.add_argument(
+        "--dropout_rate",
+        type=float,
+        default=0.0,
+        help="Dropout before fc layer, e.g. 0.4 -- regularization for overfitting.",
+    )
+    parser.add_argument(
+        "--label_smoothing",
+        type=float,
+        default=0.0,
+        help="e.g. 0.1 -- softens hard one-hot targets, another overfitting knob.",
+    )
     parser.add_argument("--optimizer", choices=["adamw", "sgd"], default="adamw")
     parser.add_argument("--scheduler", choices=["cosine", "plateau", "none"], default="cosine")
     parser.add_argument("--sampler", choices=["none", "weighted_random"], default="none")
-    parser.add_argument("--seed", type=int, default=9517)  # training-run seed (weight init/shuffle), separate from A's data-split seed (500)
+    parser.add_argument("--seed", type=int, default=9517)
     parser.add_argument("--device", choices=["auto", "cuda", "mps", "cpu"], default="auto")
     parser.add_argument("--amp", action="store_true")
     parser.add_argument("--output_dir", default=None)  # default derived from method_name below
@@ -142,12 +157,14 @@ def write_history(history_path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
-def save_checkpoint(path, model, optimizer, scheduler, epoch, best_epoch, best_val_accuracy, args, method_name):
+def save_checkpoint(
+    path, model, optimizer, scheduler, epoch, best_epoch, best_val_accuracy, args, method_name
+):
     payload = {
         "epoch": epoch,
         "best_epoch": best_epoch,
         "best_val_accuracy": best_val_accuracy,
-        "model_state_dict": model.state_dict(),  # matches C's key name, not "model_state"
+        "model_state_dict": model.state_dict(),
         "optimizer_state_dict": optimizer.state_dict(),
         "scheduler_state_dict": scheduler.state_dict() if scheduler is not None else None,
         "num_classes": args.num_classes,
@@ -163,15 +180,15 @@ def main() -> None:
 
     if args.strategy not in STRATEGY_TO_METHOD_NAME:
         raise ValueError(
-            f"'{args.strategy}' is not an official method name. Only 'frozen' and "
-            f"'finetuned' are official (see 命名清单); 'layer4' is an extra ablation."
+            f"'{args.strategy}' does not have a primary artifact name. "
+            "Use 'frozen' or 'finetuned', or provide a separately named ablation workflow."
         )
     method_name = STRATEGY_TO_METHOD_NAME[args.strategy]
     if args.use_attention:
-        # Extra ablation, not an official method_name -- keep it out of the
-        # official outputs/transfer/<method_name>/ directories entirely.
         method_name = f"{method_name}_attention_extra"
-    output_dir = Path(args.output_dir) if args.output_dir else Path(f"outputs/transfer/{method_name}")
+    output_dir = (
+        Path(args.output_dir) if args.output_dir else Path(f"outputs/transfer/{method_name}")
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     set_seed(args.seed)
@@ -199,9 +216,13 @@ def main() -> None:
         seed=args.seed,
     )
 
-    model = build_model(args.num_classes, pretrained=args.pretrained,
-                         use_attention=args.use_attention, num_heads=args.num_heads,
-                         dropout_rate=args.dropout_rate).to(device)
+    model = build_model(
+        args.num_classes,
+        pretrained=args.pretrained,
+        use_attention=args.use_attention,
+        num_heads=args.num_heads,
+        dropout_rate=args.dropout_rate,
+    ).to(device)
     set_finetune_strategy(model, args.strategy)
     trainable_params = [p for p in model.parameters() if p.requires_grad]
 
@@ -218,10 +239,24 @@ def main() -> None:
 
     for epoch in range(1, args.epochs + 1):
         epoch_start = time.perf_counter()
-        train_loss, train_acc = run_epoch(model, train_loader, criterion, device,
-                                           optimizer=optimizer, max_batches=args.max_train_batches, use_amp=use_amp)
-        val_loss, val_acc = run_epoch(model, val_loader, criterion, device,
-                                       optimizer=None, max_batches=args.max_val_batches, use_amp=False)
+        train_loss, train_acc = run_epoch(
+            model,
+            train_loader,
+            criterion,
+            device,
+            optimizer=optimizer,
+            max_batches=args.max_train_batches,
+            use_amp=use_amp,
+        )
+        val_loss, val_acc = run_epoch(
+            model,
+            val_loader,
+            criterion,
+            device,
+            optimizer=None,
+            max_batches=args.max_val_batches,
+            use_amp=False,
+        )
 
         if scheduler is not None:
             if isinstance(scheduler, ReduceLROnPlateau):
@@ -230,8 +265,12 @@ def main() -> None:
                 scheduler.step()
 
         row = {
-            "epoch": epoch, "train_loss": train_loss, "train_acc": train_acc,
-            "val_loss": val_loss, "val_acc": val_acc, "lr": current_lr(optimizer),
+            "epoch": epoch,
+            "train_loss": train_loss,
+            "train_acc": train_acc,
+            "val_loss": val_loss,
+            "val_acc": val_acc,
+            "lr": current_lr(optimizer),
             "epoch_time_seconds": time.perf_counter() - epoch_start,
         }
         history.append(row)
@@ -239,13 +278,33 @@ def main() -> None:
 
         if val_acc > best_val_accuracy:
             best_val_accuracy, best_epoch = val_acc, epoch
-            save_checkpoint(output_dir / "checkpoint_best.pth", model, optimizer, scheduler,
-                             epoch, best_epoch, best_val_accuracy, args, method_name)
-        save_checkpoint(output_dir / "checkpoint_last.pth", model, optimizer, scheduler,
-                         epoch, best_epoch, best_val_accuracy, args, method_name)
+            save_checkpoint(
+                output_dir / "checkpoint_best.pth",
+                model,
+                optimizer,
+                scheduler,
+                epoch,
+                best_epoch,
+                best_val_accuracy,
+                args,
+                method_name,
+            )
+        save_checkpoint(
+            output_dir / "checkpoint_last.pth",
+            model,
+            optimizer,
+            scheduler,
+            epoch,
+            best_epoch,
+            best_val_accuracy,
+            args,
+            method_name,
+        )
 
-        print(f"[{method_name}] epoch={epoch} train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
-              f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}")
+        print(
+            f"[{method_name}] epoch={epoch} train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
+            f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}"
+        )
 
     runtime = {
         "method_name": method_name,

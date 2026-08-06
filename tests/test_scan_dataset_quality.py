@@ -15,7 +15,6 @@ from scripts.scan_dataset_quality import (
     scan_dataset_quality,
 )
 
-
 SOURCE_COLUMNS = (
     "image_id",
     "image_path",
@@ -148,17 +147,11 @@ def test_quality_scan_excludes_only_safe_automatic_cases(tmp_path: Path) -> None
     }
 
     with report_csv.open(newline="", encoding="utf-8") as handle:
-        report = {
-            item["image_id"]: item for item in csv.DictReader(handle)
-        }
+        report = {item["image_id"]: item for item in csv.DictReader(handle)}
     assert report["t0"]["exclusion_reason"] == "exact_duplicate_holdout"
     assert report["t2"]["exclusion_reason"] == "exact_duplicate_train"
-    assert report["t3"]["exclusion_reason"] == (
-        "exact_duplicate_label_conflict"
-    )
-    assert report["t4"]["exclusion_reason"] == (
-        "exact_duplicate_label_conflict"
-    )
+    assert report["t3"]["exclusion_reason"] == ("exact_duplicate_label_conflict")
+    assert report["t4"]["exclusion_reason"] == ("exact_duplicate_label_conflict")
     assert report["t5"]["exclusion_reason"] == "corrupt"
     assert report["t6"]["is_too_dark"] == "True"
     assert report["t6"]["exclude_from_clean"] == "False"

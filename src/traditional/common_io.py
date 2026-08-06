@@ -1,33 +1,32 @@
 """
 common_io.py
 ------------
-Shared utilities for B's two traditional-method pipelines
+Shared utilities for the two traditional-method pipelines
 (SIFT+BoVW+SVM, HOG+RandomForest):
 
   1. Dataset loading (reads data/metadata/*.csv)
-  2. Degradation call wrapper (real-time degradation, see data contract section 8)
-  3. Output saving (predictions.csv / scores.npz / runtime.json), strictly following section 5
+  2. Degradation call wrapper for real-time robustness evaluation
+  3. Output saving (predictions.csv / scores.npz / runtime.json)
 
-No ImageNet normalisation is done here -- traditional methods don't need it.
-Per section 4.1 of the contract, B only does resizing (plus whatever grayscale
-conversion each method needs), not the CNN-style normalisation.
+No ImageNet normalisation is done here. These pipelines only resize images
+and perform the grayscale conversion needed by each feature extractor.
 """
 
-import os
 import json
-import time
+import os
 import platform
+import time
 from dataclasses import dataclass
-from typing import Optional, Callable, List
+from typing import Callable, List, Optional
 
 import numpy as np
 import pandas as pd
 from PIL import Image
 
-
 # ---------------------------------------------------------------------------
 # Dataset loading
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class INatRecord:
@@ -39,14 +38,13 @@ class INatRecord:
 class INatDataset:
     """
     Minimal dataset wrapper, no torch dependency, pure PIL + numpy, so it's
-    easy to plug into B's sklearn pipelines.
+    easy to plug into the sklearn pipelines.
 
     csv_file must be one of data/metadata/{train,val,test,longtail_train}.csv
     columns: image_id, image_path, original_class_id, class_idx, class_name, split
 
-    data_root: image_path is a relative path (relative to the project root).
-               If your project layout matches the spec document, data_root
-               can just be the project root.
+    data_root: image_path is relative to this directory, which normally points
+               to the project root.
     """
 
     def __init__(
@@ -58,8 +56,7 @@ class INatDataset:
     ):
         df = pd.read_csv(csv_file)
 
-        # ---- Quick-test switch: per spec section 13.1, try a 50-100 class
-        # subset before running on the full set. ----
+        # Optional small class subset for quick feature and memory checks.
         # Usage: INatDataset(..., num_classes=50) randomly picks a subset of
         # class_idx values. This does NOT re-split the data (still allowed
         # under the contract, since it's just a subset filter -- it doesn't
@@ -117,32 +114,32 @@ class INatDataset:
 
 
 # ---------------------------------------------------------------------------
-# Degradation call wrapper (section 8)
+# Degradation call wrapper
 # ---------------------------------------------------------------------------
+
 
 def load_degradation_fn() -> Callable:
     """
-    Import apply_degradation from E's src/evaluation/degradation.py.
-    B does not implement degradation logic, only calls it, and must not
-    change degradation parameters or the insertion point (contract section 8).
-
-    If E hasn't provided this file yet, this raises an error instead of
-    letting B write an inconsistent implementation of its own.
+    Import the canonical degradation implementation. Traditional models call
+    it without changing its parameters or insertion point.
     """
     try:
         from src.evaluation.degradation import apply_degradation  # type: ignore
     except ImportError as e:
         raise ImportError(
             "Could not find apply_degradation in src/evaluation/degradation.py. "
-            "This file is owned by E (see data contract section 8). "
-            "Robustness experiments must wait until E's file is in place -- "
-            "do not write your own copy."
+            "Restore the shared implementation before running robustness."
         ) from e
     return apply_degradation
 
 
-def degrade_pil_image(apply_degradation_fn, pil_img: Image.Image,
-                       degradation_type: str, severity: int, seed: Optional[int] = None):
+def degrade_pil_image(
+    apply_degradation_fn,
+    pil_img: Image.Image,
+    degradation_type: str,
+    severity: int,
+    seed: Optional[int] = None,
+):
     """
     Degradation must happen "after loading the raw image, before each model's
     own preprocessing." The pil_img passed here must be the image straight
@@ -154,6 +151,7 @@ def degrade_pil_image(apply_degradation_fn, pil_img: Image.Image,
 # ---------------------------------------------------------------------------
 # Output saving: predictions.csv / scores.npz / runtime.json
 # ---------------------------------------------------------------------------
+
 
 def save_predictions_csv(
     out_dir: str,
@@ -173,14 +171,16 @@ def save_predictions_csv(
     a predictions.csv produced from val.csv would incorrectly claim split=test.
     """
     os.makedirs(out_dir, exist_ok=True)
-    df = pd.DataFrame({
-        "image_id": image_ids,
-        "true_label": true_labels,
-        "pred_label": pred_labels,
-        "top1_score": top1_scores,
-        "method_name": method_name,
-        "split": split,
-    })
+    df = pd.DataFrame(
+        {
+            "image_id": image_ids,
+            "true_label": true_labels,
+            "pred_label": pred_labels,
+            "top1_score": top1_scores,
+            "method_name": method_name,
+            "split": split,
+        }
+    )
     out_path = os.path.join(out_dir, "predictions.csv")
     df.to_csv(out_path, index=False)
     print(f"[saved] {out_path}  ({len(df)} rows)")
@@ -248,6 +248,7 @@ def save_runtime_json(
 
 class Timer:
     """Small helper: with Timer() as t: ... ; t.elapsed"""
+
     def __enter__(self):
         self._start = time.time()
         return self

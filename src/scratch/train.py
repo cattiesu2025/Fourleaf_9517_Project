@@ -1,23 +1,18 @@
-"""Train ResNet18 from scratch for the C-role augmentation ablation."""
+"""Train ResNet18 from scratch for the augmentation ablation."""
 
 from __future__ import annotations
 
 import argparse
 import csv
 import json
-import os
-import platform
-import random
-import socket
 import sys
 import time
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 import torch
 import torch.nn as nn
-from torch.optim import AdamW, SGD
+from torch.optim import SGD, AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau
 from tqdm import tqdm
 
@@ -25,6 +20,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.common.cli import ArgumentParser
+from src.common.runtime import (
+    hardware_info,
+    select_device,
+    set_seed,
+    software_info,
+    unpack_batch,
+)
 from src.data.dataloader import get_dataloader
 from src.scratch.model import build_resnet18_scratch
 
@@ -40,7 +43,7 @@ HISTORY_FIELDS = [
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train scratch ResNet18.")
+    parser = ArgumentParser(description="Train scratch ResNet18.")
     parser.add_argument("--method_name", default="resnet18_scratch_basic_aug")
     parser.add_argument(
         "--transform_type",
@@ -68,31 +71,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def set_seed(seed: int) -> None:
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-
-
-def select_device(requested: str) -> torch.device:
-    if requested == "cuda":
-        if not torch.cuda.is_available():
-            raise RuntimeError("CUDA was requested but is not available")
-        return torch.device("cuda")
-    if requested == "mps":
-        if not torch.backends.mps.is_available():
-            raise RuntimeError("MPS was requested but is not available")
-        return torch.device("mps")
-    if requested == "cpu":
-        return torch.device("cpu")
-    if torch.cuda.is_available():
-        return torch.device("cuda")
-    if torch.backends.mps.is_available():
-        return torch.device("mps")
-    return torch.device("cpu")
-
-
 def build_optimizer(args: argparse.Namespace, model: nn.Module) -> torch.optim.Optimizer:
     if args.optimizer == "sgd":
         return SGD(
@@ -114,12 +92,6 @@ def build_scheduler(args: argparse.Namespace, optimizer: torch.optim.Optimizer) 
 
 def current_lr(optimizer: torch.optim.Optimizer) -> float:
     return float(optimizer.param_groups[0]["lr"])
-
-
-def unpack_batch(batch: Any) -> tuple[torch.Tensor, torch.Tensor, Any]:
-    if isinstance(batch, dict):
-        return batch["image"], batch["class_idx"], batch["image_id"]
-    return batch
 
 
 def run_epoch(
@@ -176,48 +148,6 @@ def write_history(history_path: Path, rows: list[dict[str, Any]]) -> None:
         writer = csv.DictWriter(f, fieldnames=HISTORY_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
-
-
-def hardware_info(device: torch.device) -> dict[str, Any]:
-    gpu_name = None
-    gpu_memory_gb = None
-    if device.type == "cuda":
-        gpu_name = torch.cuda.get_device_name(device)
-        gpu_memory_gb = round(
-            torch.cuda.get_device_properties(device).total_memory / (1024**3),
-            2,
-        )
-    elif device.type == "mps":
-        gpu_name = "Apple MPS"
-
-    ram_gb = None
-    if hasattr(os, "sysconf"):
-        try:
-            pages = os.sysconf("SC_PHYS_PAGES")
-            page_size = os.sysconf("SC_PAGE_SIZE")
-            ram_gb = round(pages * page_size / (1024**3), 2)
-        except (ValueError, OSError):
-            ram_gb = None
-
-    return {
-        "platform": platform.platform(),
-        "hostname": socket.gethostname(),
-        "pbs_jobid": os.environ.get("PBS_JOBID"),
-        "cpu": platform.processor() or platform.machine(),
-        "gpu": gpu_name,
-        "gpu_memory_gb": gpu_memory_gb,
-        "ram_gb": ram_gb,
-    }
-
-
-def software_info() -> dict[str, str]:
-    import torchvision
-
-    return {
-        "python": platform.python_version(),
-        "pytorch": torch.__version__,
-        "torchvision": torchvision.__version__,
-    }
 
 
 def save_checkpoint(

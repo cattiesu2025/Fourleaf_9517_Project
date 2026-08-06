@@ -11,9 +11,7 @@ from src.evaluation.contracts import load_evaluation_data
 from src.evaluation.evaluate import evaluate_method
 
 
-def _write_fixture(
-    root: Path, *, mismatch_argmax: bool = False
-) -> tuple[Path, Path, Path, Path]:
+def _write_fixture(root: Path, *, mismatch_argmax: bool = False) -> tuple[Path, Path, Path, Path]:
     image_ids = np.asarray(["img-0", "img-1", "img-2", "img-3", "img-4", "img-5"])
     true_labels = np.asarray([0, 1, 2, 0, 1, 2])
     class_indices = np.asarray([2, 0, 1])
@@ -79,9 +77,7 @@ def test_loader_aligns_image_ids_and_maps_permuted_class_columns(
     predictions_path, scores_path, _, _ = _write_fixture(tmp_path)
     data = load_evaluation_data(predictions_path, scores_path, expected_num_classes=3)
     np.testing.assert_array_equal(data.class_indices, [2, 0, 1])
-    np.testing.assert_array_equal(
-        data.y_pred, data.class_indices[np.argmax(data.scores, axis=1)]
-    )
+    np.testing.assert_array_equal(data.y_pred, data.class_indices[np.argmax(data.scores, axis=1)])
 
 
 def test_argmax_mismatch_is_rejected(tmp_path: Path) -> None:
@@ -91,9 +87,7 @@ def test_argmax_mismatch_is_rejected(tmp_path: Path) -> None:
 
 
 def test_evaluate_method_writes_complete_analysis(tmp_path: Path) -> None:
-    predictions_path, scores_path, classes_path, runtime_path = _write_fixture(
-        tmp_path / "input"
-    )
+    predictions_path, scores_path, classes_path, runtime_path = _write_fixture(tmp_path / "input")
     output_dir = tmp_path / "evaluation"
     payload = evaluate_method(
         predictions_path,

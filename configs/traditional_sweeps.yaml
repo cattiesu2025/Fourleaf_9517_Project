@@ -1,0 +1,62 @@
+version: 1
+
+common_args:
+  train_csv: data/metadata/train.csv
+  test_csv: data/metadata/val.csv
+
+methods:
+  hog:
+    module: src.traditional.hog_random_forest
+    output_dir: outputs/traditional/hog_random_forest/dev/{name}
+    log_file: logs/traditional/hog/{name}.log
+    fixed_args:
+      pixels_per_cell: 8
+      n_estimators: 200
+      max_depth: 30
+      n_jobs: 4
+      cache_dir: outputs/traditional/hog_random_forest/feature_cache
+    runs:
+      - name: baseline
+      - name: cell-16
+        args:
+          pixels_per_cell: 16
+      - name: trees-100
+        args:
+          n_estimators: 100
+      - name: trees-300
+        args:
+          n_estimators: 300
+      - name: depth-20
+        args:
+          max_depth: 20
+      - name: depth-50
+        args:
+          max_depth: 50
+
+  sift:
+    module: src.traditional.sift_bovw_svm
+    output_dir: outputs/traditional/sift_bovw_svm/dev/{name}
+    log_file: logs/traditional/sift/{name}.log
+    fixed_args:
+      max_desc_per_image: 200
+      max_total_desc: 1000000
+      cache_dir: outputs/traditional/sift_bovw_svm/feature_cache
+    runs:
+      - name: vocab-500-c-0.1
+        args: {vocab_size: 500, svm_c: 0.1}
+      - name: vocab-500-c-1
+        args: {vocab_size: 500, svm_c: 1}
+      - name: vocab-500-c-10
+        args: {vocab_size: 500, svm_c: 10}
+      - name: vocab-1000-c-0.1
+        args: {vocab_size: 1000, svm_c: 0.1}
+      - name: vocab-1000-c-1
+        args: {vocab_size: 1000, svm_c: 1}
+      - name: vocab-1000-c-10
+        args: {vocab_size: 1000, svm_c: 10}
+      - name: vocab-2000-c-0.1
+        args: {vocab_size: 2000, svm_c: 0.1}
+      - name: vocab-2000-c-1
+        args: {vocab_size: 2000, svm_c: 1}
+      - name: vocab-2000-c-10
+        args: {vocab_size: 2000, svm_c: 10}

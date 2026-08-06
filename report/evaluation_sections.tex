@@ -1,22 +1,13 @@
-% OVERLEAF COPY-PASTE VERSION
-%
-% Required packages in the main document preamble:
+% Evaluation and results sections for the project report.
+% Required packages:
 %   \usepackage{graphicx}
 %   \usepackage{booktabs}
-%
-% Upload these three files from report/generated/ to the Overleaf project:
+% Figures generated locally under report/generated/:
 %   main_performance_vs_time.pdf
 %   full_data_training_curves.pdf
 %   robustness_curves.pdf
-%
-% Copy each marked block into the matching part of the group's CVPR document.
-% Do not add a second \begin{document}, Abstract, Discussion, or Conclusion if
-% the main document already contains one. All tables are inline, so this file
-% does not depend on any external table include files.
-%
-% Quantitative claims are recorded in docs/member_e_claim_evidence.md.
 
-% ======================== PASTE INTO ABSTRACT ========================
+% Abstract
 \begin{abstract}
 The fine-grained species recognition is difficult, as there are often only
 minor morphological characteristics separating different categories, while the
@@ -45,7 +36,7 @@ However, augmentation strength and model capacity still need to be matched
 with available supervision data.
 \end{abstract}
 
-% ======================== PASTE INTO METHODS ========================
+% Methods
 \subsection{Evaluation and Analysis Protocol}
 \label{sec:evaluation_protocol}
 
@@ -81,7 +72,7 @@ undegraded severity-0 run in the same environment. Grad-CAM is used separately
 for qualitative failure analysis. The heat maps to show which areas the
 prediction is sensitive to, but does not prove causality.
 
-% ================= PASTE INTO EXPERIMENTAL RESULTS =================
+% Experimental results
 \subsection{Experimental Setup}
 \label{sec:experimental_setup}
 
@@ -99,18 +90,17 @@ learning rate is 0.01, weight decay is $10^{-4}$, and cosine scheduling is
 used. The operation uses random seeds of 9517. Frozen and fine-tuned models in
 limited-data experiments use basic augmentation and are trained for 15 epochs
 with AdamW. Their learning rates are $10^{-3}$ and $10^{-4}$, respectively.
-The submitted run metadata records seed 500. All deep models are evaluated
+The recorded run metadata uses seed 500. All deep models are evaluated
 from the checkpoint with the highest validation accuracy.
 
 Runtime values for the limited-data experiments come from their original
 environments. The traditional method operates on a central processor for
 macOS. The selected scratch model uses Tesla V100 and the transfer learning
 model uses RTX 5070 Ti Laptop GPU. Therefore, these times are described only.
-Both jobs in the full data comparison use PyTorch 2.3.1 and CUDA 12.1. They
-also use the same PBS resource requests and NVIDIA L40S. Both jobs run on the
-k098 and k097 nodes, respectively. Thus, the graphic processor model and the
-software stack are the same, but the physical machinery is different. All
-final metrics are recalculated by shared evaluation pipeline.
+Both jobs in the full data comparison use PyTorch 2.3.1, CUDA 12.1, the same
+resource allocation, and NVIDIA L40S GPUs. They run on different physical
+compute nodes, so elapsed times remain only approximately comparable. All
+final metrics are recalculated by the shared evaluation pipeline.
 
 \subsection{Main Comparison}
 \label{sec:main_comparison}
@@ -265,7 +255,7 @@ impact of noise on HOG was greatest, with the accuracy rate dropping from
 1.32\% to 0.60\%. Blur affects SIFT most, with the accuracy rate dropping from
 3.18\% to 1.26 per cent.
 
-% ======================== PASTE INTO DISCUSSION ========================
+% Discussion
 \section{Discussion}
 \label{sec:discussion}
 
@@ -324,7 +314,7 @@ multiple random seeds to repeat major experiments. Modern fine-grained
 backbone networks, taxonomic supervision and more matched full-data variants
 should also be tested.
 
-% ======================== PASTE INTO CONCLUSION ========================
+% Conclusion
 \section{Conclusion}
 \label{sec:conclusion}
 

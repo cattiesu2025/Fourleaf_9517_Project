@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from functools import lru_cache
 import hashlib
+from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -9,7 +9,6 @@ from typing import Any
 import numpy as np
 import yaml
 from PIL import Image, ImageEnhance, ImageFilter
-
 
 CONFIG_PATH = Path(__file__).resolve().parents[2] / "configs" / "robustness.yaml"
 

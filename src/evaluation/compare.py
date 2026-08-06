@@ -1,7 +1,7 @@
 """Build the final cross-method tables and figures from raw model outputs.
 
-The manifest-driven workflow keeps the submitted model artifacts outside Git
-while making E's evaluation reproducible.  Every run is revalidated through
+The manifest-driven workflow keeps trained model artifacts outside Git
+while making evaluation reproducible. Every run is revalidated through
 the shared output contract, recomputed with the same metric implementation,
 and checked against one canonical ``image_id -> true_label`` test mapping.
 """
@@ -130,9 +130,7 @@ def evaluate_runs(
 
     for spec in specs:
         missing = [
-            path
-            for path in (spec.predictions, spec.scores, spec.runtime)
-            if not path.is_file()
+            path for path in (spec.predictions, spec.scores, spec.runtime) if not path.is_file()
         ]
         if missing:
             raise FileNotFoundError(
@@ -244,9 +242,7 @@ def write_latex_table(table: pd.DataFrame, path: Path) -> None:
         r"\midrule",
     ]
     for index, row in table.iterrows():
-        metrics = [
-            _format_metric(row[column], ranks[column][index]) for column in METRIC_COLUMNS
-        ]
+        metrics = [_format_metric(row[column], ranks[column][index]) for column in METRIC_COLUMNS]
         train_time = (
             "--"
             if pd.isna(row["training_time_seconds"])
@@ -300,8 +296,14 @@ def _plot_performance_time(table: pd.DataFrame, output_dir: Path) -> None:
     axes[0].set_ylabel("Test Top-1 accuracy (%)")
     handles = [
         plt.Line2D(
-            [0], [0], marker="o", linestyle="", markerfacecolor=colour,
-            markeredgecolor="black", label=hardware, markersize=7
+            [0],
+            [0],
+            marker="o",
+            linestyle="",
+            markerfacecolor=colour,
+            markeredgecolor="black",
+            label=hardware,
+            markersize=7,
         )
         for hardware, colour in colours.items()
     ]
@@ -322,7 +324,9 @@ def _plot_performance_time(table: pd.DataFrame, output_dir: Path) -> None:
     )
     figure.tight_layout(rect=(0, 0.17, 1, 0.96))
     for suffix in ("png", "pdf"):
-        figure.savefig(output_dir / f"main_performance_vs_time.{suffix}", dpi=300, bbox_inches="tight")
+        figure.savefig(
+            output_dir / f"main_performance_vs_time.{suffix}", dpi=300, bbox_inches="tight"
+        )
     plt.close(figure)
 
 
@@ -335,10 +339,19 @@ def _plot_full_training_curves(specs: list[RunSpec], output_dir: Path) -> None:
         if spec.training_history is None or not spec.training_history.is_file():
             raise FileNotFoundError(f"missing training history for {spec.run_id}")
         history = pd.read_csv(spec.training_history)
-        axes[0].plot(history["epoch"], 100.0 * history["train_acc"], label=f"{spec.display_name} train")
-        axes[0].plot(history["epoch"], 100.0 * history["val_acc"], linestyle="--", label=f"{spec.display_name} val")
+        axes[0].plot(
+            history["epoch"], 100.0 * history["train_acc"], label=f"{spec.display_name} train"
+        )
+        axes[0].plot(
+            history["epoch"],
+            100.0 * history["val_acc"],
+            linestyle="--",
+            label=f"{spec.display_name} val",
+        )
         axes[1].plot(history["epoch"], history["train_loss"], label=f"{spec.display_name} train")
-        axes[1].plot(history["epoch"], history["val_loss"], linestyle="--", label=f"{spec.display_name} val")
+        axes[1].plot(
+            history["epoch"], history["val_loss"], linestyle="--", label=f"{spec.display_name} val"
+        )
     axes[0].set_ylabel("Accuracy (%)")
     axes[1].set_ylabel("Cross-entropy loss")
     for axis in axes:
@@ -350,7 +363,9 @@ def _plot_full_training_curves(specs: list[RunSpec], output_dir: Path) -> None:
     axes[1].set_title("Full-data loss")
     figure.tight_layout()
     for suffix in ("png", "pdf"):
-        figure.savefig(output_dir / f"full_data_training_curves.{suffix}", dpi=300, bbox_inches="tight")
+        figure.savefig(
+            output_dir / f"full_data_training_curves.{suffix}", dpi=300, bbox_inches="tight"
+        )
     plt.close(figure)
 
 
@@ -377,9 +392,9 @@ def build_report_artifacts(
         table.to_csv(output / f"{table_name}.csv", index=False)
         write_latex_table(table, output / f"{table_name}.tex")
 
-    main = summary.loc[summary["run_id"].isin(
-        [spec.run_id for spec in specs if "main" in spec.tables]
-    )]
+    main = summary.loc[
+        summary["run_id"].isin([spec.run_id for spec in specs if "main" in spec.tables])
+    ]
     _plot_performance_time(main, output)
     _plot_full_training_curves(specs, output)
     return summary

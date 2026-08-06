@@ -57,11 +57,7 @@ def plot_robustness_curves(summary: pd.DataFrame, output_path: str | Path) -> No
                 linewidth=1.8,
                 label=display_names.get(method_name, method_name),
             )
-        axis.set_title(
-            degradation_titles.get(
-                degradation, degradation.replace("_", " ").title()
-            )
-        )
+        axis.set_title(degradation_titles.get(degradation, degradation.replace("_", " ").title()))
         axis.set_xlabel("Severity")
         axis.set_ylabel("Top-1 accuracy (%)")
         severity_ticks = sorted(subset["severity"].unique())

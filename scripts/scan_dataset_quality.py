@@ -22,7 +22,6 @@ import numpy as np
 from PIL import Image, ImageOps
 from tqdm import tqdm
 
-
 SOURCE_COLUMNS = (
     "image_id",
     "image_path",
@@ -89,8 +88,7 @@ class HammingIndex:
         self.block_count = radius + 1
         base_size, remainder = divmod(64, self.block_count)
         self.block_sizes = [
-            base_size + (1 if index < remainder else 0)
-            for index in range(self.block_count)
+            base_size + (1 if index < remainder else 0) for index in range(self.block_count)
         ]
         self.buckets: dict[tuple[int, int], list[int]] = defaultdict(list)
         self.items: list[HashItem] = []
@@ -214,9 +212,7 @@ def scan_record(
         mean_brightness = float(quality_image.mean())
         dark_fraction = float(np.mean(quality_image <= 10))
         bright_fraction = float(np.mean(quality_image >= 245))
-        laplacian_variance = float(
-            cv2.Laplacian(quality_image, cv2.CV_64F).var()
-        )
+        laplacian_variance = float(cv2.Laplacian(quality_image, cv2.CV_64F).var())
         phash_value = perceptual_hash(grayscale)
 
         result.update(
@@ -226,17 +222,13 @@ def scan_record(
                 "mean_brightness": mean_brightness,
                 "dark_pixel_fraction": dark_fraction,
                 "bright_pixel_fraction": bright_fraction,
-                "is_blurry": (
-                    laplacian_variance
-                    < thresholds.blur_laplacian_variance
-                ),
+                "is_blurry": (laplacian_variance < thresholds.blur_laplacian_variance),
                 "is_too_dark": (
                     mean_brightness <= thresholds.dark_mean_brightness
                     and dark_fraction >= thresholds.dark_pixel_fraction
                 ),
                 "is_overexposed": (
-                    mean_brightness
-                    >= thresholds.overexposed_mean_brightness
+                    mean_brightness >= thresholds.overexposed_mean_brightness
                     and bright_fraction >= thresholds.bright_pixel_fraction
                 ),
             }
@@ -256,11 +248,9 @@ def scan_all(
     workers: int,
 ) -> list[dict[str, Any]]:
     worker = partial(scan_record, thresholds=thresholds)
+
     def serial_scan() -> list[dict[str, Any]]:
-        return [
-            worker(record)
-            for record in tqdm(records, desc="Quality scan", unit="image")
-        ]
+        return [worker(record) for record in tqdm(records, desc="Quality scan", unit="image")]
 
     if workers == 1:
         return serial_scan()
@@ -286,9 +276,7 @@ def scan_all(
 
 def require_all_paths(records: list[dict[str, str]]) -> None:
     missing = [
-        record["image_path"]
-        for record in records
-        if not Path(record["image_path"]).is_file()
+        record["image_path"] for record in records if not Path(record["image_path"]).is_file()
     ]
     if missing:
         examples = "\n".join(f"  {path}" for path in missing[:10])
@@ -321,12 +309,8 @@ def exact_duplicate_analysis(
     for keys in by_digest.values():
         if len(keys) < 2:
             continue
-        train_keys = [
-            key for key in keys if records_by_key[key]["_role"] == "train"
-        ]
-        holdout_keys = [
-            key for key in keys if records_by_key[key]["_role"] != "train"
-        ]
+        train_keys = [key for key in keys if records_by_key[key]["_role"] == "train"]
+        holdout_keys = [key for key in keys if records_by_key[key]["_role"] != "train"]
 
         if holdout_keys:
             reference = min(
@@ -337,8 +321,7 @@ def exact_duplicate_analysis(
                 ),
             )
             reference_label = (
-                f"{records_by_key[reference]['_role']}:"
-                f"{records_by_key[reference]['image_id']}"
+                f"{records_by_key[reference]['_role']}:{records_by_key[reference]['image_id']}"
             )
             for key in train_keys:
                 annotations[key] = {
@@ -351,15 +334,10 @@ def exact_duplicate_analysis(
         if len(train_keys) < 2:
             continue
 
-        labels = {
-            int(records_by_key[key]["class_idx"])
-            for key in train_keys
-        }
+        labels = {int(records_by_key[key]["class_idx"]) for key in train_keys}
         ordered = sorted(
             train_keys,
-            key=lambda key: (
-                int(records_by_key[key]["_row_index"]),
-            ),
+            key=lambda key: (int(records_by_key[key]["_row_index"]),),
         )
         if len(labels) > 1:
             for key in ordered:
@@ -404,28 +382,16 @@ def near_duplicate_analysis(
     radius: int,
 ) -> dict[str, dict[str, str | int]]:
     annotations: dict[str, dict[str, str | int]] = {}
-    valid_keys = [
-        key
-        for key, scan in scans_by_key.items()
-        if scan["file_status"] == "ok"
-    ]
+    valid_keys = [key for key, scan in scans_by_key.items() if scan["file_status"] == "ok"]
     holdout_keys = sorted(
-        (
-            key
-            for key in valid_keys
-            if records_by_key[key]["_role"] != "train"
-        ),
+        (key for key in valid_keys if records_by_key[key]["_role"] != "train"),
         key=lambda key: (
             records_by_key[key]["_role"],
             records_by_key[key]["image_id"],
         ),
     )
     train_keys = sorted(
-        (
-            key
-            for key in valid_keys
-            if records_by_key[key]["_role"] == "train"
-        ),
+        (key for key in valid_keys if records_by_key[key]["_role"] == "train"),
         key=lambda key: (
             int(records_by_key[key]["class_idx"]),
             records_by_key[key]["image_path"],
@@ -506,10 +472,7 @@ def build_outputs(
 
     reasons: dict[str, list[str]] = defaultdict(list)
     for key, scan in scans_by_key.items():
-        if (
-            records_by_key[key]["_role"] == "train"
-            and scan["file_status"] != "ok"
-        ):
+        if records_by_key[key]["_role"] == "train" and scan["file_status"] != "ok":
             add_reason(reasons, key, scan["file_status"])
 
     exact_annotations = exact_duplicate_analysis(
@@ -596,9 +559,7 @@ def build_outputs(
         report_rows.append(report_row)
 
         if role == "train" and not exclusion_reasons:
-            clean_rows.append(
-                {column: record[column] for column in SOURCE_COLUMNS}
-            )
+            clean_rows.append({column: record[column] for column in SOURCE_COLUMNS})
 
     train_input_count = role_counts["train"]
     summary: dict[str, Any] = {
@@ -616,21 +577,11 @@ def build_outputs(
         "train_clean_images": len(clean_rows),
         "train_excluded_images": train_input_count - len(clean_rows),
         "thresholds": {
-            "blur_laplacian_variance_below": (
-                thresholds.blur_laplacian_variance
-            ),
-            "dark_mean_brightness_at_most": (
-                thresholds.dark_mean_brightness
-            ),
-            "dark_pixel_fraction_at_least": (
-                thresholds.dark_pixel_fraction
-            ),
-            "overexposed_mean_brightness_at_least": (
-                thresholds.overexposed_mean_brightness
-            ),
-            "bright_pixel_fraction_at_least": (
-                thresholds.bright_pixel_fraction
-            ),
+            "blur_laplacian_variance_below": (thresholds.blur_laplacian_variance),
+            "dark_mean_brightness_at_most": (thresholds.dark_mean_brightness),
+            "dark_pixel_fraction_at_least": (thresholds.dark_pixel_fraction),
+            "overexposed_mean_brightness_at_least": (thresholds.overexposed_mean_brightness),
+            "bright_pixel_fraction_at_least": (thresholds.bright_pixel_fraction),
             "near_duplicate_phash_hamming_distance_at_most": (
                 thresholds.near_duplicate_hamming_distance
             ),

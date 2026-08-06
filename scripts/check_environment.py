@@ -1,5 +1,8 @@
+"""Validate the pinned Python environment and robustness configuration."""
+
 from __future__ import annotations
 
+import argparse
 import importlib
 import importlib.metadata
 import platform
@@ -7,7 +10,6 @@ import sys
 from pathlib import Path
 
 import yaml
-
 
 EXPECTED = {
     "torch": "2.3.1",
@@ -35,6 +37,7 @@ IMPORT_NAMES = {
 
 
 def main() -> None:
+    argparse.ArgumentParser(description=__doc__).parse_args()
     if sys.version_info[:2] != (3, 11):
         raise SystemExit(f"Expected Python 3.11, found {platform.python_version()}")
 

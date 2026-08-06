@@ -1,7 +1,7 @@
 """
 src/transfer/confusable_pairs_analysis.py
 --------------------------------------------
-Systematically finds "confusable species pairs" (same genus) using A's
+Systematically finds "confusable species pairs" (same genus) using the shared
 idx_to_class.json, ranks them by how often the model actually confuses
 them (from predictions.csv), and generates Grad-CAM visualizations for
 the top few pairs. This completes the "next step" gradcam_analysis.py
@@ -12,26 +12,26 @@ Genus is taken as the first word of class_name (e.g. "Cota tinctoria"
 AND both were among the 500 selected classes.
 
 Usage:
-    python src/transfer/confusable_pairs_analysis.py --strategy finetuned --top_n_pairs 3
+    ./scripts/comp9517 transfer-confusions --strategy finetuned --top-n-pairs 3
 
     # for the regularization/attention ablations:
-    python src/transfer/confusable_pairs_analysis.py --strategy finetuned \
-        --dropout_rate 0.4 --output_dir outputs/transfer/resnet18_pretrained_finetuned_regularized_extra
+    ./scripts/comp9517 transfer-confusions --strategy finetuned \
+        --dropout-rate 0.4 --output-dir outputs/transfer/resnet18_pretrained_finetuned_regularized_extra
 """
 
-import os
-import sys
 import csv
 import json
-import argparse
+import os
+import sys
 from collections import defaultdict
 
 import torch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from src.transfer.model import build_model, STRATEGY_TO_METHOD_NAME
-from src.transfer.gradcam_analysis import load_predictions, visualize_examples
+from src.common.cli import ArgumentParser
 from src.data.dataloader import get_dataloader
+from src.transfer.gradcam_analysis import load_predictions, visualize_examples
+from src.transfer.model import STRATEGY_TO_METHOD_NAME, build_model
 
 
 def build_genus_groups(idx_to_class_path: str) -> dict[str, list[str]]:
@@ -78,27 +78,32 @@ def find_confused_pairs(pred_rows: list[dict], genus_groups: dict[str, list[str]
     ranked = sorted(pair_counts.items(), key=lambda kv: kv[1], reverse=True)
     results = []
     for (class_a, class_b), count in ranked:
-        results.append({
-            "genus": class_to_genus[class_a],
-            "class_a": class_a,
-            "class_b": class_b,
-            "confusion_count": count,
-            "example_image_ids": pair_examples[(class_a, class_b)],
-        })
+        results.append(
+            {
+                "genus": class_to_genus[class_a],
+                "class_a": class_a,
+                "class_b": class_b,
+                "confusion_count": count,
+                "example_image_ids": pair_examples[(class_a, class_b)],
+            }
+        )
     return results
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument("--strategy", choices=["frozen", "finetuned", "layer4"], required=True)
     parser.add_argument("--idx_to_class", default="data/metadata/idx_to_class.json")
     parser.add_argument("--test_csv", default="data/metadata/test.csv")
     parser.add_argument("--image_size", type=int, default=224)
     parser.add_argument("--seed", type=int, default=9517)
     parser.add_argument("--output_root", default="outputs/transfer")
-    parser.add_argument("--output_dir", default=None,
-                         help="Exact directory to read predictions.csv/checkpoint from -- "
-                              "overrides the official path, for regularized/attention runs.")
+    parser.add_argument(
+        "--output_dir",
+        default=None,
+        help="Exact directory to read predictions.csv/checkpoint from -- "
+        "overrides the standard path for regularized or attention runs.",
+    )
     parser.add_argument("--use_attention", action="store_true", default=False)
     parser.add_argument("--num_heads", type=int, default=8)
     parser.add_argument("--dropout_rate", type=float, default=0.0)
@@ -132,9 +137,11 @@ def main():
         return
 
     print(f"\nTop {min(args.top_n_pairs, len(confused_pairs))} same-genus confused pairs:")
-    for p in confused_pairs[:args.top_n_pairs]:
-        print(f"  genus={p['genus']}  class {p['class_a']} <-> class {p['class_b']}  "
-              f"confused {p['confusion_count']}x")
+    for p in confused_pairs[: args.top_n_pairs]:
+        print(
+            f"  genus={p['genus']}  class {p['class_a']} <-> class {p['class_b']}  "
+            f"confused {p['confusion_count']}x"
+        )
 
     # Save the full ranked table for the report/appendix
     summary_path = os.path.join(out_dir, "confusable_genus_pairs.csv")
@@ -142,35 +149,53 @@ def main():
         writer = csv.writer(f)
         writer.writerow(["genus", "class_a", "class_b", "confusion_count", "example_image_ids"])
         for p in confused_pairs:
-            writer.writerow([p["genus"], p["class_a"], p["class_b"], p["confusion_count"],
-                              ";".join(p["example_image_ids"])])
+            writer.writerow(
+                [
+                    p["genus"],
+                    p["class_a"],
+                    p["class_b"],
+                    p["confusion_count"],
+                    ";".join(p["example_image_ids"]),
+                ]
+            )
     print(f"\nWrote full ranked table to {summary_path}")
 
     # --- Load model once, generate Grad-CAM for the top N pairs ---
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ckpt_path = os.path.join(out_dir, "checkpoint_best.pth")
     ckpt = torch.load(ckpt_path, map_location=device)
-    model = build_model(ckpt["num_classes"], pretrained=False,
-                         use_attention=args.use_attention, num_heads=args.num_heads,
-                         dropout_rate=args.dropout_rate).to(device)
+    model = build_model(
+        ckpt["num_classes"],
+        pretrained=False,
+        use_attention=args.use_attention,
+        num_heads=args.num_heads,
+        dropout_rate=args.dropout_rate,
+    ).to(device)
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 
     test_loader = get_dataloader(
-        split="test", csv_file=args.test_csv, transform_type="none",
-        batch_size=64, shuffle=False, image_size=args.image_size, seed=args.seed,
+        split="test",
+        csv_file=args.test_csv,
+        transform_type="none",
+        batch_size=64,
+        shuffle=False,
+        image_size=args.image_size,
+        seed=args.seed,
     )
 
     fig_dir = os.path.join(out_dir, "gradcam_examples", "confusable_pairs")
     os.makedirs(fig_dir, exist_ok=True)
 
-    for p in confused_pairs[:args.top_n_pairs]:
-        target_ids = set(p["example_image_ids"][:args.examples_per_pair])
+    for p in confused_pairs[: args.top_n_pairs]:
+        target_ids = set(p["example_image_ids"][: args.examples_per_pair])
         out_path = os.path.join(
             fig_dir, f"genus_{p['genus']}_class{p['class_a']}_vs_class{p['class_b']}.png"
         )
-        title = (f"Grad-CAM: confused pair (genus={p['genus']}, "
-                 f"class {p['class_a']} vs {p['class_b']}, {p['confusion_count']}x confused)")
+        title = (
+            f"Grad-CAM: confused pair (genus={p['genus']}, "
+            f"class {p['class_a']} vs {p['class_b']}, {p['confusion_count']}x confused)"
+        )
         visualize_examples(model, test_loader, target_ids, device, out_path, title)
 
 

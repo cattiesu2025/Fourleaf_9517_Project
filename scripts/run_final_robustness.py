@@ -106,7 +106,7 @@ def verify_clean_predictions(
     minimum_agreement: float,
     max_top1_delta: float,
 ) -> None:
-    """Check local clean inference against a submitted prediction artifact."""
+    """Check clean inference against a reference prediction artifact."""
 
     if num_images <= 0:
         return
@@ -134,7 +134,7 @@ def verify_clean_predictions(
         selected["true_label"].to_numpy(dtype=int),
         aligned_reference["true_label"].to_numpy(dtype=int),
     ):
-        raise ValueError("local and submitted clean files disagree on true labels")
+        raise ValueError("local and reference clean files disagree on true labels")
 
     local_pred = selected["pred_label"].to_numpy(dtype=int)
     reference_pred = aligned_reference["pred_label"].to_numpy(dtype=int)
@@ -151,7 +151,7 @@ def verify_clean_predictions(
         )
     print(
         f"Verified {len(selected)} clean predictions: agreement={agreement:.4f}, "
-        f"local Top-1={local_top1:.4f}, submitted Top-1={reference_top1:.4f}."
+        f"local Top-1={local_top1:.4f}, reference Top-1={reference_top1:.4f}."
     )
 
 
@@ -173,7 +173,9 @@ def main() -> None:
     parser.add_argument("--test-csv", required=True, type=Path)
     parser.add_argument("--data-root", type=Path, default=Path("."))
     parser.add_argument("--output", type=Path, default=Path("outputs/robustness"))
-    parser.add_argument("--evaluation-output", type=Path, default=Path("outputs/evaluation/robustness"))
+    parser.add_argument(
+        "--evaluation-output", type=Path, default=Path("outputs/evaluation/robustness")
+    )
     parser.add_argument("--config", type=Path, default=Path("configs/robustness.yaml"))
     parser.add_argument(
         "--clean-results",
@@ -188,7 +190,7 @@ def main() -> None:
         "--clean-check-images",
         type=int,
         default=5000,
-        help="Number of local clean predictions compared with submitted artifacts.",
+        help="Number of local clean predictions compared with reference artifacts.",
     )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(

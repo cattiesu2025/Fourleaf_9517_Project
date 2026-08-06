@@ -1,13 +1,13 @@
-# Paths are relative to the downloaded Drive snapshot supplied via
-# ``--artifact-root``.  The raw model outputs remain outside Git.
+# Paths are relative to the local artifact directory supplied via
+# ``--artifact-root``. Raw model outputs remain outside Git.
 runs:
   - id: sift_bovw_svm
     display_name: SIFT + BoVW + SVM
     dataset_group: limited
     tables: [main]
-    predictions: B_output/sift_bovw_svm_best_test/sift_predictions.csv
-    scores: B_output/sift_bovw_svm_best_test/sift_scores.npz
-    runtime: B_output/sift_bovw_svm_best_test/sift_runtime.json
+    predictions: traditional/sift_bovw_svm/sift_predictions.csv
+    scores: traditional/sift_bovw_svm/sift_scores.npz
+    runtime: traditional/sift_bovw_svm/sift_runtime.json
     expected_method_name: sift_bovw_svm
     num_train_images: 20000
 
@@ -15,9 +15,9 @@ runs:
     display_name: HOG + Random Forest
     dataset_group: limited
     tables: [main]
-    predictions: B_output/hog_random_forest_best_test/hog_predictions.csv
-    scores: B_output/hog_random_forest_best_test/hog_scores.npz
-    runtime: B_output/hog_random_forest_best_test/hog_runtime.json
+    predictions: traditional/hog_random_forest/hog_predictions.csv
+    scores: traditional/hog_random_forest/hog_scores.npz
+    runtime: traditional/hog_random_forest/hog_runtime.json
     expected_method_name: hog_random_forest
     num_train_images: 20000
 
@@ -25,90 +25,90 @@ runs:
     display_name: Scratch (no augmentation)
     dataset_group: limited
     tables: [scratch_ablation]
-    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_no_aug/predictions.csv
-    scores: C_output/extracted/outputs/scratch/resnet18_scratch_no_aug/scores.npz
-    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_no_aug/runtime.json
+    predictions: scratch/resnet18_scratch_no_aug/predictions.csv
+    scores: scratch/resnet18_scratch_no_aug/scores.npz
+    runtime: scratch/resnet18_scratch_no_aug/runtime.json
     expected_method_name: resnet18_scratch_no_aug
 
   - id: scratch_basic_aug
     display_name: Scratch (basic augmentation)
     dataset_group: limited
     tables: [scratch_ablation]
-    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug/predictions.csv
-    scores: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug/scores.npz
-    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug/runtime.json
+    predictions: scratch/resnet18_scratch_basic_aug/predictions.csv
+    scores: scratch/resnet18_scratch_basic_aug/scores.npz
+    runtime: scratch/resnet18_scratch_basic_aug/runtime.json
     expected_method_name: resnet18_scratch_basic_aug
 
   - id: scratch_strong_aug
     display_name: Scratch (strong augmentation)
     dataset_group: limited
     tables: [scratch_ablation]
-    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/predictions.csv
-    scores: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/scores.npz
-    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_strong_aug_rerun_30epoch/runtime.json
+    predictions: scratch/resnet18_scratch_strong_aug_rerun_30epoch/predictions.csv
+    scores: scratch/resnet18_scratch_strong_aug_rerun_30epoch/scores.npz
+    runtime: scratch/resnet18_scratch_strong_aug_rerun_30epoch/runtime.json
     expected_method_name: resnet18_scratch_strong_aug_rerun_30epoch
 
   - id: scratch_basic_aug_sgd
     display_name: Scratch (basic aug., 100-epoch SGD)
     dataset_group: limited
     tables: [main, scratch_ablation]
-    predictions: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug_sgd/predictions.csv
-    scores: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug_sgd/scores.npz
-    runtime: C_output/extracted/outputs/scratch/resnet18_scratch_basic_aug_sgd/runtime.json
+    predictions: scratch/resnet18_scratch_basic_aug_sgd/predictions.csv
+    scores: scratch/resnet18_scratch_basic_aug_sgd/scores.npz
+    runtime: scratch/resnet18_scratch_basic_aug_sgd/runtime.json
     expected_method_name: resnet18_scratch_basic_aug_sgd
 
   - id: transfer_frozen
     display_name: Pretrained ResNet18 (frozen)
     dataset_group: limited
     tables: [main, transfer_ablation]
-    predictions: D_output/outputs/transfer/resnet18_pretrained_frozen/predictions.csv
-    scores: D_output/outputs/transfer/resnet18_pretrained_frozen/scores.npz
-    runtime: D_output/outputs/transfer/resnet18_pretrained_frozen/runtime.json
+    predictions: transfer/resnet18_pretrained_frozen/predictions.csv
+    scores: transfer/resnet18_pretrained_frozen/scores.npz
+    runtime: transfer/resnet18_pretrained_frozen/runtime.json
     expected_method_name: resnet18_pretrained_frozen
 
   - id: transfer_finetuned
     display_name: Pretrained ResNet18 (fine-tuned)
     dataset_group: limited
     tables: [main, transfer_ablation]
-    predictions: D_output/outputs/transfer/resnet18_pretrained_finetuned/predictions.csv
-    scores: D_output/outputs/transfer/resnet18_pretrained_finetuned/scores.npz
-    runtime: D_output/outputs/transfer/resnet18_pretrained_finetuned/runtime.json
+    predictions: transfer/resnet18_pretrained_finetuned/predictions.csv
+    scores: transfer/resnet18_pretrained_finetuned/scores.npz
+    runtime: transfer/resnet18_pretrained_finetuned/runtime.json
     expected_method_name: resnet18_pretrained_finetuned
 
   - id: transfer_regularized
     display_name: Fine-tuned + regularization
     dataset_group: limited
     tables: [transfer_ablation]
-    predictions: D_output/outputs/transfer/resnet18_pretrained_finetuned_regularized_extra/predictions.csv
-    scores: D_output/outputs/transfer/resnet18_pretrained_finetuned_regularized_extra/scores.npz
-    runtime: D_output/outputs/transfer/resnet18_pretrained_finetuned_regularized_extra/runtime.json
+    predictions: transfer/resnet18_pretrained_finetuned_regularized_extra/predictions.csv
+    scores: transfer/resnet18_pretrained_finetuned_regularized_extra/scores.npz
+    runtime: transfer/resnet18_pretrained_finetuned_regularized_extra/runtime.json
     expected_method_name: resnet18_pretrained_finetuned
 
   - id: transfer_attention
     display_name: Fine-tuned + self-attention
     dataset_group: limited
     tables: [transfer_ablation]
-    predictions: D_output/outputs/transfer/resnet18_pretrained_finetuned_attention_extra/predictions.csv
-    scores: D_output/outputs/transfer/resnet18_pretrained_finetuned_attention_extra/scores.npz
-    runtime: D_output/outputs/transfer/resnet18_pretrained_finetuned_attention_extra/runtime.json
+    predictions: transfer/resnet18_pretrained_finetuned_attention_extra/predictions.csv
+    scores: transfer/resnet18_pretrained_finetuned_attention_extra/scores.npz
+    runtime: transfer/resnet18_pretrained_finetuned_attention_extra/runtime.json
     expected_method_name: resnet18_pretrained_finetuned_attention_extra
 
   - id: full_scratch
     display_name: Full-data Scratch ResNet18
     dataset_group: full_data
     tables: [full_data]
-    predictions: full_data_output/extracted/full_train/resnet18_scratch_full_basic_aug/predictions.csv
-    scores: full_data_output/extracted/full_train/resnet18_scratch_full_basic_aug/scores.npz
-    runtime: full_data_output/extracted/full_train/resnet18_scratch_full_basic_aug/runtime.json
-    training_history: full_data_output/extracted/full_train/resnet18_scratch_full_basic_aug/training_history.csv
+    predictions: full_data/resnet18_scratch_full_basic_aug/predictions.csv
+    scores: full_data/resnet18_scratch_full_basic_aug/scores.npz
+    runtime: full_data/resnet18_scratch_full_basic_aug/runtime.json
+    training_history: full_data/resnet18_scratch_full_basic_aug/training_history.csv
     expected_method_name: resnet18_scratch_full_basic_aug
 
   - id: full_finetuned
     display_name: Full-data Fine-tuned ResNet18
     dataset_group: full_data
     tables: [full_data]
-    predictions: full_data_output/extracted/full_train/resnet18_pretrained_finetuned/predictions.csv
-    scores: full_data_output/extracted/full_train/resnet18_pretrained_finetuned/scores.npz
-    runtime: full_data_output/extracted/full_train/resnet18_pretrained_finetuned/runtime.json
-    training_history: full_data_output/extracted/full_train/resnet18_pretrained_finetuned/training_history.csv
+    predictions: full_data/resnet18_pretrained_finetuned/predictions.csv
+    scores: full_data/resnet18_pretrained_finetuned/scores.npz
+    runtime: full_data/resnet18_pretrained_finetuned/runtime.json
+    training_history: full_data/resnet18_pretrained_finetuned/training_history.csv
     expected_method_name: resnet18_pretrained_finetuned

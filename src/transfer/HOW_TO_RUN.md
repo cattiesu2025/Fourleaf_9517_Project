@@ -1,57 +1,59 @@
-# 运行指令
+# Transfer-learning workflow
 
-## 1. 训练(frozen + finetuned 都跑)
-
-```bash
-python src/transfer/train.py --strategy frozen --epochs 15 --pretrained
-python src/transfer/train.py --strategy finetuned --epochs 15 --pretrained
-```
-
-## 2. 预测
+## 1. Train frozen and fine-tuned models
 
 ```bash
-python src/transfer/predict.py --strategy frozen
-python src/transfer/predict.py --strategy finetuned
+./scripts/comp9517 train-transfer --strategy frozen --epochs 15 --pretrained
+./scripts/comp9517 train-transfer --strategy finetuned --epochs 15 --pretrained
 ```
 
-## 3. 算指标(top-1/top-5/macro-F1,两个方法对比表)
+## 2. Generate predictions
 
 ```bash
-python src/transfer/compute_metrics.py --compare
+./scripts/comp9517 predict-transfer --strategy frozen
+./scripts/comp9517 predict-transfer --strategy finetuned
 ```
 
-## 4. 训练曲线对比图
+## 3. Compute and compare metrics
 
 ```bash
-python src/transfer/plot_training_curves.py
+./scripts/comp9517 transfer-metrics --compare
 ```
 
-## 5. Grad-CAM可视化(正确/错误分类案例)
+## 4. Compare training curves
 
 ```bash
-python src/transfer/gradcam_analysis.py --strategy frozen --num_examples 6
-python src/transfer/gradcam_analysis.py --strategy finetuned --num_examples 6
+./scripts/comp9517 transfer-curves
 ```
 
-## 6. Frozen vs Finetuned 同一张图的Grad-CAM对比
+## 5. Generate Grad-CAM examples
 
 ```bash
-python src/transfer/compare_gradcam_models.py --image_id 50
+./scripts/comp9517 transfer-gradcam --strategy frozen --num-examples 6
+./scripts/comp9517 transfer-gradcam --strategy finetuned --num-examples 6
 ```
 
-## 7. 系统性同属混淆物种对分析
+## 6. Compare frozen and fine-tuned Grad-CAM results
 
 ```bash
-python src/transfer/confusable_pairs_analysis.py --strategy finetuned --top_n_pairs 3
+./scripts/comp9517 transfer-gradcam-compare --image-id 50
 ```
 
-## 8. Grad-CAM二阶段裁剪融合（Command 1 为测试）
+## 7. Analyze same-genus confusions
 
 ```bash
-python src/transfer/gradcam_crop_fusion.py --strategy finetuned --max_images 20
-python src/transfer/gradcam_crop_fusion.py --strategy finetuned
+./scripts/comp9517 transfer-confusions --strategy finetuned --top-n-pairs 3
 ```
 
----
+## 8. Run two-stage Grad-CAM crop fusion
 
-所有结果都在 `outputs/transfer/` 下对应的方法文件夹里。
+The first command is a quick check on 20 images. The second command processes
+the full prediction set.
+
+```bash
+./scripts/comp9517 transfer-crop-fusion --strategy finetuned --max-images 20
+./scripts/comp9517 transfer-crop-fusion --strategy finetuned
+```
+
+All generated artifacts are written to method-specific directories under
+`outputs/transfer/`.

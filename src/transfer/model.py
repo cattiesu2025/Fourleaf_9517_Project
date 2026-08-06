@@ -1,30 +1,14 @@
-"""
-src/transfer/model.py
-----------------------
-Builds ResNet18 for transfer learning.
-
-Official method names (per 数据与输出格式规范 v1.1, Section 6 命名清单):
-    resnet18_pretrained_frozen
-    resnet18_pretrained_finetuned
-
-Only these two are "official" deliverables. "layer4" (partial unfreeze)
-is kept here as an optional extra ablation for your own exploration /
-report discussion, but its outputs should NOT be submitted under the
-official method-name directories -- if you want to report it, treat it
-as a supplementary result and clear the naming with the group first
-(per the "如需扩展先在群里同步" rule).
-"""
+"""Build ResNet18 transfer-learning models and optional ablations."""
 
 import torch.nn as nn
 import torchvision.models as models
 
 from src.transfer.attention import MultiHeadSelfAttention2D
 
-# Maps our internal strategy keys -> the official method_name string
+# Stable artifact names for the two primary transfer-learning strategies.
 STRATEGY_TO_METHOD_NAME = {
     "frozen": "resnet18_pretrained_frozen",
     "finetuned": "resnet18_pretrained_finetuned",
-    # "layer4" intentionally omitted: not in the official naming list.
 }
 
 
@@ -32,10 +16,8 @@ class AttentionResNet18(nn.Module):
     """ResNet18 with a multi-head self-attention block inserted after layer4
     (7x7 feature map -> 49 spatial tokens), before global average pooling.
 
-    NOT part of the official method-name list -- this is the optional
-    "attention- and part-based models" extra direction from the spec's
-    Advanced Method Development section. Clear with the group before
-    treating results from this as a reportable official method.
+    This optional architecture is recorded under a distinct method name so
+    its artifacts cannot be confused with the primary ResNet18 runs.
     """
 
     def __init__(self, base_resnet: nn.Module, num_heads: int = 8, dropout: float = 0.1):
@@ -54,7 +36,9 @@ class AttentionResNet18(nn.Module):
 
         # layer4's output channel count for standard ResNet18 is 512.
         attn_channels = self.layer4[-1].conv2.out_channels
-        self.attention = MultiHeadSelfAttention2D(attn_channels, num_heads=num_heads, dropout=dropout)
+        self.attention = MultiHeadSelfAttention2D(
+            attn_channels, num_heads=num_heads, dropout=dropout
+        )
 
     def forward(self, x):
         x = self.conv1(x)
@@ -75,16 +59,19 @@ class AttentionResNet18(nn.Module):
         return x
 
 
-def build_model(num_classes: int, pretrained: bool = True,
-                 use_attention: bool = False, num_heads: int = 8,
-                 dropout_rate: float = 0.0) -> nn.Module:
+def build_model(
+    num_classes: int,
+    pretrained: bool = True,
+    use_attention: bool = False,
+    num_heads: int = 8,
+    dropout_rate: float = 0.0,
+) -> nn.Module:
     """
     Args:
-        num_classes: must be 500 for official runs (per split_config.json).
+        num_classes: output classes defined by the selected metadata split.
         pretrained: True -> load ImageNet weights (needs internet on first use).
         use_attention: True -> insert a multi-head self-attention block after
-            layer4 (extra ablation, not an official method_name -- see
-            AttentionResNet18 docstring).
+            layer4 and record the run as a separate ablation.
         num_heads: number of attention heads, only used when use_attention=True.
         dropout_rate: if > 0, inserts nn.Dropout(dropout_rate) right before
             the final fc layer -- a regularization knob for combating
@@ -111,7 +98,7 @@ def set_finetune_strategy(model: nn.Module, strategy: str) -> nn.Module:
     strategy:
         "frozen"    -> freeze everything except fc (linear probe)
         "finetuned" -> unfreeze everything (full fine-tuning)
-        "layer4"    -> [extra, non-official] unfreeze layer4 + fc only
+        "layer4"    -> unfreeze layer4 + fc only
 
     If model is an AttentionResNet18, the attention block is ALWAYS kept
     trainable regardless of strategy -- it has no pretrained weights (random

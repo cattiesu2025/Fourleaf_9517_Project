@@ -53,9 +53,7 @@ def main() -> None:
             samples.append(RobustnessSample(image_id, class_idx, image_path))
 
     robustness_root = args.output / "outputs" / "robustness"
-    run_dirs = run_robustness_inference(
-        DummyColourPredictor(), samples, robustness_root
-    )
+    run_dirs = run_robustness_inference(DummyColourPredictor(), samples, robustness_root)
     summary = evaluate_robustness(
         robustness_root,
         args.output / "outputs" / "evaluation",

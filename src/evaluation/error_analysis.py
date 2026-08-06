@@ -63,30 +63,18 @@ def failure_cases(data: EvaluationData, class_names: dict[int, str]) -> pd.DataF
     if failures.empty:
         return pd.DataFrame(columns=[*data.predictions.columns, *extra_columns])
 
-    class_column = {
-        int(label): position for position, label in enumerate(data.class_indices)
-    }
+    class_column = {int(label): position for position, label in enumerate(data.class_indices)}
     failure_positions = np.flatnonzero(data.y_true != data.y_pred)
     true_scores = np.asarray(
-        [
-            data.scores[row, class_column[int(data.y_true[row])]]
-            for row in failure_positions
-        ],
+        [data.scores[row, class_column[int(data.y_true[row])]] for row in failure_positions],
         dtype=float,
     )
     pred_scores = np.asarray(
-        [
-            data.scores[row, class_column[int(data.y_pred[row])]]
-            for row in failure_positions
-        ],
+        [data.scores[row, class_column[int(data.y_pred[row])]] for row in failure_positions],
         dtype=float,
     )
-    failures["true_class_name"] = [
-        class_names[int(label)] for label in failures["true_label"]
-    ]
-    failures["pred_class_name"] = [
-        class_names[int(label)] for label in failures["pred_label"]
-    ]
+    failures["true_class_name"] = [class_names[int(label)] for label in failures["true_label"]]
+    failures["pred_class_name"] = [class_names[int(label)] for label in failures["pred_label"]]
     failures["true_score"] = true_scores
     failures["pred_score"] = pred_scores
     failures["score_margin"] = pred_scores - true_scores
