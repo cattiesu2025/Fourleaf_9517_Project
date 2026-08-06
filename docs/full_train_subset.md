@@ -24,8 +24,8 @@ without overwriting the candidate CSV.
 Run large transfers and archive extraction on Katana Data Mover (KDM):
 
 ```bash
-ssh z5535967@kdm.restech.unsw.edu.au
-cd /srv/scratch/z5535967/Fourleaf_9517_Project
+ssh <zID>@kdm.restech.unsw.edu.au
+cd /srv/scratch/<zID>/Fourleaf_9517_Project
 ```
 
 Install the updated requirements in the project environment, then download the
@@ -43,7 +43,7 @@ curl --fail --location \
 Generate and inspect the metadata before starting the image transfer:
 
 ```bash
-python scripts/build_full_train_subset.py
+./scripts/comp9517 build-full-subset
 
 wc -l \
   data/metadata/train_full.csv \
@@ -68,19 +68,19 @@ archive, but the complete archive still passes through the network stream.
 ```bash
 tmux new -s inat-full
 
-bash scripts/extract_full_train_subset.sh \
+./scripts/comp9517 extract-full-subset \
   --confirm-240gb-download
 ```
 
-Do not upload the extracted images to Git or Google Drive. Keep them in
-`/srv/scratch/z5535967`; scratch is not backed up.
+Do not commit or upload the extracted images. Keep them in the allocated
+scratch directory; scratch storage is not backed up.
 
 ## Scan image quality and create the clean CSV
 
 Run the quality scan only after all requested images have been extracted:
 
 ```bash
-python scripts/scan_dataset_quality.py
+./scripts/comp9517 scan-data
 ```
 
 The scan reads every image referenced by `train_full.csv`, `val.csv`, and
@@ -129,8 +129,8 @@ must be generated again after extracting all additional images.
 After quality control, use the clean training CSV without changing validation:
 
 ```bash
-python src/transfer/train.py \
-  --train_csv data/metadata/train_full_clean.csv \
-  --val_csv data/metadata/val.csv \
+./scripts/comp9517 train-transfer \
+  --train-csv data/metadata/train_full_clean.csv \
+  --val-csv data/metadata/val.csv \
   [other existing arguments]
 ```

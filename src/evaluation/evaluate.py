@@ -50,9 +50,7 @@ def evaluate_method(
     results = calculate_metrics(data)
 
     per_class = results.per_class.copy()
-    per_class.insert(
-        1, "class_name", [class_names[int(label)] for label in per_class["class_idx"]]
-    )
+    per_class.insert(1, "class_name", [class_names[int(label)] for label in per_class["class_idx"]])
     confused = top_confused_pairs(results.confusion, data.labels, class_names)
     failures = failure_cases(data, class_names)
 

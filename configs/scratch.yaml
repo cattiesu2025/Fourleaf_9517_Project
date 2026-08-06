@@ -1,7 +1,7 @@
 # Scratch ResNet18 experiment defaults.
 #
 # The Python scripts expose these values as CLI arguments; this file records the
-# planned ablation settings for easier handoff to the group.
+# Reproducible defaults for the scratch-model ablation.
 
 metadata_dir: data/metadata
 num_classes: 500

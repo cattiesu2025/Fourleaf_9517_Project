@@ -1,5 +1,8 @@
+"""Regenerate the checked-in evaluation MVP inputs and expected outputs."""
+
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import shutil
@@ -88,5 +91,10 @@ def build_demo() -> None:
     print(f"MVP demo inputs and expected outputs written to {demo_root}")
 
 
-if __name__ == "__main__":
+def main() -> None:
+    argparse.ArgumentParser(description=__doc__).parse_args()
     build_demo()
+
+
+if __name__ == "__main__":
+    main()

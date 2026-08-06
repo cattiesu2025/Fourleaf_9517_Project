@@ -1,4 +1,4 @@
-"""DataLoader factory aligned with the group data contract."""
+"""DataLoader factory aligned with the project metadata contract."""
 
 from __future__ import annotations
 

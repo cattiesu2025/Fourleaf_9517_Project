@@ -101,13 +101,11 @@ def run_clean_inference(
 
         batch_predictor = getattr(predictor, "predict_scores_batch", None)
         if callable(batch_predictor):
-            batch_scores = np.asarray(
-                batch_predictor(images, image_ids), dtype=float
-            )
+            batch_scores = np.asarray(batch_predictor(images, image_ids), dtype=float)
         else:
-            batch_scores = np.vstack(
-                [predictor.predict_scores(image) for image in images]
-            ).astype(float)
+            batch_scores = np.vstack([predictor.predict_scores(image) for image in images]).astype(
+                float
+            )
         expected_shape = (len(sample_batch), len(class_indices))
         if batch_scores.shape != expected_shape:
             raise ValueError(
@@ -143,8 +141,7 @@ def run_clean_inference(
         "inference_time_seconds": elapsed,
         "num_test_images": len(samples),
         "hardware": hardware or {"platform": "unspecified", "cpu": None, "gpu": None},
-        "software": software
-        or {"python": f"{sys.version_info.major}.{sys.version_info.minor}"},
+        "software": software or {"python": f"{sys.version_info.major}.{sys.version_info.minor}"},
     }
     (run_dir / "runtime.json").write_text(
         json.dumps(runtime, indent=2, ensure_ascii=False) + "\n",
@@ -201,10 +198,7 @@ def run_robustness_inference(
     for degradation_type in config["degradations"]:
         for severity in config["severity_levels"]:
             run_dir = (
-                output_root
-                / predictor.method_name
-                / degradation_type
-                / f"severity_{severity}"
+                output_root / predictor.method_name / degradation_type / f"severity_{severity}"
             )
             required_outputs = [
                 run_dir / "predictions.csv",
@@ -273,9 +267,7 @@ def run_robustness_inference(
 
             elapsed = time.perf_counter() - started
             run_dir.mkdir(parents=True, exist_ok=True)
-            pd.DataFrame(prediction_rows).to_csv(
-                run_dir / "predictions.csv", index=False
-            )
+            pd.DataFrame(prediction_rows).to_csv(run_dir / "predictions.csv", index=False)
             np.savez(
                 run_dir / "scores.npz",
                 image_ids=np.asarray(sample_ids),
@@ -285,8 +277,7 @@ def run_robustness_inference(
             runtime = {
                 "inference_time_seconds": elapsed,
                 "num_test_images": len(samples),
-                "hardware": hardware
-                or {"platform": "unspecified", "cpu": None, "gpu": None},
+                "hardware": hardware or {"platform": "unspecified", "cpu": None, "gpu": None},
                 "software": software
                 or {"python": f"{sys.version_info.major}.{sys.version_info.minor}"},
             }
@@ -312,9 +303,7 @@ def evaluate_robustness(
     output_dir = Path(output_dir)
     config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
     if methods is None:
-        methods = sorted(
-            path.name for path in robustness_root.iterdir() if path.is_dir()
-        )
+        methods = sorted(path.name for path in robustness_root.iterdir() if path.is_dir())
     if not methods:
         raise ValueError("no robustness methods were supplied or discovered")
 
@@ -325,12 +314,7 @@ def evaluate_robustness(
         for degradation_type, degradation_config in config["degradations"].items():
             values = degradation_config["values"]
             for severity, parameter_value in zip(levels, values, strict=True):
-                run_dir = (
-                    robustness_root
-                    / method_name
-                    / degradation_type
-                    / f"severity_{severity}"
-                )
+                run_dir = robustness_root / method_name / degradation_type / f"severity_{severity}"
                 predictions_path = run_dir / "predictions.csv"
                 scores_path = run_dir / "scores.npz"
                 runtime_path = run_dir / "runtime.json"
@@ -362,32 +346,22 @@ def evaluate_robustness(
                         "parameter_value": parameter_value,
                         "num_samples": int(len(data.predictions)),
                         **metrics,
-                        "inference_time_seconds": float(
-                            runtime["inference_time_seconds"]
-                        ),
+                        "inference_time_seconds": float(runtime["inference_time_seconds"]),
                         "run_dir": str(run_dir),
                     }
                 )
 
     if missing_runs and not allow_missing:
         preview = "\n- ".join(missing_runs[:12])
-        more = (
-            f"\n... and {len(missing_runs) - 12} more" if len(missing_runs) > 12 else ""
-        )
-        raise FileNotFoundError(
-            f"robustness matrix is incomplete; missing:\n- {preview}{more}"
-        )
+        more = f"\n... and {len(missing_runs) - 12} more" if len(missing_runs) > 12 else ""
+        raise FileNotFoundError(f"robustness matrix is incomplete; missing:\n- {preview}{more}")
     if not rows:
         raise ValueError("no complete robustness runs were found")
 
-    summary = pd.DataFrame(rows).sort_values(
-        ["degradation_type", "method_name", "severity"]
-    )
+    summary = pd.DataFrame(rows).sort_values(["degradation_type", "method_name", "severity"])
     expected_rows = len(methods) * len(config["degradations"]) * len(levels)
     if not allow_missing and len(summary) != expected_rows:
-        raise AssertionError(
-            f"expected {expected_rows} robustness rows, found {len(summary)}"
-        )
+        raise AssertionError(f"expected {expected_rows} robustness rows, found {len(summary)}")
 
     if clean_results is None:
         clean_rows: list[dict[str, object]] = []
@@ -425,33 +399,21 @@ def evaluate_robustness(
         required_clean_columns = {"run_id", "top1_accuracy", "macro_f1"}
         missing_columns = sorted(required_clean_columns - set(clean.columns))
         if missing_columns:
-            raise ValueError(
-                f"clean results are missing columns: {missing_columns}"
-            )
+            raise ValueError(f"clean results are missing columns: {missing_columns}")
         if clean["run_id"].duplicated().any():
             raise ValueError("clean results contain duplicate run_id values")
         clean = clean.set_index("run_id")
         absent_methods = sorted(set(methods) - set(clean.index))
         if absent_methods:
-            raise ValueError(
-                f"clean results do not cover robustness methods: {absent_methods}"
-            )
-        summary["clean_top1_accuracy"] = summary["method_name"].map(
-            clean["top1_accuracy"]
-        )
+            raise ValueError(f"clean results do not cover robustness methods: {absent_methods}")
+        summary["clean_top1_accuracy"] = summary["method_name"].map(clean["top1_accuracy"])
         summary["clean_macro_f1"] = summary["method_name"].map(clean["macro_f1"])
-        summary["top1_drop"] = (
-            summary["clean_top1_accuracy"] - summary["top1_accuracy"]
-        )
-        summary["macro_f1_drop"] = (
-            summary["clean_macro_f1"] - summary["macro_f1"]
-        )
+        summary["top1_drop"] = summary["clean_top1_accuracy"] - summary["top1_accuracy"]
+        summary["macro_f1_drop"] = summary["clean_macro_f1"] - summary["macro_f1"]
 
     output_dir.mkdir(parents=True, exist_ok=True)
     summary.to_csv(output_dir / "robustness_summary.csv", index=False)
-    summary.drop(columns=["run_dir"]).to_csv(
-        output_dir / "robustness_report.csv", index=False
-    )
+    summary.drop(columns=["run_dir"]).to_csv(output_dir / "robustness_report.csv", index=False)
     plot_robustness_curves(summary, output_dir / "robustness_curves.png")
     return summary
 
@@ -477,9 +439,7 @@ def main() -> None:
         allow_missing=args.allow_missing,
         clean_results=args.clean_results,
     )
-    print(
-        f"Aggregated {len(summary)} robustness runs; outputs written to {args.output}"
-    )
+    print(f"Aggregated {len(summary)} robustness runs; outputs written to {args.output}")
 
 
 if __name__ == "__main__":

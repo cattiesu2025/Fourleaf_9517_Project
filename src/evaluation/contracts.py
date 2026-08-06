@@ -8,7 +8,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-
 PREDICTION_COLUMNS = (
     "image_id",
     "true_label",
@@ -69,9 +68,7 @@ def load_class_names(path: str | Path | None, labels: np.ndarray) -> dict[int, s
     return names
 
 
-def load_runtime(
-    path: str | Path | None, expected_samples: int
-) -> dict[str, Any] | None:
+def load_runtime(path: str | Path | None, expected_samples: int) -> dict[str, Any] | None:
     if path is None:
         return None
     runtime_path = Path(path)
@@ -83,10 +80,7 @@ def load_runtime(
         raise ValueError(f"{runtime_path} must contain inference_time_seconds")
     if float(runtime["inference_time_seconds"]) < 0:
         raise ValueError("inference_time_seconds cannot be negative")
-    if (
-        "training_time_seconds" in runtime
-        and float(runtime["training_time_seconds"]) < 0
-    ):
+    if "training_time_seconds" in runtime and float(runtime["training_time_seconds"]) < 0:
         raise ValueError("training_time_seconds cannot be negative")
     if int(runtime.get("num_test_images", expected_samples)) != expected_samples:
         raise ValueError(
@@ -110,9 +104,7 @@ def load_evaluation_data(
     scores_path = Path(scores_path)
 
     predictions = pd.read_csv(predictions_path, dtype={"image_id": "string"})
-    missing_columns = [
-        column for column in PREDICTION_COLUMNS if column not in predictions
-    ]
+    missing_columns = [column for column in PREDICTION_COLUMNS if column not in predictions]
     if missing_columns:
         raise ValueError(f"{predictions_path} is missing columns: {missing_columns}")
     if predictions.empty:
@@ -125,9 +117,7 @@ def load_evaluation_data(
     predictions["image_id"] = predictions["image_id"].astype(str)
     if predictions["image_id"].duplicated().any():
         duplicates = (
-            predictions.loc[predictions["image_id"].duplicated(), "image_id"]
-            .head()
-            .tolist()
+            predictions.loc[predictions["image_id"].duplicated(), "image_id"].head().tolist()
         )
         raise ValueError(f"duplicate image_id values in predictions: {duplicates}")
 
@@ -158,9 +148,7 @@ def load_evaluation_data(
         class_indices = np.asarray(archive["class_indices"])
 
     if scores.ndim != 2:
-        raise ValueError(
-            f"scores must be a 2-D [N, C] matrix; got shape {scores.shape}"
-        )
+        raise ValueError(f"scores must be a 2-D [N, C] matrix; got shape {scores.shape}")
     if score_image_ids.ndim != 1 or class_indices.ndim != 1:
         raise ValueError("image_ids and class_indices must both be 1-D arrays")
     if len(score_image_ids) != scores.shape[0]:
@@ -193,9 +181,7 @@ def load_evaluation_data(
             f"predictions contain labels absent from class_indices: {sorted(observed_labels - valid_labels)}"
         )
 
-    normalised_score_ids = np.asarray(
-        [_normalise_id(item) for item in score_image_ids], dtype=str
-    )
+    normalised_score_ids = np.asarray([_normalise_id(item) for item in score_image_ids], dtype=str)
     if len(np.unique(normalised_score_ids)) != len(normalised_score_ids):
         raise ValueError("scores.npz image_ids contains duplicates")
     prediction_ids = predictions["image_id"].to_numpy(dtype=str)
@@ -209,25 +195,17 @@ def load_evaluation_data(
             f"missing scores={missing_scores}, extra scores={extra_scores}"
         )
 
-    score_row_by_id = {
-        image_id: row for row, image_id in enumerate(normalised_score_ids)
-    }
+    score_row_by_id = {image_id: row for row, image_id in enumerate(normalised_score_ids)}
     aligned_rows = np.fromiter(
         (score_row_by_id[image_id] for image_id in prediction_ids), dtype=np.int64
     )
     aligned_scores = scores[aligned_rows]
 
     score_argmax_labels = class_indices[np.argmax(aligned_scores, axis=1)]
-    mismatch_mask = score_argmax_labels != predictions["pred_label"].to_numpy(
-        dtype=np.int64
-    )
+    mismatch_mask = score_argmax_labels != predictions["pred_label"].to_numpy(dtype=np.int64)
     if strict_argmax and mismatch_mask.any():
-        examples = (
-            predictions.loc[mismatch_mask, ["image_id", "pred_label"]].head().copy()
-        )
-        examples["scores_argmax_label"] = score_argmax_labels[mismatch_mask][
-            : len(examples)
-        ]
+        examples = predictions.loc[mismatch_mask, ["image_id", "pred_label"]].head().copy()
+        examples["scores_argmax_label"] = score_argmax_labels[mismatch_mask][: len(examples)]
         raise ValueError(
             "pred_label does not match the scores argmax after class_indices mapping; examples: "
             f"{examples.to_dict(orient='records')}"

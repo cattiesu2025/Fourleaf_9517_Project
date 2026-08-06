@@ -74,14 +74,10 @@ def canonical_key(image_path: str) -> str:
 
     parts = PurePosixPath(image_path.replace("\\", "/")).parts
     marker_positions = [
-        parts.index(marker)
-        for marker in ("train", "train_mini", "val")
-        if marker in parts
+        parts.index(marker) for marker in ("train", "train_mini", "val") if marker in parts
     ]
     if not marker_positions:
-        raise ValueError(
-            f"Expected a train/, train_mini/, or val/ component in path: {image_path}"
-        )
+        raise ValueError(f"Expected a train/, train_mini/, or val/ component in path: {image_path}")
 
     marker_index = min(marker_positions)
     relative_parts = parts[marker_index + 1 :]
@@ -99,8 +95,7 @@ def safe_archive_path(image_path: str) -> str:
         raise ValueError(f"Unsafe archive path in train.json: {image_path}")
     if len(path.parts) != 3 or path.parts[0] != "train":
         raise ValueError(
-            "Expected full-train archive path train/category/image.jpg, found: "
-            f"{image_path}"
+            f"Expected full-train archive path train/category/image.jpg, found: {image_path}"
         )
     return path.as_posix()
 
@@ -130,9 +125,7 @@ def load_selected_classes(path: Path) -> dict[int, SelectedClass]:
 
     expected_indices = set(range(len(selected)))
     if class_indices != expected_indices:
-        raise ValueError(
-            f"{path} class_idx values must be consecutive 0..{len(selected) - 1}"
-        )
+        raise ValueError(f"{path} class_idx values must be consecutive 0..{len(selected) - 1}")
     return selected
 
 
@@ -150,9 +143,7 @@ def load_split_by_key(
         if original_id not in selected:
             raise ValueError(f"{path} contains unselected class {original_id}")
         if selected[original_id].class_idx != class_idx:
-            raise ValueError(
-                f"{path} class mapping mismatch for original class {original_id}"
-            )
+            raise ValueError(f"{path} class mapping mismatch for original class {original_id}")
 
         key = canonical_key(row["image_path"])
         if key in by_key:
@@ -184,18 +175,11 @@ def collect_selected_annotations(
             image_id = int(annotation["image_id"])
             previous = selected_images.setdefault(image_id, category_id)
             if previous != category_id:
-                raise ValueError(
-                    f"Image {image_id} has conflicting selected annotations"
-                )
+                raise ValueError(f"Image {image_id} has conflicting selected annotations")
 
     if not selected_images:
-        raise ValueError(
-            f"No annotations matched the selected classes in {train_json}"
-        )
-    print(
-        f"Scanned {scanned:,} annotations; "
-        f"selected {len(selected_images):,} images."
-    )
+        raise ValueError(f"No annotations matched the selected classes in {train_json}")
+    print(f"Scanned {scanned:,} annotations; selected {len(selected_images):,} images.")
     return selected_images
 
 
@@ -229,13 +213,9 @@ def collect_selected_images(
     if missing_ids:
         examples = sorted(missing_ids)[:5]
         raise ValueError(
-            f"{len(missing_ids)} selected annotations have no image entry; "
-            f"examples: {examples}"
+            f"{len(missing_ids)} selected annotations have no image entry; examples: {examples}"
         )
-    print(
-        f"Scanned {scanned:,} image records; "
-        f"resolved {len(selected_images):,} selected paths."
-    )
+    print(f"Scanned {scanned:,} image records; resolved {len(selected_images):,} selected paths.")
     return selected_images
 
 
@@ -303,21 +283,16 @@ def build_full_train_subset(
     overlap = set(current_train) & set(validation)
     if overlap:
         raise ValueError(
-            "Current train and validation paths overlap; "
-            f"examples: {sorted(overlap)[:5]}"
+            f"Current train and validation paths overlap; examples: {sorted(overlap)[:5]}"
         )
 
-    category_by_image_id = collect_selected_annotations(
-        train_json, set(selected)
-    )
+    category_by_image_id = collect_selected_annotations(train_json, set(selected))
     full_images = collect_selected_images(train_json, category_by_image_id)
 
     full_by_key: dict[str, FullImage] = {}
     for image in full_images:
         if image.canonical_key in full_by_key:
-            raise ValueError(
-                f"Duplicate selected full-train path: {image.canonical_key}"
-            )
+            raise ValueError(f"Duplicate selected full-train path: {image.canonical_key}")
         full_by_key[image.canonical_key] = image
 
     missing_current = set(current_train) - set(full_by_key)
@@ -347,18 +322,14 @@ def build_full_train_subset(
         validation_row = validation.get(image.canonical_key)
         if validation_row is not None:
             if int(validation_row["original_class_id"]) != image.original_class_id:
-                raise ValueError(
-                    f"Validation label mismatch for {image.canonical_key}"
-                )
+                raise ValueError(f"Validation label mismatch for {image.canonical_key}")
             excluded_count += 1
             continue
 
         current_row = current_train.get(image.canonical_key)
         if current_row is not None:
             if int(current_row["original_class_id"]) != image.original_class_id:
-                raise ValueError(
-                    f"Current-train label mismatch for {image.canonical_key}"
-                )
+                raise ValueError(f"Current-train label mismatch for {image.canonical_key}")
             image_id: int | str = current_row["image_id"]
             image_path = current_row["image_path"]
             reused_count += 1
@@ -397,13 +368,9 @@ def build_full_train_subset(
     train_counts = Counter(int(row["class_idx"]) for row in output_rows)
     missing_classes = set(range(len(selected))) - set(train_counts)
     if missing_classes:
-        raise ValueError(
-            f"Generated training split has empty classes: {sorted(missing_classes)}"
-        )
+        raise ValueError(f"Generated training split has empty classes: {sorted(missing_classes)}")
 
-    raw_counts = Counter(
-        selected[image.original_class_id].class_idx for image in full_images
-    )
+    raw_counts = Counter(selected[image.original_class_id].class_idx for image in full_images)
     per_class_counts = list(train_counts.values())
     config: dict[str, Any] = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -464,9 +431,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path("data/metadata/train.csv"),
     )
-    parser.add_argument(
-        "--validation", type=Path, default=Path("data/metadata/val.csv")
-    )
+    parser.add_argument("--validation", type=Path, default=Path("data/metadata/val.csv"))
     parser.add_argument("--test", type=Path, default=Path("data/metadata/test.csv"))
     parser.add_argument(
         "--output-csv",

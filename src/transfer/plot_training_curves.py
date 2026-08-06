@@ -8,22 +8,28 @@ one hardcoded pair. Reads training_history.csv that train.py already
 wrote -- doesn't need torch, doesn't re-run anything.
 
 Usage (default: frozen vs finetuned):
-    python src/transfer/plot_training_curves.py
+    ./scripts/comp9517 transfer-curves
 
 Usage (custom comparison, e.g. finetuned vs regularized):
-    python src/transfer/plot_training_curves.py \
+    ./scripts/comp9517 transfer-curves \
         --dirs outputs/transfer/resnet18_pretrained_finetuned outputs/transfer/resnet18_pretrained_finetuned_regularized_extra \
         --labels Finetuned Finetuned+Regularized \
-        --out_file outputs/transfer/training_curves_finetuned_vs_regularized.png
+        --out-file outputs/transfer/training_curves_finetuned_vs_regularized.png
 """
 
 from __future__ import annotations
 
-import argparse
 import csv
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.common.cli import ArgumentParser
 
 DEFAULT_DIRS = [
     "outputs/transfer/resnet18_pretrained_frozen",
@@ -48,13 +54,21 @@ def read_history(path: Path) -> dict[str, list[float]]:
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dirs", nargs="+", default=None,
-                         help="Method output directories to compare (each must contain "
-                              "training_history.csv). Defaults to frozen vs finetuned.")
-    parser.add_argument("--labels", nargs="+", default=None,
-                         help="Legend labels, same order/length as --dirs. Defaults to the "
-                              "directory names if not given.")
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--dirs",
+        nargs="+",
+        default=None,
+        help="Method output directories to compare (each must contain "
+        "training_history.csv). Defaults to frozen vs finetuned.",
+    )
+    parser.add_argument(
+        "--labels",
+        nargs="+",
+        default=None,
+        help="Legend labels, same order/length as --dirs. Defaults to the "
+        "directory names if not given.",
+    )
     parser.add_argument("--title", default=None)
     parser.add_argument("--out_file", default=None)
     args = parser.parse_args()
@@ -84,15 +98,15 @@ def main():
 
     for i, (label, h) in enumerate(histories.items()):
         color = PALETTE[i % len(PALETTE)]
-        ax_loss.plot(h["epoch"], h["train_loss"], color=color, linestyle="--",
-                     label=f"{label} (train)")
-        ax_loss.plot(h["epoch"], h["val_loss"], color=color, linestyle="-",
-                     label=f"{label} (val)")
+        ax_loss.plot(
+            h["epoch"], h["train_loss"], color=color, linestyle="--", label=f"{label} (train)"
+        )
+        ax_loss.plot(h["epoch"], h["val_loss"], color=color, linestyle="-", label=f"{label} (val)")
 
-        ax_acc.plot(h["epoch"], h["train_acc"], color=color, linestyle="--",
-                    label=f"{label} (train)")
-        ax_acc.plot(h["epoch"], h["val_acc"], color=color, linestyle="-",
-                    label=f"{label} (val)")
+        ax_acc.plot(
+            h["epoch"], h["train_acc"], color=color, linestyle="--", label=f"{label} (train)"
+        )
+        ax_acc.plot(h["epoch"], h["val_acc"], color=color, linestyle="-", label=f"{label} (val)")
 
     ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Cross-entropy loss")
@@ -112,7 +126,9 @@ def main():
     if args.out_file:
         out_file = Path(args.out_file)
     else:
-        suffix = "_vs_".join(l.lower().replace(" ", "_").replace("+", "") for l in histories.keys())
+        suffix = "_vs_".join(
+            label.lower().replace(" ", "_").replace("+", "") for label in histories
+        )
         out_file = Path("outputs/transfer") / f"training_curves_{suffix}.png"
     out_file.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(out_file, dpi=150)

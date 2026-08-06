@@ -1,4 +1,4 @@
-"""Dataset implementation backed by the group metadata CSV contract."""
+"""Dataset implementation backed by the project metadata CSV contract."""
 
 from __future__ import annotations
 
@@ -22,8 +22,8 @@ REQUIRED_COLUMNS = {
 class INatDataset(Dataset):
     """iNaturalist subset dataset driven only by metadata CSV rows.
 
-    Each item returns ``(image, label, image_id)`` by default, matching the
-    C-role plan. ``image`` is transformed when a transform is provided.
+    Each item returns ``(image, label, image_id)`` by default. ``image`` is
+    transformed when a transform is provided.
     """
 
     def __init__(
@@ -79,8 +79,7 @@ class INatDataset(Dataset):
         except ModuleNotFoundError as exc:
             raise ModuleNotFoundError(
                 "degradation_type was requested, but src/evaluation/degradation.py "
-                "is not available yet. Add E's degradation module or run without "
-                "--degradation."
+                "is not available. Restore that module or run without --degradation."
             ) from exc
         return apply_degradation
 

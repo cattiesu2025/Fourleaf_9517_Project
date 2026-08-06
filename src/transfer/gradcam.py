@@ -9,9 +9,9 @@ Usage:
     cam.remove_hooks()
 """
 
+import numpy as np
 import torch
 import torch.nn.functional as F
-import numpy as np
 
 
 class GradCAM:
@@ -44,8 +44,8 @@ class GradCAM:
         score = output[0, class_idx]
         score.backward()
 
-        activations = self.activations[0]   # (K, h, w)
-        gradients = self.gradients[0]        # (K, h, w)
+        activations = self.activations[0]  # (K, h, w)
+        gradients = self.gradients[0]  # (K, h, w)
         weights = gradients.mean(dim=(1, 2))  # (K,)
 
         cam = torch.zeros(activations.shape[1:], dtype=activations.dtype, device=activations.device)
@@ -71,6 +71,7 @@ class GradCAM:
 
 def overlay_heatmap(image_rgb_uint8, heatmap, alpha=0.4):
     import matplotlib.cm as cm
+
     colormap = cm.get_cmap("jet")
     heatmap_colored = (colormap(heatmap)[:, :, :3] * 255).astype(np.uint8)
     overlaid = (image_rgb_uint8 * (1 - alpha) + heatmap_colored * alpha).astype(np.uint8)

@@ -1,21 +1,20 @@
 """
 src/transfer/compute_metrics.py
 ----------------------------------
-Computes the metrics the spec requires (top-1, top-5 accuracy, macro
+Computes top-1, top-5 accuracy, macro
 precision/recall/F1) from the predictions.csv + scores.npz that
 predict.py already wrote. Doesn't re-run inference -- just reads the
 saved scores.
 
 Usage (single method):
-    python src/transfer/compute_metrics.py --strategy finetuned
+    ./scripts/comp9517 transfer-metrics --strategy finetuned
 
-Usage (compare both official methods side by side):
-    python src/transfer/compute_metrics.py --compare
+Usage (compare both primary methods side by side):
+    ./scripts/comp9517 transfer-metrics --compare
 """
 
 from __future__ import annotations
 
-import argparse
 import csv
 import json
 import sys
@@ -28,6 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.common.cli import ArgumentParser
 from src.transfer.model import STRATEGY_TO_METHOD_NAME
 
 
@@ -38,8 +38,10 @@ def compute_metrics_for_method(output_dir: Path) -> dict:
         raise FileNotFoundError(f"{scores_path} not found -- run predict.py first.")
 
     data = np.load(scores_path, allow_pickle=True)
-    scores = data["scores"]              # (N, num_classes) softmax probabilities
-    class_indices = data["class_indices"]  # column j of `scores` corresponds to class class_indices[j]
+    scores = data["scores"]  # (N, num_classes) softmax probabilities
+    class_indices = data[
+        "class_indices"
+    ]  # column j of `scores` corresponds to class class_indices[j]
 
     with pred_path.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
@@ -73,23 +75,32 @@ def compute_metrics_for_method(output_dir: Path) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument("--strategy", choices=["frozen", "finetuned", "layer4"], default=None)
     parser.add_argument("--output_root", default="outputs/transfer")
-    parser.add_argument("--output_dir", default=None,
-                         help="Exact directory containing predictions.csv/scores.npz -- overrides "
-                              "the official outputs/transfer/<method_name>/ path. Use this for "
-                              "non-official runs (e.g. the regularization ablation).")
-    parser.add_argument("--label", default=None,
-                         help="Label to print/save results under when --output_dir is used "
-                              "(defaults to the directory name).")
-    parser.add_argument("--compare", action="store_true",
-                         help="Compute metrics for both official methods (frozen + finetuned) "
-                              "and print/save a side-by-side comparison table.")
+    parser.add_argument(
+        "--output_dir",
+        default=None,
+        help="Exact directory containing predictions.csv/scores.npz -- overrides "
+        "the standard outputs/transfer/<method_name>/ path. Use this for "
+        "separately named runs such as the regularization ablation.",
+    )
+    parser.add_argument(
+        "--label",
+        default=None,
+        help="Label to print/save results under when --output-dir is used "
+        "(defaults to the directory name).",
+    )
+    parser.add_argument(
+        "--compare",
+        action="store_true",
+        help="Compute metrics for both primary methods (frozen + finetuned) "
+        "and print/save a side-by-side comparison table.",
+    )
     args = parser.parse_args()
 
     if args.output_dir is not None:
-        # Single custom-directory run -- bypasses the official method_name mapping entirely.
+        # A custom directory bypasses the primary method-name mapping.
         output_dir = Path(args.output_dir)
         label = args.label or output_dir.name
         metrics = compute_metrics_for_method(output_dir)
@@ -103,14 +114,14 @@ def main():
         return
 
     if not args.compare and args.strategy is None:
-        parser.error("Provide --strategy X, --output_dir X, or --compare")
+        parser.error("Provide --strategy X, --output-dir X, or --compare")
 
     strategies = ["frozen", "finetuned"] if args.compare else [args.strategy]
     results = {}
 
     for strategy in strategies:
         if strategy not in STRATEGY_TO_METHOD_NAME:
-            print(f"Skipping '{strategy}' -- not an official method_name.")
+            print(f"Skipping '{strategy}' -- no primary method name is defined.")
             continue
         method_name = STRATEGY_TO_METHOD_NAME[strategy]
         output_dir = Path(args.output_root) / method_name
@@ -133,12 +144,29 @@ def main():
         summary_path = Path(args.output_root) / "metrics_summary.csv"
         with summary_path.open("w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow(["method_name", "num_test_images", "top1_accuracy", "top5_accuracy",
-                              "macro_precision", "macro_recall", "macro_f1"])
+            writer.writerow(
+                [
+                    "method_name",
+                    "num_test_images",
+                    "top1_accuracy",
+                    "top5_accuracy",
+                    "macro_precision",
+                    "macro_recall",
+                    "macro_f1",
+                ]
+            )
             for method_name, m in results.items():
-                writer.writerow([method_name, m["num_test_images"], m["top1_accuracy"],
-                                  m["top5_accuracy"], m["macro_precision"],
-                                  m["macro_recall"], m["macro_f1"]])
+                writer.writerow(
+                    [
+                        method_name,
+                        m["num_test_images"],
+                        m["top1_accuracy"],
+                        m["top5_accuracy"],
+                        m["macro_precision"],
+                        m["macro_recall"],
+                        m["macro_f1"],
+                    ]
+                )
         print(f"\nWrote comparison table to {summary_path}")
 
 

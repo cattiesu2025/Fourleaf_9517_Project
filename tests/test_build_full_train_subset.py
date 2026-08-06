@@ -8,7 +8,6 @@ import pytest
 
 from scripts.build_full_train_subset import build_full_train_subset
 
-
 CSV_COLUMNS = (
     "image_id",
     "image_path",
@@ -201,9 +200,7 @@ def test_build_reuses_mini_excludes_validation_and_lists_only_new_images(
     assert not any(row["image_path"].endswith(("/b.jpg", "/f.jpg")) for row in rows)
     assert sum("train_mini" in row["image_path"] for row in rows) == 2
 
-    paths = (tmp_path / "full_train_paths.txt").read_text(
-        encoding="utf-8"
-    ).splitlines()
+    paths = (tmp_path / "full_train_paths.txt").read_text(encoding="utf-8").splitlines()
     assert paths == [
         "train/00010_Species_A/c.jpg",
         "train/00010_Species_A/d.jpg",
@@ -223,9 +220,7 @@ def test_build_rejects_missing_validation_image(tmp_path: Path) -> None:
         image for image in payload["images"] if not image["file_name"].endswith("/b.jpg")
     ]
     payload["annotations"] = [
-        annotation
-        for annotation in payload["annotations"]
-        if annotation["image_id"] != 101
+        annotation for annotation in payload["annotations"] if annotation["image_id"] != 101
     ]
     fixture["json"].write_text(json.dumps(payload), encoding="utf-8")
 

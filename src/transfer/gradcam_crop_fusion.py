@@ -11,36 +11,39 @@ this must hold at test time or the "improvement" would be meaningless.
 This does NOT require retraining -- it reuses the already-trained
 finetuned checkpoint for both passes (stage 1 on the full image, stage
 2 on the Grad-CAM-cropped region), fusing their softmax outputs. This
-is an extra, non-official ablation (method_name gets a distinct suffix,
-not one of the two official names).
+is an extra ablation whose method name gets a distinct suffix.
 
 Usage:
-    python src/transfer/gradcam_crop_fusion.py --strategy finetuned
+    ./scripts/comp9517 transfer-crop-fusion --strategy finetuned
 
 Output goes to outputs/transfer/resnet18_pretrained_finetuned_gradcam_crop_fusion_extra/
 (predictions.csv, scores.npz, runtime.json -- same schema as other methods,
 plus a metrics.json comparing fused vs stage-1-only accuracy).
 """
 
-import os
-import sys
 import csv
 import json
+import os
+import sys
 import time
-import argparse
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from src.transfer.model import build_model, STRATEGY_TO_METHOD_NAME
-from src.transfer.gradcam import GradCAM
+from src.common.cli import ArgumentParser
 from src.data.dataloader import get_dataloader
+from src.transfer.gradcam import GradCAM
+from src.transfer.model import STRATEGY_TO_METHOD_NAME, build_model
 
 
-def heatmap_to_bbox(heatmap: np.ndarray, percentile: float = 70.0,
-                     padding_frac: float = 0.15, min_size_frac: float = 0.3):
+def heatmap_to_bbox(
+    heatmap: np.ndarray,
+    percentile: float = 70.0,
+    padding_frac: float = 0.15,
+    min_size_frac: float = 0.3,
+):
     """
     Thresholds a (H, W) Grad-CAM heatmap (values in [0,1]) at the given
     percentile, finds the bounding box of the activated region, adds
@@ -53,7 +56,9 @@ def heatmap_to_bbox(heatmap: np.ndarray, percentile: float = 70.0,
     """
     H, W = heatmap.shape
     thresh = np.percentile(heatmap, percentile)
-    mask = heatmap > thresh  # strict > -- avoids swallowing large zero-plateaus sitting at the threshold
+    mask = (
+        heatmap > thresh
+    )  # strict > -- avoids swallowing large zero-plateaus sitting at the threshold
     # (>= would misfire whenever many pixels are exactly at the threshold value, which is
     # common for sparse/well-localized Grad-CAM heatmaps with large flat zero backgrounds)
     if not mask.any():
@@ -93,27 +98,38 @@ def crop_and_resize(img_tensor: torch.Tensor, bbox, out_size: int) -> torch.Tens
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument("--strategy", choices=["frozen", "finetuned", "layer4"], required=True)
-    parser.add_argument("--checkpoint_dir", default=None,
-                         help="Directory containing checkpoint_best.pth to use for BOTH passes "
-                              "(defaults to outputs/transfer/<official_method_name>).")
+    parser.add_argument(
+        "--checkpoint_dir",
+        default=None,
+        help="Directory containing checkpoint_best.pth to use for BOTH passes "
+        "(defaults to outputs/transfer/<base_method_name>).",
+    )
     parser.add_argument("--test_csv", default="data/metadata/test.csv")
     parser.add_argument("--image_size", type=int, default=224)
     parser.add_argument("--seed", type=int, default=9517)
-    parser.add_argument("--percentile", type=float, default=70.0,
-                         help="Heatmap threshold percentile for the bounding box.")
+    parser.add_argument(
+        "--percentile",
+        type=float,
+        default=70.0,
+        help="Heatmap threshold percentile for the bounding box.",
+    )
     parser.add_argument("--padding_frac", type=float, default=0.15)
     parser.add_argument("--min_size_frac", type=float, default=0.3)
-    parser.add_argument("--fusion_weight", type=float, default=0.5,
-                         help="Weight on stage-2 (cropped) probs; stage-1 gets (1 - this).")
+    parser.add_argument(
+        "--fusion_weight",
+        type=float,
+        default=0.5,
+        help="Weight on stage-2 (cropped) probs; stage-1 gets (1 - this).",
+    )
     parser.add_argument("--output_dir", default=None)
     parser.add_argument("--max_images", type=int, default=None, help="For a quick smoke test.")
     args = parser.parse_args()
 
-    official_method_name = STRATEGY_TO_METHOD_NAME[args.strategy]
-    checkpoint_dir = args.checkpoint_dir or f"outputs/transfer/{official_method_name}"
-    output_dir = args.output_dir or f"outputs/transfer/{official_method_name}_gradcam_crop_fusion_extra"
+    base_method_name = STRATEGY_TO_METHOD_NAME[args.strategy]
+    checkpoint_dir = args.checkpoint_dir or f"outputs/transfer/{base_method_name}"
+    output_dir = args.output_dir or f"outputs/transfer/{base_method_name}_gradcam_crop_fusion_extra"
     os.makedirs(output_dir, exist_ok=True)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -126,8 +142,13 @@ def main():
 
     # batch_size=1: Grad-CAM's hook/backward logic assumes a single image per forward pass.
     loader = get_dataloader(
-        split="test", csv_file=args.test_csv, transform_type="none",
-        batch_size=1, shuffle=False, image_size=args.image_size, seed=args.seed,
+        split="test",
+        csv_file=args.test_csv,
+        transform_type="none",
+        batch_size=1,
+        shuffle=False,
+        image_size=args.image_size,
+        seed=args.seed,
     )
 
     image_ids, true_labels = [], []
@@ -183,16 +204,22 @@ def main():
     stage1_acc = float((stage1_pred == true_labels).mean())
     fused_acc = float((fused_pred == true_labels).mean())
 
-    # --- Write predictions.csv / scores.npz (fused = the "official" output of this method) ---
-    method_name = f"{official_method_name}_gradcam_crop_fusion_extra"
+    # Write the fused predictions and scores using the shared artifact schema.
+    method_name = f"{base_method_name}_gradcam_crop_fusion_extra"
     with open(os.path.join(output_dir, "predictions.csv"), "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["image_id", "true_label", "pred_label", "top1_score", "method_name", "split"])
+        writer.writerow(
+            ["image_id", "true_label", "pred_label", "top1_score", "method_name", "split"]
+        )
         for iid, tl, pl, row_scores in zip(image_ids, true_labels, fused_pred, fused_scores):
             writer.writerow([iid, tl, pl, float(row_scores.max()), method_name, "test"])
 
-    np.savez(os.path.join(output_dir, "scores.npz"),
-             image_ids=np.array(image_ids), scores=fused_scores, class_indices=class_indices)
+    np.savez(
+        os.path.join(output_dir, "scores.npz"),
+        image_ids=np.array(image_ids),
+        scores=fused_scores,
+        class_indices=class_indices,
+    )
 
     runtime = {
         "method_name": method_name,
@@ -214,7 +241,7 @@ def main():
 
     print(f"\nStage-1-only accuracy : {stage1_acc:.4f}")
     print(f"Fused accuracy        : {fused_acc:.4f}  (delta: {fused_acc - stage1_acc:+.4f})")
-    print(f"Cropped {num_cropped}/{len(image_ids)} images ({runtime['crop_rate']*100:.1f}%)")
+    print(f"Cropped {num_cropped}/{len(image_ids)} images ({runtime['crop_rate'] * 100:.1f}%)")
     print(f"Wrote outputs to {output_dir}")
 
 

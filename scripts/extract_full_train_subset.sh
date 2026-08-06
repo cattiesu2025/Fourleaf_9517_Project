@@ -19,10 +19,18 @@ Run it on Katana Data Mover (KDM), not a login node.
 EOF
 }
 
-if [[ "${1:-}" != "--confirm-240gb-download" ]]; then
-  usage >&2
-  exit 2
-fi
+case "${1:-}" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  --confirm-240gb-download)
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac
 shift
 
 cd "$PROJECT_ROOT"

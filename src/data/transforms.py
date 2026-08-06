@@ -42,8 +42,7 @@ def get_transform(
     """
     if transform_type not in {"none", "basic_aug", "strong_aug"}:
         raise ValueError(
-            "transform_type must be one of: none, basic_aug, strong_aug; "
-            f"got {transform_type!r}"
+            f"transform_type must be one of: none, basic_aug, strong_aug; got {transform_type!r}"
         )
 
     if not is_train or transform_type == "none":
